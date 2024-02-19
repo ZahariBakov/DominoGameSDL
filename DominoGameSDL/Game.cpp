@@ -7,18 +7,22 @@ Game::Game() {
 	Game::renderer = NULL;
 
 	Game::running = true;
-	Game::isGame = false;
 
 	Game::mouseDownX = 0;
 	Game::mouseDownY = 0;
+	Game::gameFlag = 0;
 
-	Game::newTex =  NULL;
-	Game::menuTex = NULL;
-	Game::passTex = NULL;
+	Game::newTex =       NULL;
+	Game::menuTex =      NULL;
+	Game::menuTitleTex = NULL;
+	Game::passTex =      NULL;
+	Game::classicTex =   NULL;
 
-	Game::newRect =  { 0, 0, 0, 0 };
-	Game::menuRect = { 0, 0, 0, 0 };
-	Game::passRect = { 0, 0, 0, 0 };
+	Game::newRect =       { 0, 0, 0, 0 };
+	Game::menuRect =      { 0, 0, 0, 0 };
+	Game::menuTitleRect = { 0, 0, 0, 0 };
+	Game::passRect =      { 0, 0, 0, 0 };
+	Game::classicRect =   { 0, 0, 0, 0 };
 }
 
 Game::~Game() {
@@ -68,11 +72,10 @@ bool Game::ttf_init() {
 	}
 
 	TTF_Font* font1 = TTF_OpenFont("fonts/Arcade.ttf", 36);
-	TTF_Font* font2 = TTF_OpenFont("fonts/COLONNA.ttf", 36);
-	TTF_Font* font3 = TTF_OpenFont("fonts/arial.ttf", 36);
+	TTF_Font* font2 = TTF_OpenFont("fonts/Arcade.ttf", 90);
 
-	if (font1 == NULL || font2 == NULL || font3 == NULL) {
-		std::cout << "Font 1 or Font 2 or Font 3 is NULL" << std::endl;
+	if (font1 == NULL || font2 == NULL) {
+		std::cout << "Font 1 or Font 2" << std::endl;
 		return false;
 	}
 
@@ -87,8 +90,14 @@ bool Game::ttf_init() {
 	tempSurfaceText = TTF_RenderText_Blended(font1, "MENU", { 255, 255, 255, 255 });
 	menuTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
 
+	tempSurfaceText = TTF_RenderText_Blended(font2, "MENU", { 255, 255, 255, 255 });
+	menuTitleTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
 	tempSurfaceText = TTF_RenderText_Blended(font1, "PASS", { 255, 255, 255, 255 });
 	passTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, "CLASSIC", { 255, 255, 255, 255 });
+	classicTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
 
 	int tw, th;
 	SDL_QueryTexture(newTex, 0, 0, &tw, &th);
@@ -97,11 +106,18 @@ bool Game::ttf_init() {
 	SDL_QueryTexture(menuTex, 0, 0, &tw, &th);
 	menuRect = { 10, 40, tw, th };
 
+	SDL_QueryTexture(menuTitleTex, 0, 0, &tw, &th);
+	menuTitleRect = { ww / 2 - tw / 2, 40, tw, th };
+
 	SDL_QueryTexture(passTex, 0, 0, &tw, &th);
 	passRect = { 10, 70, tw, th };
 
+	SDL_QueryTexture(classicTex, 0, 0, &tw, &th);
+	classicRect = { 10, 150, tw, th };
+
 	SDL_FreeSurface(tempSurfaceText);
 	TTF_CloseFont(font1);
+	TTF_CloseFont(font2);
 
 	return true;
 }
@@ -112,16 +128,18 @@ void Game::render() {
 
 	SDL_RenderClear(renderer);
 
-	if (!Game::isGame) {
+	if (Game::gameFlag == 0) {
 		TextureManager::Instance()->drawTexture("welcome", 0, 0, ww, wh, renderer, SDL_FLIP_NONE);
-		
+		SDL_RenderCopy(renderer, newTex, NULL, &newRect);
 	}
-
-	SDL_RenderCopy(renderer, newTex, NULL, &newRect);
-	SDL_RenderCopy(renderer, menuTex, NULL, &menuRect);
-	SDL_RenderCopy(renderer, passTex, NULL, &passRect);
-
-	
+	else if (Game::gameFlag == 1) {
+		SDL_RenderCopy(renderer, menuTitleTex, NULL, &menuTitleRect);
+		SDL_RenderCopy(renderer, classicTex, NULL, &classicRect);
+	}
+	else {
+		SDL_RenderCopy(renderer, menuTex, NULL, &menuRect);
+		SDL_RenderCopy(renderer, passTex, NULL, &passRect);
+	}	
 
 	SDL_RenderPresent(renderer);
 }
@@ -172,7 +190,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH))) {
-		Game::isGame = true;
+		Game::gameFlag = 1;
 		std::cout << "NEW GAME Button is clicked!" << std::endl;
 
 		return;
@@ -183,6 +201,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH))) {
+		Game::gameFlag = 2;
 		std::cout << "MENU Button is clicked!" << std::endl;
 
 		return;
@@ -195,6 +214,18 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH))) {
 		std::cout << "PASS Button is clicked!" << std::endl;
+
+		return;
+	}
+
+	btnY = 150;
+	btnW = 130;
+	btnH = 20;
+
+	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
+		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH))) {
+		Game::gameFlag = 3;
+		std::cout << "CLASSIC Button is clicked!" << std::endl;
 
 		return;
 	}

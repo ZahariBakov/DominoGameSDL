@@ -27,15 +27,19 @@ public:
 private:
 	SDL_Window* window = NULL;
 	SDL_Renderer* renderer = NULL;
-	bool running, isGame;
+	bool running;
 
-	int mouseDownX, mouseDownY;
+	int mouseDownX, mouseDownY, gameFlag;
 
 	SDL_Texture* newTex,
 		* menuTex,
-		* passTex;
+		* menuTitleTex,
+		* passTex,
+		* classicTex;
 
 	SDL_Rect newRect,
 		menuRect,
-		passRect;
+		menuTitleRect,
+		passRect,
+		classicRect;
 };

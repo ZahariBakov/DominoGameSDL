@@ -22,7 +22,9 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 
 			if (renderer != 0) {
 				std::cout << "Renderer creation success!\n";
-				SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+				SDL_SetRenderDrawColor(renderer, 64, 64, 64, 255);
+
+				TextureManager::Instance()->loadTexture("assets/welcome.jpg", "welcome", renderer);
 
 			}
 			else {
@@ -69,7 +71,12 @@ bool Game::ttf_init() {
 }
 
 void Game::render() {
+	int ww, wh;
+	SDL_GetWindowSize(window, &ww, &wh);
+
 	SDL_RenderClear(renderer);
+
+	TextureManager::Instance()->drawTexture("welcome", 0, 0, ww, wh, renderer, SDL_FLIP_NONE);
 
 	SDL_RenderPresent(renderer);
 }

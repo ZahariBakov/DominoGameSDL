@@ -6,6 +6,8 @@
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 
+#include "TextureManager.h"
+
 class Game {
 public:
 	Game();

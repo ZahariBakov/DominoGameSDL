@@ -10,7 +10,7 @@
 
 1. Клонирайте репозиторито на локалната си машина:
 
-  https://github.com/ZahariBakov/DominoGameSDL.git
+    https://github.com/ZahariBakov/DominoGameSDL.git
 
 
 2. Компилирайте изходния код с помощта на компилатор за C++.

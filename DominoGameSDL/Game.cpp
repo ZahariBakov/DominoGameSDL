@@ -1,9 +1,24 @@
 #include "Game.h"
 
+#include <iostream>
+
 Game::Game() {
-	Game::window = NULL;
+	Game::window =   NULL;
 	Game::renderer = NULL;
+
 	Game::running = true;
+	Game::isGame = false;
+
+	Game::mouseDownX = 0;
+	Game::mouseDownY = 0;
+
+	Game::newTex =  NULL;
+	Game::menuTex = NULL;
+	Game::passTex = NULL;
+
+	Game::newRect =  { 0, 0, 0, 0 };
+	Game::menuRect = { 0, 0, 0, 0 };
+	Game::passRect = { 0, 0, 0, 0 };
 }
 
 Game::~Game() {
@@ -52,10 +67,12 @@ bool Game::ttf_init() {
 		return false;
 	}
 
-	TTF_Font* font1 = TTF_OpenFont("fonts/Arcade.ttf", 24);
+	TTF_Font* font1 = TTF_OpenFont("fonts/Arcade.ttf", 36);
+	TTF_Font* font2 = TTF_OpenFont("fonts/COLONNA.ttf", 36);
+	TTF_Font* font3 = TTF_OpenFont("fonts/arial.ttf", 36);
 
-	if (font1 == NULL) {
-		std::cout << "Font 1 is NULL" << std::endl;
+	if (font1 == NULL || font2 == NULL || font3 == NULL) {
+		std::cout << "Font 1 or Font 2 or Font 3 is NULL" << std::endl;
 		return false;
 	}
 
@@ -63,6 +80,19 @@ bool Game::ttf_init() {
 	SDL_GetWindowSize(window, &ww, &wh); // get window size
 
 	SDL_Surface* tempSurfaceText = NULL;
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, "NEW GAME", { 255, 255, 255, 255 });
+	newTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, "MENU", { 255, 255, 255, 255 });
+	menuTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, "PASS", { 255, 255, 255, 255 });
+	passTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	int tw, th;
+	SDL_QueryTexture(newTex, 0, 0, &tw, &th);
+	newRect = { 10, 10, tw, th };
 
 	SDL_FreeSurface(tempSurfaceText);
 	TTF_CloseFont(font1);
@@ -76,7 +106,11 @@ void Game::render() {
 
 	SDL_RenderClear(renderer);
 
-	TextureManager::Instance()->drawTexture("welcome", 0, 0, ww, wh, renderer, SDL_FLIP_NONE);
+	if (!Game::isGame) {
+		TextureManager::Instance()->drawTexture("welcome", 0, 0, ww, wh, renderer, SDL_FLIP_NONE);
+	}
+
+	SDL_RenderCopy(renderer, newTex, NULL, &newRect);
 
 	SDL_RenderPresent(renderer);
 }
@@ -86,11 +120,26 @@ void Game::update() {}
 void Game::handleEvents() {
 	SDL_Event event;
 	if (SDL_PollEvent(&event)) {
-		switch (event.type) {
-		case SDL_QUIT: running = false; break;
+		int msx, msy;
 
-		default: break;
-		}
+		switch (event.type) {
+			case SDL_QUIT: running = false; break;
+			case SDL_MOUSEBUTTONDOWN: {
+				if (event.button.button == SDL_BUTTON_LEFT) {
+					SDL_GetMouseState(&msx, &msy);
+					Game::mouseDownX = msx;
+					Game::mouseDownY = msy;
+				}
+			}; break;
+			case SDL_MOUSEBUTTONUP: {
+				if (event.button.button == SDL_BUTTON_LEFT) {
+					SDL_GetMouseState(&msx, &msy);
+					Game::isClicked(mouseDownY, mouseDownY, msx, msy);
+				}
+			}; break;
+
+			default: break;
+			}
 	}
 }
 
@@ -99,6 +148,22 @@ void Game::clean() {
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
+}
+
+void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
+	int ww, wh;
+	SDL_GetWindowSize(window, &ww, &wh);
+
+	int BtnX = 10;
+	int BtnY = 10;
+	int BtnW = 155;
+	int BtnH = 23;
+
+	if ((xDown > BtnX && xDown < (BtnX + BtnW)) && (xUp > BtnX && xUp < (BtnX + BtnW)) &&
+		(yDown > BtnY && yDown < (BtnY + BtnH)) && (yUp > BtnY && yUp < (BtnY + BtnH))) {
+		Game::isGame = true;
+		std::cout << "NEW GAME Button is clicked!" << std::endl;
+	}
 }
 
 bool Game::isRunning() const {

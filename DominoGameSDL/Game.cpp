@@ -79,8 +79,8 @@ bool Game::ttf_init() {
 		return false;
 	}
 
-	TTF_Font* font1 = TTF_OpenFont("fonts/Arcade.ttf", 36);
-	TTF_Font* font2 = TTF_OpenFont("fonts/Arcade.ttf", 90);
+	TTF_Font* font1 = TTF_OpenFont("fonts/segoepr.ttf", 28);
+	TTF_Font* font2 = TTF_OpenFont("fonts/segoepr.ttf", 72);
 
 	if (font1 == NULL || font2 == NULL) {
 		std::cout << "Font 1 or Font 2" << std::endl;
@@ -139,6 +139,7 @@ void Game::render() {
 	if (Game::gameFlag == 0) {
 		TextureManager::Instance()->drawTexture("welcome", 0, 0, ww, wh, renderer, SDL_FLIP_NONE);
 		SDL_RenderCopy(renderer, newTex, NULL, &newRect);
+
 	}
 	else if (Game::gameFlag == 1) {
 		SDL_RenderCopy(renderer, menuTitleTex, NULL, &menuTitleRect);
@@ -175,6 +176,7 @@ void Game::render() {
 		}
 		
 	}
+	SDL_SetRenderDrawColor(renderer, 64, 64, 64, 255);
 
 	SDL_RenderPresent(renderer);
 }
@@ -217,8 +219,8 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 	SDL_GetWindowSize(window, &ww, &wh);
 
 	int btnX = 10;
-	int btnY = 14;
-	int btnW = 150;
+	int btnY = 23;
+	int btnW = 170;
 	int btnH = 23;
 
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
@@ -229,8 +231,8 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 		return;
 	}
 
-	btnY = 40;
-	btnW = 75;
+	btnY = 54;
+	btnW = 90;
 
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH))) {
@@ -240,9 +242,8 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 		return;
 	}
 
-
-	btnY = 75;
-	btnH = 20;
+	btnY = 84;
+	btnW = 80;
 
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH))) {
@@ -253,9 +254,8 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 		return;
 	}
 
-	btnY = 150;
+	btnY = 163;
 	btnW = 130;
-	btnH = 20;
 
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH))) {

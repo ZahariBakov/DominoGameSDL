@@ -12,6 +12,7 @@ public:
 	void shuffle();
 
 	std::string giveTile();
+	std::string imagePath(std::string name);
 
 private:
 	int _tileIdx;

@@ -8,7 +8,7 @@ class TextureManager {
 public:
 	bool loadTexture(const char* fileName, std::string id, SDL_Renderer* ren);
 
-	void drawTexture(std::string id, int xpos, int ypos, int width, int height, SDL_Renderer* ren, SDL_RendererFlip flip = SDL_FLIP_VERTICAL);
+	void drawTexture(std::string id, int xpos, int ypos, int width, int height, SDL_Renderer* ren, SDL_RendererFlip flip = SDL_FLIP_HORIZONTAL);
 	static void drawRectangle(SDL_Renderer* renderer, int xpos, int ypos,  int width, int height);
 
 	static TextureManager* Instance();

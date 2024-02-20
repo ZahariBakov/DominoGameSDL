@@ -36,3 +36,11 @@ std::string Domino::giveTile() {
 
 	return result;
 }
+
+std::string Domino::imagePath(std::string name) {
+	std::string result;
+
+	result = "assets/classic/" + name + ".png";
+
+	return result;
+}

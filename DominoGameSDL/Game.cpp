@@ -51,15 +51,10 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 
 				firstPlayer  = new Player(dominoTiles);
 				secondPlayer = new Player(dominoTiles);
-				std::cout << "First PLayer: " << std::endl;
-				for (auto tile : firstPlayer->playerTiles) {
-					std::cout << tile << std::endl;
-				}
-				std::cout << "Second PLayer: " << std::endl;
-				for (auto tile : secondPlayer->playerTiles) {
-					std::cout << tile << std::endl;
-				}
-				std::cout << "Next tile is: " << dominoTiles.giveTile() << std::endl;
+				
+				std::string tileName = dominoTiles.giveTile();
+				
+				TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), "baseTile", renderer);
 
 			}
 			else {
@@ -155,7 +150,16 @@ void Game::render() {
 	else {
 		SDL_RenderCopy(renderer, menuTex, NULL, &menuRect);
 		SDL_RenderCopy(renderer, passTex, NULL, &passRect);
-	}	
+		TextureManager::Instance()->drawTexture("baseTile", ww /2 - 38, wh / 2 - 18, 75, 38, renderer);
+
+		for (int i = 0; i < firstPlayer->playerTiles.size(); ++i) {
+			int x = 150 + i * 100;
+			
+			std::string tileName = firstPlayer->playerTiles[i];
+			TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), tileName, renderer);
+			TextureManager::Instance()->drawTexture(tileName, x, wh - 50, 75, 38, renderer, SDL_FLIP_HORIZONTAL);
+		}
+	}
 
 	SDL_RenderPresent(renderer);
 }
@@ -217,7 +221,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH))) {
-		Game::gameFlag = 2;
+		Game::gameFlag = 1;
 		std::cout << "MENU Button is clicked!" << std::endl;
 
 		return;
@@ -240,7 +244,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH))) {
-		Game::gameFlag = 3;
+		Game::gameFlag = 2;
 		std::cout << "CLASSIC Button is clicked!" << std::endl;
 
 		return;

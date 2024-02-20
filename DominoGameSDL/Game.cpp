@@ -4,6 +4,7 @@
 
 Player* firstPlayer;
 Player* secondPlayer;
+Table* table;
 
 Game::Game() {
 	Game::window =   NULL;
@@ -51,6 +52,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 
 				firstPlayer  = new Player();
 				secondPlayer = new Player();
+				table = new Table();
 			}
 			else {
 				std::cout << "Renderer init failed!\n";
@@ -145,7 +147,12 @@ void Game::render() {
 	else {
 		SDL_RenderCopy(renderer, menuTex, NULL, &menuRect);
 		SDL_RenderCopy(renderer, passTex, NULL, &passRect);
-		TextureManager::Instance()->drawTexture("baseTile", ww /2 - 38, wh / 2 - 18, 75, 38, renderer);
+
+		for (int i = 0; i < table->tableTiles.size(); ++i) {
+			std::string tileName = table->tableTiles[i];
+			TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), tileName, renderer);
+			TextureManager::Instance()->drawTexture(tileName, ww / 2 - 38, wh / 2 - 18, 75, 38, renderer);
+		}
 
 		if (Game::playerFlag == 1) {
 			for (int i = 0; i < firstPlayer->playerTiles.size(); ++i) {
@@ -271,11 +278,12 @@ void Game::startNewGame() {
 
 
 	firstPlayer->addTiles(dominoTiles);
+	std::cout << "First player have tiles" << std::endl;
 	secondPlayer->addTiles(dominoTiles);
+	std::cout << "Second player have tiles" << std::endl;
 
-	std::string tileName = dominoTiles.giveTile();
-
-	TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), "baseTile", renderer);
+	table->addTile(dominoTiles);
+	std::cout << "Table have tile" << std::endl;
 }
 
 int Game::nextPlayer(int currPlayer) {

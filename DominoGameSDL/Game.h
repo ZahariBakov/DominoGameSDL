@@ -7,6 +7,7 @@
 #include <SDL_image.h>
 
 #include "TextureManager.h"
+#include "Domino.h"
 
 class Game {
 public:
@@ -30,6 +31,8 @@ private:
 	bool running;
 
 	int mouseDownX, mouseDownY, gameFlag;
+
+	Domino dominoTiles;
 
 	SDL_Texture* newTex,
 		* menuTex,

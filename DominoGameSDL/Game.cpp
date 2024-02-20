@@ -47,15 +47,9 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 				SDL_SetRenderDrawColor(renderer, 64, 64, 64, 255);
 
 				TextureManager::Instance()->loadTexture("assets/welcome.jpg", "welcome", renderer);
-				dominoTiles.shuffle();
 
-				firstPlayer  = new Player(dominoTiles);
-				secondPlayer = new Player(dominoTiles);
-				
-				std::string tileName = dominoTiles.giveTile();
-				
-				TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), "baseTile", renderer);
-
+				firstPlayer  = new Player();
+				secondPlayer = new Player();
 			}
 			else {
 				std::cout << "Renderer init failed!\n";
@@ -245,10 +239,29 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH))) {
 		Game::gameFlag = 2;
+		Game::startNewGame();
+		
 		std::cout << "CLASSIC Button is clicked!" << std::endl;
 
 		return;
 	}
+}
+
+void Game::startNewGame() {
+	dominoTiles.shuffle();
+
+	if (firstPlayer->playerTiles.size() > 0) {
+		firstPlayer->playerTiles.clear();
+		secondPlayer->playerTiles.clear();
+	}
+
+
+	firstPlayer->addTiles(dominoTiles);
+	secondPlayer->addTiles(dominoTiles);
+
+	std::string tileName = dominoTiles.giveTile();
+
+	TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), "baseTile", renderer);
 }
 
 bool Game::isRunning() const {

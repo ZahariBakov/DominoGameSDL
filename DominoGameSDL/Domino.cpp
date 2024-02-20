@@ -26,8 +26,9 @@ void Domino::shuffle() {
     // Shuffle the vector using std::shuffle
     std::shuffle(dominoTiles.begin(), dominoTiles.end(), rng);
 
-    std::cout << "The tiles are shuffled." << std::endl;
-    
+	this->_tileIdx = 0;
+
+    std::cout << "The tiles are shuffled." << std::endl;   
 }
 
 std::string Domino::giveTile() {

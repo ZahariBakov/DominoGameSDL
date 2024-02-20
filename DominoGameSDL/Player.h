@@ -4,8 +4,9 @@
 
 class Player {
 public:
-	Player(Domino &domino);
+	Player();
 
 	std::vector<std::string> playerTiles;
 
+	void addTiles(Domino& domino);
 };

@@ -23,6 +23,7 @@ public:
 	void handleEvents();
 	void clean();
 	void isClicked(int xDown, int yDown, int xUp, int yUp);
+	void startNewGame();
 
 	bool isRunning() const;
 	

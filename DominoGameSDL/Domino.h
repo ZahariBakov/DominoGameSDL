@@ -11,5 +11,8 @@ public:
 
 	void shuffle();
 
+	std::string giveTile();
+
 private:
+	int _tileIdx;
 };

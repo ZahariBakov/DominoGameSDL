@@ -2,6 +2,9 @@
 
 #include <iostream>
 
+Player* firstPlayer;
+Player* secondPlayer;
+
 Game::Game() {
 	Game::window =   NULL;
 	Game::renderer = NULL;
@@ -45,6 +48,18 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 
 				TextureManager::Instance()->loadTexture("assets/welcome.jpg", "welcome", renderer);
 				dominoTiles.shuffle();
+
+				firstPlayer  = new Player(dominoTiles);
+				secondPlayer = new Player(dominoTiles);
+				std::cout << "First PLayer: " << std::endl;
+				for (auto tile : firstPlayer->playerTiles) {
+					std::cout << tile << std::endl;
+				}
+				std::cout << "Second PLayer: " << std::endl;
+				for (auto tile : secondPlayer->playerTiles) {
+					std::cout << tile << std::endl;
+				}
+				std::cout << "Next tile is: " << dominoTiles.giveTile() << std::endl;
 
 			}
 			else {

@@ -5,6 +5,7 @@
 #include <algorithm>
 
 Domino::Domino() {
+	this->_tileIdx = 0;
 	std::string currentTiles;
 
 	for (int i = 0; i < 7; ++i) {
@@ -25,9 +26,13 @@ void Domino::shuffle() {
     // Shuffle the vector using std::shuffle
     std::shuffle(dominoTiles.begin(), dominoTiles.end(), rng);
 
-    // Print the shuffled vector
-    std::cout << "Shuffled vector:" << std::endl;
-    for (const auto& str : dominoTiles) {
-        std::cout << str << std::endl;
-    }
+    std::cout << "The tiles are shuffled." << std::endl;
+    
+}
+
+std::string Domino::giveTile() {
+	std::string result = dominoTiles[this->_tileIdx];
+	this->_tileIdx++;
+
+	return result;
 }

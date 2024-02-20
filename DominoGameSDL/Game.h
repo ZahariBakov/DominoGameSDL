@@ -8,6 +8,7 @@
 
 #include "TextureManager.h"
 #include "Domino.h"
+#include "Player.h"
 
 class Game {
 public:

@@ -14,6 +14,7 @@ Game::Game() {
 	Game::mouseDownX = 0;
 	Game::mouseDownY = 0;
 	Game::gameFlag = 0;
+	Game::playerFlag = 1;
 
 	Game::newTex =       NULL;
 	Game::menuTex =      NULL;
@@ -146,19 +147,30 @@ void Game::render() {
 		SDL_RenderCopy(renderer, passTex, NULL, &passRect);
 		TextureManager::Instance()->drawTexture("baseTile", ww /2 - 38, wh / 2 - 18, 75, 38, renderer);
 
-		for (int i = 0; i < firstPlayer->playerTiles.size(); ++i) {
-			int x = 150 + i * 100;
-			
-			std::string tileName = firstPlayer->playerTiles[i];
-			TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), tileName, renderer);
-			TextureManager::Instance()->drawTexture(tileName, x, wh - 50, 75, 38, renderer, SDL_FLIP_HORIZONTAL);
+		if (Game::playerFlag == 1) {
+			for (int i = 0; i < firstPlayer->playerTiles.size(); ++i) {
+				int x = 150 + i * 100;
+
+				std::string tileName = firstPlayer->playerTiles[i];
+				TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), tileName, renderer);
+				TextureManager::Instance()->drawTexture(tileName, x, wh - 50, 75, 38, renderer, SDL_FLIP_HORIZONTAL);
+			}
 		}
+
+		if (Game::playerFlag == 2) {
+			for (int i = 0; i < secondPlayer->playerTiles.size(); ++i) {
+				int x = 150 + i * 100;
+
+				std::string tileName = secondPlayer->playerTiles[i];
+				TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), tileName, renderer);
+				TextureManager::Instance()->drawTexture(tileName, x, wh - 50, 75, 38, renderer, SDL_FLIP_HORIZONTAL);
+			}
+		}
+		
 	}
 
 	SDL_RenderPresent(renderer);
 }
-
-void Game::update() {}
 
 void Game::handleEvents() {
 	SDL_Event event;
@@ -227,7 +239,9 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH))) {
-		std::cout << "PASS Button is clicked!" << std::endl;
+		Game::playerFlag = nextPlayer(playerFlag);
+
+		std::cout << "PASS Button is clicked! Next player is: " << playerFlag << std::endl;
 
 		return;
 	}
@@ -262,6 +276,14 @@ void Game::startNewGame() {
 	std::string tileName = dominoTiles.giveTile();
 
 	TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), "baseTile", renderer);
+}
+
+int Game::nextPlayer(int currPlayer) {
+	if (currPlayer == 1) {
+		return 2;
+	}
+	
+	return 1;
 }
 
 bool Game::isRunning() const {

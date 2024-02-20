@@ -19,11 +19,11 @@ public:
 	bool ttf_init();
 
 	void render();
-	void update();
 	void handleEvents();
 	void clean();
 	void isClicked(int xDown, int yDown, int xUp, int yUp);
 	void startNewGame();
+	int nextPlayer(int currPlayer);
 
 	bool isRunning() const;
 	
@@ -32,7 +32,7 @@ private:
 	SDL_Renderer* renderer = NULL;
 	bool running;
 
-	int mouseDownX, mouseDownY, gameFlag;
+	int mouseDownX, mouseDownY, gameFlag, playerFlag;
 
 	Domino dominoTiles;
 

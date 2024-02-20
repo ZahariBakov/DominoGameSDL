@@ -14,7 +14,6 @@ int main(int argc, char* argv[]) {
 	while (game->isRunning()) {
 		game->ttf_init();
 		game->handleEvents();
-		game->update();
 		game->render();
 	}
 

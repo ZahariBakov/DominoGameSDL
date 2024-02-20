@@ -44,6 +44,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 				SDL_SetRenderDrawColor(renderer, 64, 64, 64, 255);
 
 				TextureManager::Instance()->loadTexture("assets/welcome.jpg", "welcome", renderer);
+				dominoTiles.shuffle();
 
 			}
 			else {

@@ -1,6 +1,8 @@
 #include "Domino.h"
 
 #include <iostream>
+#include <random>
+#include <algorithm>
 
 Domino::Domino() {
 	std::string currentTiles;
@@ -13,4 +15,19 @@ Domino::Domino() {
 	}
 
 	std::cout << "Domino tiles is created!" << std::endl;
+}
+
+void Domino::shuffle() {
+    // Create a random number generator
+    std::random_device rd;
+    std::mt19937 rng(rd());
+
+    // Shuffle the vector using std::shuffle
+    std::shuffle(dominoTiles.begin(), dominoTiles.end(), rng);
+
+    // Print the shuffled vector
+    std::cout << "Shuffled vector:" << std::endl;
+    for (const auto& str : dominoTiles) {
+        std::cout << str << std::endl;
+    }
 }

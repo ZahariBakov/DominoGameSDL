@@ -156,7 +156,7 @@ void Game::render() {
 	SDL_RenderClear(renderer);
 
 	if (Game::gameFlag == 0) {
-		TextureManager::Instance()->drawTexture("welcome", 0, 0, ww, wh, 0, renderer, SDL_FLIP_NONE);
+		TextureManager::Instance()->drawTexture("welcome", 0, 0, ww, wh, renderer);
 		SDL_RenderCopy(renderer, newTex, NULL, &newRect);
 
 	}
@@ -173,7 +173,7 @@ void Game::render() {
 		for (int i = 0; i < table->tableTiles.size(); ++i) {
 			std::string tileName = table->tableTiles[i].getFirst() + table->tableTiles[i].getSecond();
 			TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), tileName, renderer);
-			TextureManager::Instance()->drawTexture(tileName, ww / 2 - 38, wh / 2 - 18, 75, 38, 90, renderer);
+			TextureManager::Instance()->drawTexture(tileName, ww / 2 - 38, wh / 2 - 18, 75, 38, renderer, 90);
 		}
 
 		if (Game::playerFlag == 1) {
@@ -182,7 +182,7 @@ void Game::render() {
 
 				std::string tileName = firstPlayer->playerTiles[i].getFirst() + firstPlayer->playerTiles[i].getSecond();
 				TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), tileName, renderer);
-				TextureManager::Instance()->drawTexture(tileName, x, wh - 50, 75, 38, 0, renderer, SDL_FLIP_HORIZONTAL);
+				TextureManager::Instance()->drawTexture(tileName, x, wh - 50, 75, 38, renderer);
 			}
 		}
 
@@ -192,7 +192,7 @@ void Game::render() {
 
 				std::string tileName = secondPlayer->playerTiles[i].getFirst() + secondPlayer->playerTiles[i].getSecond();
 				TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), tileName, renderer);
-				TextureManager::Instance()->drawTexture(tileName, x, wh - 50, 75, 38, 0,  renderer, SDL_FLIP_HORIZONTAL);
+				TextureManager::Instance()->drawTexture(tileName, x, wh - 50, 75, 38, renderer);
 			}
 		}
 		

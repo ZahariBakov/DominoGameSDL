@@ -4,7 +4,7 @@
 
 Player* firstPlayer;
 Player* secondPlayer;
-Table* table;
+Table*  table;
 
 Game::Game() {
 	Game::window =   NULL;
@@ -14,20 +14,24 @@ Game::Game() {
 
 	Game::mouseDownX = 0;
 	Game::mouseDownY = 0;
-	Game::gameFlag = 0;
+	Game::gameFlag =   0;
 	Game::playerFlag = 1;
 
-	Game::newTex =       NULL;
-	Game::menuTex =      NULL;
-	Game::menuTitleTex = NULL;
-	Game::passTex =      NULL;
-	Game::classicTex =   NULL;
+	Game::newTex =         NULL;
+	Game::menuTex =        NULL;
+	Game::menuTitleTex =   NULL;
+	Game::passTex =        NULL;
+	Game::classicTex =     NULL;
+	Game::playerTex =      NULL;
+	Game::playerNumTex =   NULL;
 
-	Game::newRect =       { 0, 0, 0, 0 };
-	Game::menuRect =      { 0, 0, 0, 0 };
-	Game::menuTitleRect = { 0, 0, 0, 0 };
-	Game::passRect =      { 0, 0, 0, 0 };
-	Game::classicRect =   { 0, 0, 0, 0 };
+	Game::newRect =         { 0, 0, 0, 0 };
+	Game::menuRect =        { 0, 0, 0, 0 };
+	Game::menuTitleRect =   { 0, 0, 0, 0 };
+	Game::passRect =        { 0, 0, 0, 0 };
+	Game::classicRect =     { 0, 0, 0, 0 };
+	Game::playerRect =      { 0, 0, 0, 0 };
+	Game::playerNumRect =   { 0, 0, 0, 0 };
 }
 
 Game::~Game() {
@@ -107,6 +111,15 @@ bool Game::ttf_init() {
 	tempSurfaceText = TTF_RenderText_Blended(font1, "CLASSIC", { 255, 255, 255, 255 });
 	classicTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
 
+	tempSurfaceText = TTF_RenderText_Blended(font1, "PLAYER", { 255, 255, 255, 255 });
+	playerTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+	
+	std::string tmp = std::to_string(Game::playerFlag);
+	char const* playerNum = tmp.c_str();
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, playerNum, { 255, 255, 255, 255 });
+	playerNumTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
 	int tw, th;
 	SDL_QueryTexture(newTex, 0, 0, &tw, &th);
 	newRect = { 10, 10, tw, th };
@@ -123,6 +136,12 @@ bool Game::ttf_init() {
 	SDL_QueryTexture(classicTex, 0, 0, &tw, &th);
 	classicRect = { 10, 150, tw, th };
 
+	SDL_QueryTexture(playerTex, 0, 0, &tw, &th);
+	playerRect = { 10, wh - 110, tw, th };
+
+	SDL_QueryTexture(playerNumTex, 0, 0, &tw, &th);
+	playerNumRect = { 140, wh - 110, tw, th };
+
 	SDL_FreeSurface(tempSurfaceText);
 	TTF_CloseFont(font1);
 	TTF_CloseFont(font2);
@@ -137,7 +156,7 @@ void Game::render() {
 	SDL_RenderClear(renderer);
 
 	if (Game::gameFlag == 0) {
-		TextureManager::Instance()->drawTexture("welcome", 0, 0, ww, wh, renderer, SDL_FLIP_NONE);
+		TextureManager::Instance()->drawTexture("welcome", 0, 0, ww, wh, 0, renderer, SDL_FLIP_NONE);
 		SDL_RenderCopy(renderer, newTex, NULL, &newRect);
 
 	}
@@ -148,11 +167,13 @@ void Game::render() {
 	else {
 		SDL_RenderCopy(renderer, menuTex, NULL, &menuRect);
 		SDL_RenderCopy(renderer, passTex, NULL, &passRect);
+		SDL_RenderCopy(renderer, playerTex, NULL, &playerRect);
+		SDL_RenderCopy(renderer, playerNumTex, NULL, &playerNumRect);
 
 		for (int i = 0; i < table->tableTiles.size(); ++i) {
 			std::string tileName = table->tableTiles[i];
 			TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), tileName, renderer);
-			TextureManager::Instance()->drawTexture(tileName, ww / 2 - 38, wh / 2 - 18, 75, 38, renderer);
+			TextureManager::Instance()->drawTexture(tileName, ww / 2 - 38, wh / 2 - 18, 75, 38, 90, renderer);
 		}
 
 		if (Game::playerFlag == 1) {
@@ -161,7 +182,7 @@ void Game::render() {
 
 				std::string tileName = firstPlayer->playerTiles[i];
 				TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), tileName, renderer);
-				TextureManager::Instance()->drawTexture(tileName, x, wh - 50, 75, 38, renderer, SDL_FLIP_HORIZONTAL);
+				TextureManager::Instance()->drawTexture(tileName, x, wh - 50, 75, 38, 0, renderer, SDL_FLIP_HORIZONTAL);
 			}
 		}
 
@@ -171,7 +192,7 @@ void Game::render() {
 
 				std::string tileName = secondPlayer->playerTiles[i];
 				TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), tileName, renderer);
-				TextureManager::Instance()->drawTexture(tileName, x, wh - 50, 75, 38, renderer, SDL_FLIP_HORIZONTAL);
+				TextureManager::Instance()->drawTexture(tileName, x, wh - 50, 75, 38, 0,  renderer, SDL_FLIP_HORIZONTAL);
 			}
 		}
 		

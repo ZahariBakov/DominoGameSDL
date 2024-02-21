@@ -41,11 +41,15 @@ private:
 		* menuTex,
 		* menuTitleTex,
 		* passTex,
-		* classicTex;
+		* classicTex,
+		* playerTex,
+		* playerNumTex;
 
 	SDL_Rect newRect,
 		menuRect,
 		menuTitleRect,
 		passRect,
-		classicRect;
+		classicRect,
+		playerRect,
+		playerNumRect;
 };

@@ -19,7 +19,7 @@ bool TextureManager::loadTexture(const char* fileName, std::string id, SDL_Rende
 	return false;
 }
 
-void TextureManager::drawTexture(std::string id, int xpos, int ypos, int width, int height, SDL_Renderer* ren, SDL_RendererFlip flip) {
+void TextureManager::drawTexture(std::string id, int xpos, int ypos, int width, int height, int angle, SDL_Renderer* ren, SDL_RendererFlip flip) {
 	SDL_Rect srcRect;
 	SDL_Rect destRect;
 	srcRect.x = srcRect.y = 0;
@@ -28,7 +28,7 @@ void TextureManager::drawTexture(std::string id, int xpos, int ypos, int width, 
 	destRect.x = xpos;
 	destRect.y = ypos;
 
-	SDL_RenderCopyEx(ren, textureMap[id], &srcRect, &destRect, 0, 0, flip);
+	SDL_RenderCopyEx(ren, textureMap[id], &srcRect, &destRect, angle, 0, flip);
 }
 
 void TextureManager::drawRectangle(SDL_Renderer* renderer, int xpos, int ypos, int width, int height) {

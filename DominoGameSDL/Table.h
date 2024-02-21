@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Domino.h"
+#include "TextureManager.h"
 
 class Table {
 public:
@@ -16,4 +17,7 @@ public:
 	char map[20][20];
 
 	void printMap();
+
+private:
+	void createMap();
 };

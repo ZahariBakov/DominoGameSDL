@@ -3,13 +3,7 @@
 #include <iostream>
 
 Table::Table() {
-	for (int row = 0; row < 20; ++row) {
-		for (int col = 0; col < 20; ++col) {
-			this->map[row][col] = '*';
-		}
-	}
-
-	std::cout << "map is created" << std::endl;
+	this->createMap();
 }
 
 void Table::addTile(Domino& domino) {
@@ -26,4 +20,14 @@ void Table::printMap() {
 		}
 		std::cout << std::endl;
 	}
+}
+
+void Table::createMap() {
+	for (int row = 0; row < 20; ++row) {
+		for (int col = 0; col < 20; ++col) {
+			map[row][col] = '*';
+		}
+	}
+
+	std::cout << "map is created" << std::endl;
 }

@@ -57,6 +57,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 				firstPlayer  = new Player();
 				secondPlayer = new Player();
 				table = new Table();
+				table->printMap();
 			}
 			else {
 				std::cout << "Renderer init failed!\n";
@@ -195,7 +196,6 @@ void Game::render() {
 				TextureManager::Instance()->drawTexture(tileName, x, wh - 50, 75, 38, renderer);
 			}
 		}
-		
 	}
 	SDL_SetRenderDrawColor(renderer, 64, 64, 64, 255);
 
@@ -280,9 +280,9 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH))) {
-		Game::gameFlag = 2;
 		Game::startNewGame();
-		
+		Game::gameFlag = 2;
+
 		std::cout << "CLASSIC Button is clicked!" << std::endl;
 
 		return;
@@ -304,6 +304,8 @@ void Game::startNewGame() {
 	std::cout << "Second player have tiles" << std::endl;
 
 	table->addTile(dominoTiles);
+	table->firstFree = table->tableTiles[0].getFirst();
+	table->secondFree = table->tableTiles[0].getSecond();
 	std::cout << "Table have tile" << std::endl;
 }
 

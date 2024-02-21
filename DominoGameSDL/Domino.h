@@ -1,17 +1,18 @@
 #pragma once
 
+#include "Tile.h"
+
 #include <vector>
-#include <string>
 
 class Domino {
 public:
 	Domino();
 
-	std::vector<std::string> dominoTiles;
+	std::vector<Tile> dominoTiles;
 
 	void shuffle();
 
-	std::string giveTile();
+	Tile giveTile();
 	std::string imagePath(std::string name);
 
 private:

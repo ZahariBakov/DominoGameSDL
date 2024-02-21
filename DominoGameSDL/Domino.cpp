@@ -6,12 +6,10 @@
 
 Domino::Domino() {
 	this->_tileIdx = 0;
-	std::string currentTiles;
 
 	for (int i = 0; i < 7; ++i) {
 		for (int j = i; j < 7; ++j) {
-			currentTiles = std::to_string(i) + std::to_string(j);
-			dominoTiles.push_back(currentTiles);
+			dominoTiles.push_back(Tile(std::to_string(i), std::to_string(j)));
 		}
 	}
 
@@ -31,8 +29,8 @@ void Domino::shuffle() {
     std::cout << "The tiles are shuffled." << std::endl;   
 }
 
-std::string Domino::giveTile() {
-	std::string result = dominoTiles[this->_tileIdx];
+Tile Domino::giveTile() {
+	Tile result = dominoTiles[this->_tileIdx];
 	this->_tileIdx++;
 
 	return result;

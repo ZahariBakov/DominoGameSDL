@@ -7,31 +7,31 @@ Player* secondPlayer;
 Table*  table;
 
 Game::Game() {
-	Game::window =   NULL;
+	Game::window   = NULL;
 	Game::renderer = NULL;
 
 	Game::running = true;
 
 	Game::mouseDownX = 0;
 	Game::mouseDownY = 0;
-	Game::gameFlag =   0;
+	Game::gameFlag   = 0;
 	Game::playerFlag = 1;
 
-	Game::newTex =         NULL;
-	Game::menuTex =        NULL;
-	Game::menuTitleTex =   NULL;
-	Game::passTex =        NULL;
-	Game::classicTex =     NULL;
-	Game::playerTex =      NULL;
-	Game::playerNumTex =   NULL;
+	Game::newTex       = NULL;
+	Game::menuTex      = NULL;
+	Game::menuTitleTex = NULL;
+	Game::passTex      = NULL;
+	Game::classicTex   = NULL;
+	Game::playerTex    = NULL;
+	Game::playerNumTex = NULL;
 
-	Game::newRect =         { 0, 0, 0, 0 };
-	Game::menuRect =        { 0, 0, 0, 0 };
-	Game::menuTitleRect =   { 0, 0, 0, 0 };
-	Game::passRect =        { 0, 0, 0, 0 };
-	Game::classicRect =     { 0, 0, 0, 0 };
-	Game::playerRect =      { 0, 0, 0, 0 };
-	Game::playerNumRect =   { 0, 0, 0, 0 };
+	Game::newRect       = { 0, 0, 0, 0 };
+	Game::menuRect      = { 0, 0, 0, 0 };
+	Game::menuTitleRect = { 0, 0, 0, 0 };
+	Game::passRect      = { 0, 0, 0, 0 };
+	Game::classicRect   = { 0, 0, 0, 0 };
+	Game::playerRect    = { 0, 0, 0, 0 };
+	Game::playerNumRect = { 0, 0, 0, 0 };
 }
 
 Game::~Game() {
@@ -171,7 +171,7 @@ void Game::render() {
 		SDL_RenderCopy(renderer, playerNumTex, NULL, &playerNumRect);
 
 		for (int i = 0; i < table->tableTiles.size(); ++i) {
-			std::string tileName = table->tableTiles[i];
+			std::string tileName = table->tableTiles[i].getFirst() + table->tableTiles[i].getSecond();
 			TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), tileName, renderer);
 			TextureManager::Instance()->drawTexture(tileName, ww / 2 - 38, wh / 2 - 18, 75, 38, 90, renderer);
 		}
@@ -180,7 +180,7 @@ void Game::render() {
 			for (int i = 0; i < firstPlayer->playerTiles.size(); ++i) {
 				int x = 150 + i * 100;
 
-				std::string tileName = firstPlayer->playerTiles[i];
+				std::string tileName = firstPlayer->playerTiles[i].getFirst() + firstPlayer->playerTiles[i].getSecond();
 				TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), tileName, renderer);
 				TextureManager::Instance()->drawTexture(tileName, x, wh - 50, 75, 38, 0, renderer, SDL_FLIP_HORIZONTAL);
 			}
@@ -190,7 +190,7 @@ void Game::render() {
 			for (int i = 0; i < secondPlayer->playerTiles.size(); ++i) {
 				int x = 150 + i * 100;
 
-				std::string tileName = secondPlayer->playerTiles[i];
+				std::string tileName = secondPlayer->playerTiles[i].getFirst() + secondPlayer->playerTiles[i].getSecond();
 				TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), tileName, renderer);
 				TextureManager::Instance()->drawTexture(tileName, x, wh - 50, 75, 38, 0,  renderer, SDL_FLIP_HORIZONTAL);
 			}

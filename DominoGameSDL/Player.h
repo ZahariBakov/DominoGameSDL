@@ -6,7 +6,7 @@ class Player {
 public:
 	Player();
 
-	std::vector<std::string> playerTiles;
+	std::vector<Tile> playerTiles;
 
 	void addTiles(Domino& domino);
 };

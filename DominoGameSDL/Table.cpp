@@ -5,9 +5,9 @@
 Table::Table() {}
 
 void Table::addTile(Domino& domino) {
-	std::string tileName = domino.giveTile();
-	std::cout << "Tile name is: " << tileName << std::endl;
+	Tile tile = domino.giveTile();
+	std::cout << "Tile name is: " << tile.getFirst() << " " << tile.getSecond() << std::endl;
 
 	std::cout << "Vector size: " << tableTiles.size() << std::endl;
-	this->tableTiles.push_back(domino.giveTile());
+	this->tableTiles.push_back(tile);
 }

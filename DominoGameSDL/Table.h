@@ -6,7 +6,7 @@ class Table {
 public:
 	Table();
 
-	std::vector<std::string> tableTiles;
+	std::vector<Tile> tableTiles;
 
 	void addTile(Domino& domino);
 };

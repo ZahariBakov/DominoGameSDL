@@ -53,6 +53,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 				SDL_SetRenderDrawColor(renderer, 64, 64, 64, 255);
 
 				TextureManager::Instance()->loadTexture("assets/welcome.jpg", "welcome", renderer);
+				TextureManager::Instance()->loadTexture("assets/piece.png", "piece", renderer);
 
 				firstPlayer  = new Player();
 				secondPlayer = new Player();
@@ -166,6 +167,14 @@ void Game::render() {
 		SDL_RenderCopy(renderer, classicTex, NULL, &classicRect);
 	}
 	else {
+		int x = 300;
+		int y = 10;
+		for (int row = 0; row < 20; ++row) {
+			for (int col = 0; col < 20; ++col) {
+				TextureManager::Instance()->drawTexture("piece", x + (row * 32), y + (col * 32), 32, 32, renderer);
+			}
+		}
+		
 		SDL_RenderCopy(renderer, menuTex, NULL, &menuRect);
 		SDL_RenderCopy(renderer, passTex, NULL, &passRect);
 		SDL_RenderCopy(renderer, playerTex, NULL, &playerRect);
@@ -174,7 +183,7 @@ void Game::render() {
 		for (int i = 0; i < table->tableTiles.size(); ++i) {
 			std::string tileName = table->tableTiles[i].getFirst() + table->tableTiles[i].getSecond();
 			TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), tileName, renderer);
-			TextureManager::Instance()->drawTexture(tileName, ww / 2 - 38, wh / 2 - 18, 75, 38, renderer, 90);
+			TextureManager::Instance()->drawTexture(tileName, x + 9 * 32 - 16, y + 9 * 32 + 16, 64, 32, renderer, 90);
 		}
 
 		if (Game::playerFlag == 1) {
@@ -183,7 +192,7 @@ void Game::render() {
 
 				std::string tileName = firstPlayer->playerTiles[i].getFirst() + firstPlayer->playerTiles[i].getSecond();
 				TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), tileName, renderer);
-				TextureManager::Instance()->drawTexture(tileName, x, wh - 50, 75, 38, renderer);
+				TextureManager::Instance()->drawTexture(tileName, x, wh - 50, 64, 32, renderer);
 			}
 		}
 
@@ -193,11 +202,11 @@ void Game::render() {
 
 				std::string tileName = secondPlayer->playerTiles[i].getFirst() + secondPlayer->playerTiles[i].getSecond();
 				TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), tileName, renderer);
-				TextureManager::Instance()->drawTexture(tileName, x, wh - 50, 75, 38, renderer);
+				TextureManager::Instance()->drawTexture(tileName, x, wh - 50, 64, 32, renderer);
 			}
 		}
 	}
-	SDL_SetRenderDrawColor(renderer, 64, 64, 64, 255);
+	//SDL_SetRenderDrawColor(renderer, 64, 64, 64, 255);
 
 	SDL_RenderPresent(renderer);
 }
@@ -295,6 +304,7 @@ void Game::startNewGame() {
 	if (firstPlayer->playerTiles.size() > 0) {
 		firstPlayer->playerTiles.clear();
 		secondPlayer->playerTiles.clear();
+		table->tableTiles.clear();
 	}
 
 
@@ -304,8 +314,6 @@ void Game::startNewGame() {
 	std::cout << "Second player have tiles" << std::endl;
 
 	table->addTile(dominoTiles);
-	table->firstFree = table->tableTiles[0].getFirst();
-	table->secondFree = table->tableTiles[0].getSecond();
 	std::cout << "Table have tile" << std::endl;
 }
 

@@ -8,12 +8,20 @@ Table::Table() {
 
 void Table::addTile(Domino& domino) {
 	Tile tile = domino.giveTile();
-	this->tableTiles.push_back(tile);
+	
+	if (this->tableTiles.size() == 0) {
+		this->firstFree = tile.getFirst();
+		this->secondFree = tile.getSecond();
 
+	}
+
+	this->tableTiles.push_back(tile);
+	std::cout << "First free piece of tile is: " << firstFree << std::endl;
+	std::cout << "Second free piece of tile is: " << secondFree << std::endl;
 	std::cout << "Table add tile." << std::endl;
 }
 
-void Table::printMap() {
+void Table::printMap() const {
 	for (int row = 0; row < 20; ++row) {
 		for (int col = 0; col < 20; ++col) {
 			std::cout << map[row][col];
@@ -25,7 +33,7 @@ void Table::printMap() {
 void Table::createMap() {
 	for (int row = 0; row < 20; ++row) {
 		for (int col = 0; col < 20; ++col) {
-			map[row][col] = '*';
+			map[row][col] = "*";
 		}
 	}
 

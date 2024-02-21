@@ -14,9 +14,9 @@ public:
 	std::string firstFree;
 	std::string secondFree;
 
-	char map[20][20];
+	std::string map[20][20];
 
-	void printMap();
+	void printMap() const;
 
 private:
 	void createMap();

@@ -1,5 +1,7 @@
 #include "Tile.h"
 
+#include <iostream>
+
 Tile::Tile() {}
 
 Tile::Tile(std::string first, std::string second) : _first(first), _second(second) {}

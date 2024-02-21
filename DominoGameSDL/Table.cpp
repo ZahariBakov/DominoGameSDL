@@ -12,6 +12,8 @@ void Table::addTile(Domino& domino) {
 	if (this->tableTiles.size() == 0) {
 		this->firstFree = tile.getFirst();
 		this->secondFree = tile.getSecond();
+		map[9][9] = firstFree;
+		map[10][9] = secondFree;
 
 	}
 
@@ -19,6 +21,7 @@ void Table::addTile(Domino& domino) {
 	std::cout << "First free piece of tile is: " << firstFree << std::endl;
 	std::cout << "Second free piece of tile is: " << secondFree << std::endl;
 	std::cout << "Table add tile." << std::endl;
+	printMap();
 }
 
 void Table::printMap() const {

@@ -309,6 +309,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 
 			if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 				(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH))) {
+				Game::playerTileClicked(i);
 				std::cout << "First player tile is clicked" << std::endl;
 			}
 		}	
@@ -320,10 +321,15 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 
 			if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 				(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH))) {
+				Game::playerTileClicked(i);
 				std::cout << "Second player tile is clicked" << std::endl;
 			}
 		}
 	}
+}
+
+bool Game::isRunning() const {
+	return Game::running;
 }
 
 void Game::startNewGame() {
@@ -353,6 +359,39 @@ int Game::nextPlayer(int currPlayer) {
 	return 1;
 }
 
-bool Game::isRunning() const {
-	return Game::running;
+void Game::playerTileClicked(int idx) {
+	if (Game::playerFlag == 1) {
+		std::cout << "First player current tile is " << firstPlayer->playerTiles[idx].getFirst() << " " 
+			<< firstPlayer->playerTiles[idx].getSecond() << std::endl;
+
+		if (firstPlayer->playerTiles[idx].getFirst() == table->firstFree) {
+			std::cout << "The first piece of the first player's tile is the same as the first free piece on the table" << std::endl;
+		}
+		else if (firstPlayer->playerTiles[idx].getFirst() == table->secondFree) {
+			std::cout << "The first piece of the first player's tile is the same as the second free piece on the table" << std::endl;
+		}
+		else if (firstPlayer->playerTiles[idx].getSecond() == table->firstFree) {
+			std::cout << "The second piece of the first player's tile is the same as the first free piece on the table" << std::endl;
+		}
+		else if (firstPlayer->playerTiles[idx].getSecond() == table->secondFree) {
+			std::cout << "The second piece of the first player's tile is the same as the second free piece on the table" << std::endl;
+		}
+	}
+	else {
+		std::cout << "Second player current tile is " << secondPlayer->playerTiles[idx].getFirst() << " "
+			<< secondPlayer->playerTiles[idx].getSecond() << std::endl;
+
+		if (secondPlayer->playerTiles[idx].getFirst() == table->firstFree) {
+			std::cout << "The first piece of the second player's tile is the same as the first free piece on the table" << std::endl;
+		}
+		else if (secondPlayer->playerTiles[idx].getFirst() == table->secondFree) {
+			std::cout << "The first piece of the second player's tile is the same as the second free piece on the table" << std::endl;
+		}
+		else if (secondPlayer->playerTiles[idx].getSecond() == table->firstFree) {
+			std::cout << "The second piece of the second player's tile is the same as the first free piece on the table" << std::endl;
+		}
+		else if (secondPlayer->playerTiles[idx].getSecond() == table->secondFree) {
+			std::cout << "The second piece of the second player's tile is the same as the second free piece on the table" << std::endl;
+		}
+	}
 }

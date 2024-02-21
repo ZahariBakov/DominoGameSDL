@@ -23,8 +23,6 @@ public:
 	void handleEvents();
 	void clean();
 	void isClicked(int xDown, int yDown, int xUp, int yUp);
-	void startNewGame();
-	int nextPlayer(int currPlayer);
 
 	bool isRunning() const;
 	
@@ -52,4 +50,8 @@ private:
 		classicRect,
 		playerRect,
 		playerNumRect;
+
+	void startNewGame();
+	int nextPlayer(int currPlayer);
+	void playerTileClicked(int idx);
 };

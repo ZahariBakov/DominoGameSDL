@@ -254,7 +254,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 	int btnH = 23;
 
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
-		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH))) {
+		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 0) {
 		Game::gameFlag = 1;
 		std::cout << "NEW GAME Button is clicked!" << std::endl;
 
@@ -265,7 +265,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 	btnW = 90;
 
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
-		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH))) {
+		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag > 0) {
 		Game::gameFlag = 1;
 		std::cout << "MENU Button is clicked!" << std::endl;
 
@@ -276,7 +276,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 	btnW = 80;
 
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
-		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH))) {
+		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 2) {
 		Game::playerFlag = nextPlayer(playerFlag);
 
 		std::cout << "PASS Button is clicked! Next player is: " << playerFlag << std::endl;
@@ -288,7 +288,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 	btnW = 130;
 
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
-		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH))) {
+		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1) {
 		Game::startNewGame();
 		Game::gameFlag = 2;
 
@@ -303,7 +303,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 	btnH = 32;
 
 	if (Game::playerFlag == 1 && Game::gameFlag == 2) {
-		std::cout << "First player tiles size: " << firstPlayer->playerTiles.size() << std::endl;
+		//std::cout << "First player tiles size: " << firstPlayer->playerTiles.size() << std::endl;
 		for (int i = 0; i < firstPlayer->playerTiles.size(); ++i) {
 			btnX = 150 + i * 100;
 
@@ -314,7 +314,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 		}	
 	}
 	else if (Game::playerFlag == 2 && Game::gameFlag == 2) {
-		std::cout << "Second player tiles size: " << secondPlayer->playerTiles.size() << std::endl;
+		//std::cout << "Second player tiles size: " << secondPlayer->playerTiles.size() << std::endl;
 		for (int i = 0; i < secondPlayer->playerTiles.size(); ++i) {
 			btnX = 150 + i * 100;
 

@@ -10,16 +10,38 @@ Table::Table() {
 	this->createMap();
 }
 
-void Table::addTile(Tile& newTile) {	
+void Table::addTile(Tile& newTile, int xPos, int yPos) {
 	if (this->tableTiles.size() == 0) {
 		this->firstFree = newTile.getFirst();
 		this->secondFree = newTile.getSecond();
-		map[9][9] = firstFree;
-		map[10][9] = secondFree;
+		map[yPos][xPos] = firstFree;
+		map[yPos + 1][xPos] = secondFree;
 		firstFreePos["x"] = 9;
 		firstFreePos["y"] = 9;
 		secondFreePos["y"] = 10;
 		secondFreePos["x"] = 9;
+	}
+	else {
+		if (newTile.getFirst() == firstFree) {
+			this->firstFree = newTile.getSecond();
+			map[yPos][xPos] = newTile.getFirst();
+			map[yPos][xPos + 1] = newTile.getSecond();
+		}
+		else if (newTile.getFirst() == secondFree) {
+			this->secondFree = newTile.getSecond();
+			map[yPos][xPos] = newTile.getFirst();
+			map[yPos][xPos + 1] = newTile.getSecond();
+		}
+		else if (newTile.getSecond() == firstFree) {
+			this->firstFree = newTile.getFirst();
+			map[yPos][xPos] = newTile.getSecond();
+			map[yPos][xPos - 1] = newTile.getFirst();
+		}
+		else {
+			this->secondFree = newTile.getFirst();
+			map[yPos][xPos] = newTile.getSecond();
+			map[yPos][xPos - 1] = newTile.getFirst();
+		}
 	}
 
 	this->tableTiles.push_back(newTile);
@@ -57,6 +79,7 @@ void Table::checkForPlacement(Tile playerTile, int xDown, int yDown, int xUp, in
 					std::cout << "can add tile here: [" << xPress << "][" << yPress << "]" << std::endl;
 					xPos = xPress;
 					yPos = yPress;
+					addTile(playerTile, xPress, yPress);
 				}
 			}
 		}
@@ -69,6 +92,7 @@ void Table::checkForPlacement(Tile playerTile, int xDown, int yDown, int xUp, in
 					std::cout << "can add tile here: [" << xPress << "][" << yPress << "]" << std::endl;
 					xPos = xPress;
 					yPos = yPress;
+					addTile(playerTile, xPress, yPress);
 				}
 			}
 		}

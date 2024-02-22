@@ -313,6 +313,12 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 				std::cout << "First player tile is clicked" << std::endl;
 			}
 		}	
+
+		for (auto tile : firstPlayer->playerTiles) {
+			if (tile.isSelected == true) {
+				table->checkForPlacement(tile, xDown, yDown, xUp, yUp);
+			}
+		}
 	}
 	else if (Game::playerFlag == 2 && Game::gameFlag == 2) {
 		//std::cout << "Second player tiles size: " << secondPlayer->playerTiles.size() << std::endl;
@@ -323,6 +329,12 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 				(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH))) {
 				Game::playerTileClicked(i);
 				std::cout << "Second player tile is clicked" << std::endl;
+			}
+		}
+
+		for (auto tile : secondPlayer->playerTiles) {
+			if (tile.isSelected == true) {
+				table->checkForPlacement(tile, xDown, yDown, xUp, yUp);
 			}
 		}
 	}
@@ -361,6 +373,10 @@ int Game::nextPlayer(int currPlayer) {
 
 void Game::playerTileClicked(int idx) {
 	if (Game::playerFlag == 1) {
+		for (auto tile : firstPlayer->playerTiles) {
+			tile.isSelected = false;
+		}
+		firstPlayer->playerTiles[idx].isSelected = true;
 		std::cout << "First player current tile is " << firstPlayer->playerTiles[idx].getFirst() << " " 
 			<< firstPlayer->playerTiles[idx].getSecond() << std::endl;
 
@@ -378,6 +394,10 @@ void Game::playerTileClicked(int idx) {
 		}
 	}
 	else {
+		for (auto tile : secondPlayer->playerTiles) {
+			tile.isSelected = false;
+		}
+		secondPlayer->playerTiles[idx].isSelected = true;
 		std::cout << "Second player current tile is " << secondPlayer->playerTiles[idx].getFirst() << " "
 			<< secondPlayer->playerTiles[idx].getSecond() << std::endl;
 

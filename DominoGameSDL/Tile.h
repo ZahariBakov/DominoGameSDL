@@ -10,6 +10,8 @@ public:
 	std::string getFirst() const;
 	std::string getSecond() const;
 
+	bool isSelected;
+
 private:
 	std::string _first;
 	std::string _second;

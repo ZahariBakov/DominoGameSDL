@@ -2,7 +2,9 @@
 
 #include <iostream>
 
-Tile::Tile() {}
+Tile::Tile() {
+	this->isSelected = false;
+}
 
 Tile::Tile(std::string first, std::string second) : _first(first), _second(second) {}
 

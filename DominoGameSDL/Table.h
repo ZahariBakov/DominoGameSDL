@@ -17,6 +17,7 @@ public:
 	std::string map[20][20];
 
 	void printMap() const;
+	void checkForPlacement(Tile playerTile, int xDown, int yDown, int xUp, int yUp);
 
 private:
 	void createMap();

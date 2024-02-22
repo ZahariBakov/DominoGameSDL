@@ -33,6 +33,10 @@ void Table::printMap() const {
 	}
 }
 
+void Table::checkForPlacement(Tile playerTile, int xDown, int yDown, int xUp, int yUp) {
+
+}
+
 void Table::createMap() {
 	for (int row = 0; row < 20; ++row) {
 		for (int col = 0; col < 20; ++col) {

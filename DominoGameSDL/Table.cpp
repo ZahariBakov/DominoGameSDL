@@ -10,12 +10,10 @@ Table::Table() {
 	this->createMap();
 }
 
-void Table::addTile(Domino& domino) {
-	Tile tile = domino.giveTile();
-	
+void Table::addTile(Tile& newTile) {	
 	if (this->tableTiles.size() == 0) {
-		this->firstFree = tile.getFirst();
-		this->secondFree = tile.getSecond();
+		this->firstFree = newTile.getFirst();
+		this->secondFree = newTile.getSecond();
 		map[9][9] = firstFree;
 		map[10][9] = secondFree;
 		firstFreePos["x"] = 9;
@@ -24,7 +22,7 @@ void Table::addTile(Domino& domino) {
 		secondFreePos["x"] = 9;
 	}
 
-	this->tableTiles.push_back(tile);
+	this->tableTiles.push_back(newTile);
 	std::cout << "First free piece of tile is: " << firstFree << std::endl;
 	std::cout << "Second free piece of tile is: " << secondFree << std::endl;
 	std::cout << "Table add tile." << std::endl;
@@ -40,7 +38,7 @@ void Table::printMap() const {
 	}
 }
 
-void Table::checkForPlacement(Tile playerTile, int xDown, int yDown, int xUp, int yUp) {
+void Table::checkForPlacement(Tile playerTile, int xDown, int yDown, int xUp, int yUp, int &xPos, int &yPos) {
 	int xPress =   (xDown - matrixX) / matrixPieceSize;
 	int yPress =   (yDown - matrixY) / matrixPieceSize;
 	int xUnpress = (xUp - matrixX)   / matrixPieceSize;
@@ -57,16 +55,20 @@ void Table::checkForPlacement(Tile playerTile, int xDown, int yDown, int xUp, in
 				((yPress == firstFreePos["y"] - 1 || yPress == firstFreePos["y"] + 1 || yPress == firstFreePos["y"]) && (xPress == firstFreePos["x"]))) {
 				if (map[yPress][xPress] == "*") {
 					std::cout << "can add tile here: [" << xPress << "][" << yPress << "]" << std::endl;
+					xPos = xPress;
+					yPos = yPress;
 				}
 			}
 		}
-		else {
+		if (playerTile.getFirst() == secondFree || playerTile.getSecond() == secondFree) {
 			std::cout << "second free is with pos: " << secondFreePos["x"] << " " << secondFreePos["y"] << std::endl;
 
 			if ((xPress == secondFreePos["x"] - 1 || xPress == secondFreePos["x"] + 1 || xPress == secondFreePos["x"]) && (yPress == secondFreePos["y"]) ||
 				((yPress == secondFreePos["y"] - 1 || yPress == secondFreePos["y"] + 1 || yPress == secondFreePos["y"]) && (xPress == secondFreePos["x"]))) {
 				if (map[yPress][xPress] == "*") {
 					std::cout << "can add tile here: [" << xPress << "][" << yPress << "]" << std::endl;
+					xPos = xPress;
+					yPos = yPress;
 				}
 			}
 		}

@@ -306,6 +306,8 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 	btnY = wh - 50;
 	btnW = 64;
 	btnH = 32;
+	int xPos = 0;
+	int yPos = 0;
 
 	if (Game::playerFlag == 1 && Game::gameFlag == 2) {
 		//std::cout << "First player tiles size: " << firstPlayer->playerTiles.size() << std::endl;
@@ -327,11 +329,14 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 			}
 
 			if (Game::isInMatrix) {
-				for (auto tile : firstPlayer->playerTiles) {
-					if (tile.isSelected == true) {
-						// TODO...
-						// need another check if is clicked in matrix
-						table->checkForPlacement(tile, xDown, yDown, xUp, yUp);
+				//for (auto &tile : firstPlayer->playerTiles) {
+				for (int i = 0;i < firstPlayer->playerTiles.size(); ++i) {
+					if (firstPlayer->playerTiles[i].isSelected == true) {
+						table->checkForPlacement(firstPlayer->playerTiles[i], xDown, yDown, xUp, yUp, xPos, yPos);
+						if (xPos != 0 && yPos != 0) {
+							std::cout << "Xpos - yPos: " << xPos << "-" << yPos << std::endl;
+							firstPlayer->removeTile(i);
+						}
 					}
 				}
 			}		
@@ -358,9 +363,14 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 			}
 
 			if (Game::isInMatrix) {
-				for (auto tile : secondPlayer->playerTiles) {
-					if (tile.isSelected == true) {
-						table->checkForPlacement(tile, xDown, yDown, xUp, yUp);
+				//for (auto &tile : secondPlayer->playerTiles) {
+				for (int i =0; i < secondPlayer->playerTiles.size(); ++i) {
+					if (secondPlayer->playerTiles[i].isSelected == true) {
+						table->checkForPlacement(secondPlayer->playerTiles[i], xDown, yDown, xUp, yUp, xPos, yPos);
+						if (xPos != 0 && yPos != 0) {
+							std::cout << "Xpos - yPos: " << xPos << "-" << yPos << std::endl;
+							secondPlayer->removeTile(i);
+						}
 					}
 				}
 			}		
@@ -387,7 +397,8 @@ void Game::startNewGame() {
 	secondPlayer->addTiles(dominoTiles);
 	std::cout << "Second player have tiles" << std::endl;
 
-	table->addTile(dominoTiles);
+	Tile tmpTile = dominoTiles.giveTile();
+	table->addTile(tmpTile);
 	std::cout << "Table have tile" << std::endl;
 }
 
@@ -401,7 +412,7 @@ int Game::nextPlayer(int currPlayer) {
 
 bool Game::playerTileClicked(int idx) const {
 	if (Game::playerFlag == 1) {
-		for (auto tile : firstPlayer->playerTiles) {
+		for (auto &tile : firstPlayer->playerTiles) {
 			tile.isSelected = false;
 		}
 		firstPlayer->playerTiles[idx].isSelected = true;
@@ -427,7 +438,7 @@ bool Game::playerTileClicked(int idx) const {
 		}
 	}
 	else {
-		for (auto tile : secondPlayer->playerTiles) {
+		for (auto &tile : secondPlayer->playerTiles) {
 			tile.isSelected = false;
 		}
 		secondPlayer->playerTiles[idx].isSelected = true;

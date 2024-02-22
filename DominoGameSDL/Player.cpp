@@ -13,3 +13,10 @@ void Player::addTiles(Domino& domino) {
 
 	std::cout << "Player add tiles!" << std::endl;
 }
+
+Tile Player::removeTile(int idx) {
+	Tile currTile = playerTiles[idx];
+	playerTiles.erase(playerTiles.begin() + idx);
+
+	return currTile;
+}

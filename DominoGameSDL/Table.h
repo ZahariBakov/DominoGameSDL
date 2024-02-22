@@ -12,7 +12,7 @@ public:
 
 	std::vector<Tile> tableTiles;
 
-	void addTile(Domino& domino);
+	void addTile(Tile& newTile);
 
 	std::string firstFree;
 	std::string secondFree;
@@ -22,7 +22,7 @@ public:
 	std::map<std::string, int> secondFreePos;
 
 	void printMap() const;
-	void checkForPlacement(Tile playerTile, int xDown, int yDown, int xUp, int yUp);
+	void checkForPlacement(Tile playerTile, int xDown, int yDown, int xUp, int yUp, int &xPos, int &yPos);
 
 private:
 	void createMap();

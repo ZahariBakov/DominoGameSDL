@@ -10,5 +10,7 @@ public:
 
 	void addTiles(Domino& domino);
 
+	Tile removeTile(int idx);
+
 	bool isPossible;
 };

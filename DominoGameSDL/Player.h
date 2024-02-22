@@ -9,4 +9,6 @@ public:
 	std::vector<Tile> playerTiles;
 
 	void addTiles(Domino& domino);
+
+	bool isPossible;
 };

@@ -2,6 +2,10 @@
 
 #include <iostream>
 
+const int matrixX = 300;
+const int matrixY = 10;
+const int matrixPieceSize = 32;
+
 Player* firstPlayer;
 Player* secondPlayer;
 Table*  table;
@@ -11,6 +15,7 @@ Game::Game() {
 	Game::renderer = NULL;
 
 	Game::running = true;
+	Game::isInMatrix = false;
 
 	Game::mouseDownX = 0;
 	Game::mouseDownY = 0;
@@ -167,11 +172,11 @@ void Game::render() {
 		SDL_RenderCopy(renderer, classicTex, NULL, &classicRect);
 	}
 	else {
-		int x = 300;
-		int y = 10;
+		int x = matrixX;
+		int y = matrixY;
 		for (int row = 0; row < 20; ++row) {
 			for (int col = 0; col < 20; ++col) {
-				TextureManager::Instance()->drawTexture("piece", x + (row * 32), y + (col * 32), 32, 32, renderer);
+				TextureManager::Instance()->drawTexture("piece", x + (row * matrixPieceSize), y + (col * matrixPieceSize), matrixPieceSize, matrixPieceSize, renderer);
 			}
 		}
 		
@@ -183,7 +188,7 @@ void Game::render() {
 		for (int i = 0; i < table->tableTiles.size(); ++i) {
 			std::string tileName = table->tableTiles[i].getFirst() + table->tableTiles[i].getSecond();
 			TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), tileName, renderer);
-			TextureManager::Instance()->drawTexture(tileName, x + 9 * 32 - 16, y + 9 * 32 + 16, 64, 32, renderer, 90);
+			TextureManager::Instance()->drawTexture(tileName, x + 9 * matrixPieceSize - 16, y + 9 * matrixPieceSize + 16, matrixPieceSize * 2, matrixPieceSize, renderer, 90);
 		}
 
 		if (Game::playerFlag == 1) {
@@ -192,7 +197,7 @@ void Game::render() {
 
 				std::string tileName = firstPlayer->playerTiles[i].getFirst() + firstPlayer->playerTiles[i].getSecond();
 				TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), tileName, renderer);
-				TextureManager::Instance()->drawTexture(tileName, x, wh - 50, 64, 32, renderer);
+				TextureManager::Instance()->drawTexture(tileName, x, wh - 50, matrixPieceSize * 2, matrixPieceSize, renderer);
 			}
 		}
 
@@ -202,7 +207,7 @@ void Game::render() {
 
 				std::string tileName = secondPlayer->playerTiles[i].getFirst() + secondPlayer->playerTiles[i].getSecond();
 				TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), tileName, renderer);
-				TextureManager::Instance()->drawTexture(tileName, x, wh - 50, 64, 32, renderer);
+				TextureManager::Instance()->drawTexture(tileName, x, wh - 50, matrixPieceSize * 2, matrixPieceSize, renderer);
 			}
 		}
 	}
@@ -309,16 +314,29 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 
 			if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 				(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH))) {
-				Game::playerTileClicked(i);
+				firstPlayer->isPossible = Game::playerTileClicked(i);
 				std::cout << "First player tile is clicked" << std::endl;
 			}
 		}	
 
-		for (auto tile : firstPlayer->playerTiles) {
-			if (tile.isSelected == true) {
-				table->checkForPlacement(tile, xDown, yDown, xUp, yUp);
+		if (firstPlayer->isPossible) {
+			if ((xDown > matrixX && xDown < (matrixX + matrixPieceSize * 20)) && (xUp > matrixX && xUp < (matrixX + matrixPieceSize * 20)) &&
+				(yDown > matrixY && yDown < (matrixY + matrixPieceSize * 20)) && (yUp > matrixY && yUp < (matrixY + matrixPieceSize * 20))) {
+				Game::isInMatrix = true;
+				std::cout << "First player click in matrix" << std::endl;
 			}
+
+			if (Game::isInMatrix) {
+				for (auto tile : firstPlayer->playerTiles) {
+					if (tile.isSelected == true) {
+						// TODO...
+						// need another check if is clicked in matrix
+						table->checkForPlacement(tile, xDown, yDown, xUp, yUp);
+					}
+				}
+			}		
 		}
+		
 	}
 	else if (Game::playerFlag == 2 && Game::gameFlag == 2) {
 		//std::cout << "Second player tiles size: " << secondPlayer->playerTiles.size() << std::endl;
@@ -327,16 +345,26 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 
 			if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 				(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH))) {
-				Game::playerTileClicked(i);
+				secondPlayer->isPossible = Game::playerTileClicked(i);
 				std::cout << "Second player tile is clicked" << std::endl;
 			}
 		}
 
-		for (auto tile : secondPlayer->playerTiles) {
-			if (tile.isSelected == true) {
-				table->checkForPlacement(tile, xDown, yDown, xUp, yUp);
+		if (secondPlayer->isPossible) {
+			if ((xDown > matrixX && xDown < (matrixX + matrixPieceSize * 20)) && (xUp > matrixX && xUp < (matrixX + matrixPieceSize * 20)) &&
+				(yDown > matrixY && yDown < (matrixY + matrixPieceSize * 20)) && (yUp > matrixY && yUp < (matrixY + matrixPieceSize * 20))) {
+				Game::isInMatrix = true;
+				std::cout << "Second player click in matrix" << std::endl;
 			}
-		}
+
+			if (Game::isInMatrix) {
+				for (auto tile : secondPlayer->playerTiles) {
+					if (tile.isSelected == true) {
+						table->checkForPlacement(tile, xDown, yDown, xUp, yUp);
+					}
+				}
+			}		
+		}	
 	}
 }
 
@@ -371,26 +399,31 @@ int Game::nextPlayer(int currPlayer) {
 	return 1;
 }
 
-void Game::playerTileClicked(int idx) {
+bool Game::playerTileClicked(int idx) const {
 	if (Game::playerFlag == 1) {
 		for (auto tile : firstPlayer->playerTiles) {
 			tile.isSelected = false;
 		}
 		firstPlayer->playerTiles[idx].isSelected = true;
+
 		std::cout << "First player current tile is " << firstPlayer->playerTiles[idx].getFirst() << " " 
 			<< firstPlayer->playerTiles[idx].getSecond() << std::endl;
 
 		if (firstPlayer->playerTiles[idx].getFirst() == table->firstFree) {
 			std::cout << "The first piece of the first player's tile is the same as the first free piece on the table" << std::endl;
+			return true;
 		}
 		else if (firstPlayer->playerTiles[idx].getFirst() == table->secondFree) {
 			std::cout << "The first piece of the first player's tile is the same as the second free piece on the table" << std::endl;
+			return true;
 		}
 		else if (firstPlayer->playerTiles[idx].getSecond() == table->firstFree) {
 			std::cout << "The second piece of the first player's tile is the same as the first free piece on the table" << std::endl;
+			return true;
 		}
 		else if (firstPlayer->playerTiles[idx].getSecond() == table->secondFree) {
 			std::cout << "The second piece of the first player's tile is the same as the second free piece on the table" << std::endl;
+			return true;
 		}
 	}
 	else {
@@ -398,20 +431,27 @@ void Game::playerTileClicked(int idx) {
 			tile.isSelected = false;
 		}
 		secondPlayer->playerTiles[idx].isSelected = true;
+
 		std::cout << "Second player current tile is " << secondPlayer->playerTiles[idx].getFirst() << " "
 			<< secondPlayer->playerTiles[idx].getSecond() << std::endl;
 
 		if (secondPlayer->playerTiles[idx].getFirst() == table->firstFree) {
 			std::cout << "The first piece of the second player's tile is the same as the first free piece on the table" << std::endl;
+			return true;
 		}
 		else if (secondPlayer->playerTiles[idx].getFirst() == table->secondFree) {
 			std::cout << "The first piece of the second player's tile is the same as the second free piece on the table" << std::endl;
+			return true;
 		}
 		else if (secondPlayer->playerTiles[idx].getSecond() == table->firstFree) {
 			std::cout << "The second piece of the second player's tile is the same as the first free piece on the table" << std::endl;
+			return true;
 		}
 		else if (secondPlayer->playerTiles[idx].getSecond() == table->secondFree) {
 			std::cout << "The second piece of the second player's tile is the same as the second free piece on the table" << std::endl;
+			return true;
 		}
 	}
+
+	return false;
 }

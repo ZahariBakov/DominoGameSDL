@@ -2,6 +2,10 @@
 
 #include <iostream>
 
+const int matrixX = 300;
+const int matrixY = 10;
+const int matrixPieceSize = 32;
+
 Table::Table() {
 	this->createMap();
 }

@@ -2,7 +2,9 @@
 
 #include <iostream>
 
-Player::Player() {}
+Player::Player() {
+	this->isPossible = false;
+}
 
 void Player::addTiles(Domino& domino) {
 	for (int i = 0; i < 10; ++i) {

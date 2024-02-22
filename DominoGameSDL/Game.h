@@ -29,7 +29,8 @@ public:
 private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
-	bool running;
+	bool running, isInMatrix;
+	bool playerTileClicked(int idx) const;
 
 	int mouseDownX, mouseDownY, gameFlag, playerFlag;
 
@@ -53,5 +54,4 @@ private:
 
 	void startNewGame();
 	int nextPlayer(int currPlayer);
-	void playerTileClicked(int idx);
 };

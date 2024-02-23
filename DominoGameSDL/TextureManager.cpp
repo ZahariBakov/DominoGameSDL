@@ -33,7 +33,7 @@ void TextureManager::drawTexture(std::string id, int xpos, int ypos, int width, 
 
 void TextureManager::drawRectangle(SDL_Renderer* renderer, int xpos, int ypos, int width, int height) {
 	SDL_Rect fillRect = { xpos, ypos, width, height };
-	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 	SDL_RenderFillRect(renderer, &fillRect);
 }
 

@@ -33,6 +33,7 @@ Game::Game() {
 	Game::classicTex   = NULL;
 	Game::playerTex    = NULL;
 	Game::playerNumTex = NULL;
+	Game::okTex        = NULL;
 
 	Game::newRect       = { 0, 0, 0, 0 };
 	Game::menuRect      = { 0, 0, 0, 0 };
@@ -41,6 +42,7 @@ Game::Game() {
 	Game::classicRect   = { 0, 0, 0, 0 };
 	Game::playerRect    = { 0, 0, 0, 0 };
 	Game::playerNumRect = { 0, 0, 0, 0 };
+	Game::okRect        = { 0, 0, 0, 0 };
 }
 
 Game::~Game() {
@@ -131,6 +133,9 @@ bool Game::ttf_init() {
 	tempSurfaceText = TTF_RenderText_Blended(font1, playerNum, { 255, 255, 255, 255 });
 	playerNumTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
 
+	tempSurfaceText = TTF_RenderText_Blended(font1, "OK", { 255, 255, 255, 255 });
+	okTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
 	int tw, th;
 	SDL_QueryTexture(newTex, 0, 0, &tw, &th);
 	newRect = { 10, 10, tw, th };
@@ -152,6 +157,9 @@ bool Game::ttf_init() {
 
 	SDL_QueryTexture(playerNumTex, 0, 0, &tw, &th);
 	playerNumRect = { 140, wh - 110, tw, th };
+
+	SDL_QueryTexture(okTex, 0, 0, &tw, &th);
+	okRect = { 10, 100, tw, th };
 
 	SDL_FreeSurface(tempSurfaceText);
 	TTF_CloseFont(font1);
@@ -186,6 +194,10 @@ void Game::render() {
 		SDL_RenderCopy(renderer, passTex, NULL, &passRect);
 		SDL_RenderCopy(renderer, playerTex, NULL, &playerRect);
 		SDL_RenderCopy(renderer, playerNumTex, NULL, &playerNumRect);
+
+		if (Game::gameFlag == 3) {
+			SDL_RenderCopy(renderer, okTex, NULL, &okRect);
+		}
 
 
 		for (int i = 0; i < table->tableTiles.size(); ++i) {
@@ -222,7 +234,7 @@ void Game::render() {
 			}
 		}
 	}
-	//SDL_SetRenderDrawColor(renderer, 64, 64, 64, 255);
+	SDL_SetRenderDrawColor(renderer, 64, 64, 64, 255);
 
 	SDL_RenderPresent(renderer);
 }
@@ -281,7 +293,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 	btnW = 90;
 
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
-		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag > 0) {
+		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 2) {
 		Game::gameFlag = 1;
 		std::cout << "MENU Button is clicked!" << std::endl;
 
@@ -299,6 +311,19 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 
 		return;
 	}
+
+	btnY = 115;
+	btnW = 44;
+
+	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
+		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 3) {
+		Game::playerFlag = nextPlayer(playerFlag);
+		Game::gameFlag = 2;
+		std::cout << "OK Button is clicked! Next player is: " << playerFlag << std::endl;
+
+		return;
+	}
+
 
 	btnY = 163;
 	btnW = 130;
@@ -347,6 +372,8 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 						if (xPos != 0 && yPos != 0) {
 							std::cout << "Xpos - yPos: " << xPos << "-" << yPos << std::endl;
 							firstPlayer->removeTile(i);
+							Game::gameFlag = 3;
+							Game::isInMatrix = false;
 						}
 					}
 				}
@@ -381,6 +408,8 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 						if (xPos != 0 && yPos != 0) {
 							std::cout << "Xpos - yPos: " << xPos << "-" << yPos << std::endl;
 							secondPlayer->removeTile(i);
+							Game::gameFlag = 3;
+							Game::isInMatrix = false;
 						}
 					}
 				}

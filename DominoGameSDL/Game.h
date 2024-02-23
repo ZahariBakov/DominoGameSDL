@@ -42,7 +42,8 @@ private:
 		* passTex,
 		* classicTex,
 		* playerTex,
-		* playerNumTex;
+		* playerNumTex,
+		* okTex;
 
 	SDL_Rect newRect,
 		menuRect,
@@ -50,7 +51,8 @@ private:
 		passRect,
 		classicRect,
 		playerRect,
-		playerNumRect;
+		playerNumRect,
+		okRect;
 
 	void startNewGame();
 	int nextPlayer(int currPlayer);

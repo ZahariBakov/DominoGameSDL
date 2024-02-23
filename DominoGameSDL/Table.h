@@ -11,6 +11,7 @@ public:
 	Table();
 
 	std::vector<Tile> tableTiles;
+	std::vector<std::string> tileYX;
 
 	void addTile(Tile& newTile, int xPos = 9, int yPos = 9);
 

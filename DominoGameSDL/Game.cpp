@@ -1,10 +1,14 @@
 #include "Game.h"
 
 #include <iostream>
+#include <sstream>
 
 const int matrixX = 300;
 const int matrixY = 10;
 const int matrixPieceSize = 32;
+
+std::string tableCoordinates;
+int tableCoordInt[2]{};
 
 Player* firstPlayer;
 Player* secondPlayer;
@@ -172,11 +176,9 @@ void Game::render() {
 		SDL_RenderCopy(renderer, classicTex, NULL, &classicRect);
 	}
 	else {
-		int x = matrixX;
-		int y = matrixY;
 		for (int row = 0; row < 20; ++row) {
 			for (int col = 0; col < 20; ++col) {
-				TextureManager::Instance()->drawTexture("piece", x + (row * matrixPieceSize), y + (col * matrixPieceSize), matrixPieceSize, matrixPieceSize, renderer);
+				TextureManager::Instance()->drawTexture("piece", matrixX + (row * matrixPieceSize), matrixY + (col * matrixPieceSize), matrixPieceSize, matrixPieceSize, renderer);
 			}
 		}
 		
@@ -185,10 +187,19 @@ void Game::render() {
 		SDL_RenderCopy(renderer, playerTex, NULL, &playerRect);
 		SDL_RenderCopy(renderer, playerNumTex, NULL, &playerNumRect);
 
+
 		for (int i = 0; i < table->tableTiles.size(); ++i) {
+			tableCoordinates = table->tileYX[i];
+			Game::CoordinatesToInt();
 			std::string tileName = table->tableTiles[i].getFirst() + table->tableTiles[i].getSecond();
+
 			TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), tileName, renderer);
-			TextureManager::Instance()->drawTexture(tileName, x + 9 * matrixPieceSize - 16, y + 9 * matrixPieceSize + 16, matrixPieceSize * 2, matrixPieceSize, renderer, 90);
+			if (i == 0) {
+				TextureManager::Instance()->drawTexture(tileName, matrixX + tableCoordInt[1] * matrixPieceSize - 16, matrixY + tableCoordInt[0] * matrixPieceSize + 16, matrixPieceSize * 2, matrixPieceSize, renderer, 90);
+			}
+			else {
+				TextureManager::Instance()->drawTexture(tileName, matrixX + tableCoordInt[1] * matrixPieceSize, matrixY + tableCoordInt[0] * matrixPieceSize, matrixPieceSize * 2, matrixPieceSize, renderer);
+			}	
 		}
 
 		if (Game::playerFlag == 1) {
@@ -335,7 +346,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 						table->checkForPlacement(firstPlayer->playerTiles[i], xDown, yDown, xUp, yUp, xPos, yPos);
 						if (xPos != 0 && yPos != 0) {
 							std::cout << "Xpos - yPos: " << xPos << "-" << yPos << std::endl;
-							Tile tmpTile = firstPlayer->removeTile(i);
+							firstPlayer->removeTile(i);
 						}
 					}
 				}
@@ -369,8 +380,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 						table->checkForPlacement(secondPlayer->playerTiles[i], xDown, yDown, xUp, yUp, xPos, yPos);
 						if (xPos != 0 && yPos != 0) {
 							std::cout << "Xpos - yPos: " << xPos << "-" << yPos << std::endl;
-							Tile tmpTile = secondPlayer->removeTile(i);
-							table->addTile(tmpTile, xPos, yPos);
+							secondPlayer->removeTile(i);
 						}
 					}
 				}
@@ -410,6 +420,18 @@ int Game::nextPlayer(int currPlayer) {
 	}
 	
 	return 1;
+}
+
+void Game::CoordinatesToInt() {
+	std::stringstream stream(tableCoordinates);
+	std::string temp;
+	int idx = 0;
+
+	while (std::getline(stream, temp, ',')) {
+		int value = std::stoi(temp);
+		tableCoordInt[idx] = value;
+		++idx;
+	}
 }
 
 bool Game::playerTileClicked(int idx) const {

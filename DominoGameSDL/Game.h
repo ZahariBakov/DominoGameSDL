@@ -54,4 +54,5 @@ private:
 
 	void startNewGame();
 	int nextPlayer(int currPlayer);
+	void CoordinatesToInt();
 };

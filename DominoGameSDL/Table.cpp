@@ -1,10 +1,12 @@
 #include "Table.h"
 
 #include <iostream>
+#include <sstream>
 
 const int matrixX = 300;
 const int matrixY = 10;
 const int matrixPieceSize = 32;
+std::string coordinates;
 
 Table::Table() {
 	this->createMap();
@@ -20,27 +22,45 @@ void Table::addTile(Tile& newTile, int xPos, int yPos) {
 		firstFreePos["y"] = 9;
 		secondFreePos["y"] = 10;
 		secondFreePos["x"] = 9;
+		coordinates = "9,9";
+		tileYX.push_back(coordinates);
 	}
 	else {
 		if (newTile.getFirst() == firstFree) {
 			this->firstFree = newTile.getSecond();
 			map[yPos][xPos] = newTile.getFirst();
 			map[yPos][xPos + 1] = newTile.getSecond();
+			std::stringstream ss;
+			ss << yPos << "," << xPos;
+			coordinates = ss.str();
+			tileYX.push_back(coordinates);
 		}
 		else if (newTile.getFirst() == secondFree) {
 			this->secondFree = newTile.getSecond();
 			map[yPos][xPos] = newTile.getFirst();
 			map[yPos][xPos + 1] = newTile.getSecond();
+			std::stringstream ss;
+			ss << yPos << "," << xPos;
+			coordinates = ss.str();
+			tileYX.push_back(coordinates);
 		}
 		else if (newTile.getSecond() == firstFree) {
 			this->firstFree = newTile.getFirst();
 			map[yPos][xPos] = newTile.getSecond();
 			map[yPos][xPos - 1] = newTile.getFirst();
+			std::stringstream ss;
+			ss << yPos << "," << (xPos - 1);
+			coordinates = ss.str();
+			tileYX.push_back(coordinates);
 		}
 		else {
 			this->secondFree = newTile.getFirst();
 			map[yPos][xPos] = newTile.getSecond();
 			map[yPos][xPos - 1] = newTile.getFirst();
+			std::stringstream ss;
+			ss << yPos << "," << (xPos - 1);
+			coordinates = ss.str();
+			tileYX.push_back(coordinates);
 		}
 	}
 

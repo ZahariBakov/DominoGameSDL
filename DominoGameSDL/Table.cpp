@@ -34,6 +34,8 @@ void Table::addTile(Tile& newTile, int xPos, int yPos) {
 			ss << yPos << "," << xPos;
 			coordinates = ss.str();
 			tileYX.push_back(coordinates);
+			firstFreePos["x"] = xPos + 1;
+			firstFreePos["y"] = yPos;
 		}
 		else if (newTile.getFirst() == secondFree) {
 			this->secondFree = newTile.getSecond();
@@ -43,6 +45,8 @@ void Table::addTile(Tile& newTile, int xPos, int yPos) {
 			ss << yPos << "," << xPos;
 			coordinates = ss.str();
 			tileYX.push_back(coordinates);
+			secondFreePos["y"] = yPos;
+			secondFreePos["x"] = xPos + 1;
 		}
 		else if (newTile.getSecond() == firstFree) {
 			this->firstFree = newTile.getFirst();
@@ -52,6 +56,8 @@ void Table::addTile(Tile& newTile, int xPos, int yPos) {
 			ss << yPos << "," << (xPos - 1);
 			coordinates = ss.str();
 			tileYX.push_back(coordinates);
+			firstFreePos["x"] = xPos - 1;
+			firstFreePos["y"] = yPos;
 		}
 		else {
 			this->secondFree = newTile.getFirst();
@@ -61,12 +67,16 @@ void Table::addTile(Tile& newTile, int xPos, int yPos) {
 			ss << yPos << "," << (xPos - 1);
 			coordinates = ss.str();
 			tileYX.push_back(coordinates);
+			secondFreePos["y"] = yPos;
+			secondFreePos["x"] = xPos - 1;
 		}
 	}
 
 	this->tableTiles.push_back(newTile);
 	std::cout << "First free piece of tile is: " << firstFree << std::endl;
 	std::cout << "Second free piece of tile is: " << secondFree << std::endl;
+	std::cout << "First free pos [" << firstFreePos["x"] << "][" << firstFreePos["y"] << "]\n";
+	std::cout << "Second free pos [" << secondFreePos["x"] << "][" << secondFreePos["y"] << "]\n";
 	std::cout << "Table add tile." << std::endl;
 	printMap();
 }

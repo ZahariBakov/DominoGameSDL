@@ -4,12 +4,12 @@
 #include <random>
 #include <algorithm>
 
-Domino::Domino() {
+Domino::Domino(SDL_Renderer* renderer) {
 	this->_tileIdx = 0;
 
 	for (int i = 0; i < 7; ++i) {
 		for (int j = i; j < 7; ++j) {
-			dominoTiles.push_back(Tile(std::to_string(i), std::to_string(j)));
+			dominoTiles.push_back(Tile(renderer, std::to_string(i), std::to_string(j), 0, 0));
 		}
 	}
 
@@ -32,14 +32,6 @@ void Domino::shuffle() {
 Tile Domino::giveTile() {
 	Tile result = dominoTiles[this->_tileIdx];
 	this->_tileIdx++;
-
-	return result;
-}
-
-std::string Domino::imagePath(std::string name) {
-	std::string result;
-
-	result = "assets/classic/" + name + ".png";
 
 	return result;
 }

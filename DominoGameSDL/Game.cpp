@@ -13,6 +13,7 @@ int tableCoordInt[2]{};
 Player* firstPlayer;
 Player* secondPlayer;
 Table*  table;
+Domino* dominoTiles;
 
 Game::Game() {
 	Game::window   = NULL;
@@ -69,7 +70,9 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 				firstPlayer  = new Player();
 				secondPlayer = new Player();
 				table = new Table();
-				table->printMap();
+				dominoTiles = new Domino(renderer);
+				table->setRenderer(renderer);
+				//table->printMap();
 			}
 			else {
 				std::cout << "Renderer init failed!\n";
@@ -189,6 +192,8 @@ void Game::render() {
 				TextureManager::Instance()->drawTexture("piece", matrixX + (row * matrixPieceSize), matrixY + (col * matrixPieceSize), matrixPieceSize, matrixPieceSize, renderer);
 			}
 		}
+
+		table->render();
 		
 		if (Game::gameFlag == 2) {
 			SDL_RenderCopy(renderer, menuTex, NULL, &menuRect);
@@ -203,38 +208,14 @@ void Game::render() {
 		}
 
 
-		for (int i = 0; i < table->tableTiles.size(); ++i) {
-			tableCoordinates = table->tileYX[i];
-			Game::CoordinatesToInt();
-			std::string tileName = table->tableTiles[i].getFirst() + table->tableTiles[i].getSecond();
-
-			TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), tileName, renderer);
-			if (i == 0) {
-				TextureManager::Instance()->drawTexture(tileName, matrixX + tableCoordInt[1] * matrixPieceSize - 16, matrixY + tableCoordInt[0] * matrixPieceSize + 16, matrixPieceSize * 2, matrixPieceSize, renderer, 90);
-			}
-			else {
-				TextureManager::Instance()->drawTexture(tileName, matrixX + tableCoordInt[1] * matrixPieceSize, matrixY + tableCoordInt[0] * matrixPieceSize, matrixPieceSize * 2, matrixPieceSize, renderer);
-			}	
-		}
+		
 
 		if (Game::playerFlag == 1) {
-			for (int i = 0; i < firstPlayer->playerTiles.size(); ++i) {
-				int x = 150 + i * 100;
-
-				std::string tileName = firstPlayer->playerTiles[i].getFirst() + firstPlayer->playerTiles[i].getSecond();
-				TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), tileName, renderer);
-				TextureManager::Instance()->drawTexture(tileName, x, wh - 50, matrixPieceSize * 2, matrixPieceSize, renderer);
-			}
+			firstPlayer->render();
 		}
 
 		if (Game::playerFlag == 2) {
-			for (int i = 0; i < secondPlayer->playerTiles.size(); ++i) {
-				int x = 150 + i * 100;
-
-				std::string tileName = secondPlayer->playerTiles[i].getFirst() + secondPlayer->playerTiles[i].getSecond();
-				TextureManager::Instance()->loadTexture(dominoTiles.imagePath(tileName).c_str(), tileName, renderer);
-				TextureManager::Instance()->drawTexture(tileName, x, wh - 50, matrixPieceSize * 2, matrixPieceSize, renderer);
-			}
+			secondPlayer->render();
 		}
 	}
 	SDL_SetRenderDrawColor(renderer, 64, 64, 64, 255);
@@ -264,7 +245,7 @@ void Game::handleEvents() {
 			}; break;
 			case SDL_KEYDOWN: {
 				if (event.key.keysym.sym == SDLK_LEFT && Game::gameFlag == 3) {
-					table->moveTileInLeft();
+					//table->moveTileInLeft();
 					std::cout << "left arrow" << std::endl;
 				}
 				if (event.key.keysym.sym == SDLK_RIGHT && Game::gameFlag == 3) {
@@ -279,6 +260,11 @@ void Game::handleEvents() {
 
 void Game::clean() {
 	std::cout << "Cleaning game!\n";
+
+	delete firstPlayer;
+	delete secondPlayer;
+	delete table;
+
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
@@ -364,12 +350,13 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 
 			if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 				(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH))) {
-				firstPlayer->isPossible = Game::playerTileClicked(i);
+				//firstPlayer->isPossible = Game::playerTileClicked(i);
+				Game::isSeleckted(i);
 				std::cout << "First player tile is clicked" << std::endl;
 			}
 		}	
 
-		if (firstPlayer->isPossible) {
+		if (!firstPlayer->isPossible) {
 			if ((xDown > matrixX && xDown < (matrixX + matrixPieceSize * 20)) && (xUp > matrixX && xUp < (matrixX + matrixPieceSize * 20)) &&
 				(yDown > matrixY && yDown < (matrixY + matrixPieceSize * 20)) && (yUp > matrixY && yUp < (matrixY + matrixPieceSize * 20))) {
 				Game::isInMatrix = true;
@@ -385,10 +372,11 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 							std::cout << "Xpos - yPos: " << xPos << "-" << yPos << std::endl;
 							firstPlayer->removeTile(i);
 							Game::gameFlag = 3;
-							Game::isInMatrix = false;
+							
 						}
 					}
 				}
+				Game::isInMatrix = false;
 			}		
 		}
 		
@@ -400,12 +388,12 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 
 			if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 				(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH))) {
-				secondPlayer->isPossible = Game::playerTileClicked(i);
+				//secondPlayer->isPossible = Game::playerTileClicked(i);
 				std::cout << "Second player tile is clicked" << std::endl;
 			}
 		}
 
-		if (secondPlayer->isPossible) {
+		if (!secondPlayer->isPossible) {
 			if ((xDown > matrixX && xDown < (matrixX + matrixPieceSize * 20)) && (xUp > matrixX && xUp < (matrixX + matrixPieceSize * 20)) &&
 				(yDown > matrixY && yDown < (matrixY + matrixPieceSize * 20)) && (yUp > matrixY && yUp < (matrixY + matrixPieceSize * 20))) {
 				Game::isInMatrix = true;
@@ -430,27 +418,40 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 	}
 }
 
+bool Game::isSeleckted(int idx)
+{
+	if (Game::playerFlag == 1) {
+		for (auto& tile : firstPlayer->playerTiles) {
+			tile.isSelected = false;
+		}
+		firstPlayer->playerTiles[idx].isSelected = true;
+		return true;
+	}
+
+	return false;
+}
+
 bool Game::isRunning() const {
 	return Game::running;
 }
 
 void Game::startNewGame() {
-	dominoTiles.shuffle();
+	dominoTiles->shuffle();
 
 	if (firstPlayer->playerTiles.size() > 0) {
 		firstPlayer->playerTiles.clear();
 		secondPlayer->playerTiles.clear();
-		table->tableTiles.clear();
+		table->clear();
 		table->createMap();
 	}
 
 
-	firstPlayer->addTiles(dominoTiles);
+	firstPlayer->addTiles(*dominoTiles);
 	std::cout << "First player have tiles" << std::endl;
-	secondPlayer->addTiles(dominoTiles);
+	secondPlayer->addTiles(*dominoTiles);
 	std::cout << "Second player have tiles" << std::endl;
 
-	Tile tmpTile = dominoTiles.giveTile();
+	Tile tmpTile = dominoTiles->giveTile();
 	table->addTile(tmpTile);
 	std::cout << "Table have tile" << std::endl;
 }
@@ -476,11 +477,7 @@ void Game::CoordinatesToInt() {
 }
 
 bool Game::playerTileClicked(int idx) const {
-	if (Game::playerFlag == 1) {
-		for (auto &tile : firstPlayer->playerTiles) {
-			tile.isSelected = false;
-		}
-		firstPlayer->playerTiles[idx].isSelected = true;
+	if (true) {
 
 		std::cout << "First player current tile is " << firstPlayer->playerTiles[idx].getFirst() << " " 
 			<< firstPlayer->playerTiles[idx].getSecond() << std::endl;

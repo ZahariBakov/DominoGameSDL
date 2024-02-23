@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Game.h"
-
+#include <SDL.h>
 #include <map>
+#include <string>
 
 class TextureManager {
 public:

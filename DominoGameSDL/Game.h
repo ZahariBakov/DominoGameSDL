@@ -23,6 +23,7 @@ public:
 	void handleEvents();
 	void clean();
 	void isClicked(int xDown, int yDown, int xUp, int yUp);
+	bool isSeleckted(int idx);
 
 	bool isRunning() const;
 	
@@ -33,8 +34,6 @@ private:
 	bool playerTileClicked(int idx) const;
 
 	int mouseDownX, mouseDownY, gameFlag, playerFlag;
-
-	Domino dominoTiles;
 
 	SDL_Texture* newTex,
 		* menuTex,

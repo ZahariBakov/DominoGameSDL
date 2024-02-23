@@ -6,14 +6,13 @@
 
 class Domino {
 public:
-	Domino();
+	Domino(SDL_Renderer* renderer);
 
 	std::vector<Tile> dominoTiles;
 
 	void shuffle();
 
 	Tile giveTile();
-	std::string imagePath(std::string name);
 
 private:
 	int _tileIdx;

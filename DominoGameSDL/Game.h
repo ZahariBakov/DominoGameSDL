@@ -23,7 +23,7 @@ public:
 	void handleEvents();
 	void clean();
 	void isClicked(int xDown, int yDown, int xUp, int yUp);
-	bool isSeleckted(int idx);
+	bool isSeleckted(int idx) const;
 
 	bool isRunning() const;
 	

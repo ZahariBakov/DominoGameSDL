@@ -418,7 +418,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 	}
 }
 
-bool Game::isSeleckted(int idx)
+bool Game::isSeleckted(int idx) const
 {
 	if (Game::playerFlag == 1) {
 		for (auto& tile : firstPlayer->playerTiles) {

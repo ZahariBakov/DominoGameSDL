@@ -129,6 +129,41 @@ void Table::checkForPlacement(Tile playerTile, int xDown, int yDown, int xUp, in
 	}	
 }
 
+void Table::moveTileInLeft() {
+	Tile lastTile = tableTiles.back();
+
+	if (lastTile.getFirst() == lastTile.getSecond()) {
+		std::string lastCoord = tileYX.back();
+		tileYX.pop_back();
+		int xPos = 0;
+		int yPos = 0;
+
+		std::stringstream stream(lastCoord);
+		std::string temp;
+		int idx = 0;
+
+		while (std::getline(stream, temp, ',')) {
+			int value = std::stoi(temp);
+			if (idx == 0) {
+				yPos = value;
+				++idx;
+			}
+			else {
+				xPos = value;
+			}
+		}
+
+		map[yPos][xPos] = lastTile.getSecond();
+		map[yPos][xPos - 1] = lastTile.getFirst();
+		std::stringstream ss;
+		ss << yPos << "," << (xPos - 1);
+		coordinates = ss.str();
+		tileYX.push_back(coordinates);
+		secondFreePos["y"] = yPos;
+		secondFreePos["x"] = xPos - 1;
+	}
+}
+
 void Table::createMap() {
 	for (int row = 0; row < 20; ++row) {
 		for (int col = 0; col < 20; ++col) {

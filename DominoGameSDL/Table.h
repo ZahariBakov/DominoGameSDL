@@ -24,6 +24,6 @@ public:
 
 	void printMap() const;
 	void checkForPlacement(Tile playerTile, int xDown, int yDown, int xUp, int yUp, int &xPos, int &yPos);
-
+	void moveTileInLeft();
 	void createMap();
 };

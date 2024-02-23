@@ -18,8 +18,9 @@ Game::Game() {
 	Game::window   = NULL;
 	Game::renderer = NULL;
 
-	Game::running = true;
-	Game::isInMatrix = false;
+	Game::running     = true;
+	Game::isInMatrix  = false;
+	Game::isLeftArrow = false;
 
 	Game::mouseDownX = 0;
 	Game::mouseDownY = 0;
@@ -190,13 +191,21 @@ void Game::render() {
 			}
 		}
 		
-		SDL_RenderCopy(renderer, menuTex, NULL, &menuRect);
-		SDL_RenderCopy(renderer, passTex, NULL, &passRect);
+		if (Game::gameFlag == 2) {
+			SDL_RenderCopy(renderer, menuTex, NULL, &menuRect);
+			SDL_RenderCopy(renderer, passTex, NULL, &passRect);
+		}
+		
 		SDL_RenderCopy(renderer, playerTex, NULL, &playerRect);
 		SDL_RenderCopy(renderer, playerNumTex, NULL, &playerNumRect);
 
 		if (Game::gameFlag == 3) {
 			SDL_RenderCopy(renderer, okTex, NULL, &okRect);
+
+			if (Game::isLeftArrow) {
+				table->moveTileInLeft();
+				Game::isLeftArrow = false;
+			}
 		}
 
 
@@ -257,6 +266,15 @@ void Game::handleEvents() {
 				if (event.button.button == SDL_BUTTON_LEFT) {
 					SDL_GetMouseState(&msx, &msy);
 					Game::isClicked(mouseDownX, mouseDownY, msx, msy);
+				}
+			}; break;
+			case SDL_KEYDOWN: {
+				if (event.key.keysym.sym == SDLK_LEFT && Game::gameFlag == 3) {
+					Game::isLeftArrow = true;
+					std::cout << "left arrow" << std::endl;
+				}
+				if (event.key.keysym.sym == SDLK_RIGHT && Game::gameFlag == 3) {
+					std::cout << "right arrow" << std::endl;
 				}
 			}; break;
 

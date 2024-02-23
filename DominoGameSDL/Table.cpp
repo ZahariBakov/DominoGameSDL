@@ -139,14 +139,14 @@ void Table::addTile(Tile& newTile, int xPos, int yPos) {
 //	}
 //}
 
-void Table::checkForPlacement(Tile playerTile, int xDown, int yDown, int xUp, int yUp, int &xPos, int &yPos) {
+bool Table::checkForPlacement(Tile playerTile, int xDown, int yDown, int xUp, int yUp) {
 	int xPress =   (xDown - matrixX) / matrixPieceSize;
 	int yPress =   (yDown - matrixY) / matrixPieceSize;
 	int xUnpress = (xUp - matrixX)   / matrixPieceSize;
 	int yUnpress = (yUp - matrixY)   / matrixPieceSize;
 
 	if (tableBox[yPress][xPress].getValue() == "*" &&
-		((tableBox[yPress][xPress].getValue() == playerTile.getFirst() || tableBox[yPress][xPress].getValue() == playerTile.getSecond()) ||
+		((tableBox[yPress][xPress].getValue()    == playerTile.getFirst() || tableBox[yPress][xPress].getValue()     == playerTile.getSecond()) ||
 		(tableBox[yPress][xPress + 1].getValue() == playerTile.getFirst() || tableBox[yPress][xPress + 1].getValue() == playerTile.getSecond()) ||
 		(tableBox[yPress][xPress - 1].getValue() == playerTile.getFirst() || tableBox[yPress][xPress - 1].getValue() == playerTile.getSecond()) ||
 		(tableBox[yPress + 1][xPress].getValue() == playerTile.getFirst() || tableBox[yPress + 1][xPress].getValue() == playerTile.getSecond()) ||
@@ -154,7 +154,10 @@ void Table::checkForPlacement(Tile playerTile, int xDown, int yDown, int xUp, in
 	{
 		std::cout << "Add tile" << std::endl;
 		addTile(playerTile, xPress, yPress);
+		return true;
 	}
+
+	return false;
 }
 
 //void Table::moveTileInLeft() {

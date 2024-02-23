@@ -210,11 +210,11 @@ void Game::render() {
 
 		
 
-		if (Game::playerFlag == 1) {
+		if (Game::playerFlag == 1) 
+		{
 			firstPlayer->render();
-		}
-
-		if (Game::playerFlag == 2) {
+		} else if (Game::playerFlag == 2) 
+		{
 			secondPlayer->render();
 		}
 	}
@@ -344,15 +344,14 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 	int yPos = 0;
 
 	if (Game::playerFlag == 1 && Game::gameFlag == 2) {
-		//std::cout << "First player tiles size: " << firstPlayer->playerTiles.size() << std::endl;
 		for (int i = 0; i < firstPlayer->playerTiles.size(); ++i) {
 			btnX = 150 + i * 100;
 
 			if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 				(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH))) {
-				//firstPlayer->isPossible = Game::playerTileClicked(i);
 				Game::isSeleckted(i);
-				std::cout << "First player tile is clicked" << std::endl;
+				std::cout << "First player tile is clicked " << firstPlayer->playerTiles[i].getFirst() << "-" 
+					<< firstPlayer->playerTiles[i].getSecond() << std::endl;
 			}
 		}	
 
@@ -364,15 +363,14 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 			}
 
 			if (Game::isInMatrix) {
-				//for (auto &tile : firstPlayer->playerTiles) {
 				for (int i = 0;i < firstPlayer->playerTiles.size(); ++i) {
 					if (firstPlayer->playerTiles[i].isSelected == true) {
-						table->checkForPlacement(firstPlayer->playerTiles[i], xDown, yDown, xUp, yUp, xPos, yPos);
-						if (xPos != 0 && yPos != 0) {
-							std::cout << "Xpos - yPos: " << xPos << "-" << yPos << std::endl;
+						firstPlayer->isPossible = table->checkForPlacement(firstPlayer->playerTiles[i], xDown, yDown, xUp, yUp);
+						if (firstPlayer->isPossible) 
+						{
 							firstPlayer->removeTile(i);
-							Game::gameFlag = 3;
-							
+							Game::gameFlag = 3;	
+							firstPlayer->isPossible = false;
 						}
 					}
 				}
@@ -382,14 +380,14 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 		
 	}
 	else if (Game::playerFlag == 2 && Game::gameFlag == 2) {
-		//std::cout << "Second player tiles size: " << secondPlayer->playerTiles.size() << std::endl;
 		for (int i = 0; i < secondPlayer->playerTiles.size(); ++i) {
 			btnX = 150 + i * 100;
 
 			if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 				(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH))) {
-				//secondPlayer->isPossible = Game::playerTileClicked(i);
-				std::cout << "Second player tile is clicked" << std::endl;
+				Game::isSeleckted(i);
+				std::cout << "Second player tile is clicked " << secondPlayer->playerTiles[i].getFirst() 
+					<< "-" << secondPlayer->playerTiles[i].getSecond() << std::endl;
 			}
 		}
 
@@ -401,18 +399,18 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 			}
 
 			if (Game::isInMatrix) {
-				//for (auto &tile : secondPlayer->playerTiles) {
 				for (int i =0; i < secondPlayer->playerTiles.size(); ++i) {
 					if (secondPlayer->playerTiles[i].isSelected == true) {
-						table->checkForPlacement(secondPlayer->playerTiles[i], xDown, yDown, xUp, yUp, xPos, yPos);
-						if (xPos != 0 && yPos != 0) {
-							std::cout << "Xpos - yPos: " << xPos << "-" << yPos << std::endl;
+						secondPlayer->isPossible = table->checkForPlacement(secondPlayer->playerTiles[i], xDown, yDown, xUp, yUp);
+						if (secondPlayer->isPossible)
+						{
 							secondPlayer->removeTile(i);
 							Game::gameFlag = 3;
-							Game::isInMatrix = false;
+							secondPlayer->isPossible = false;
 						}
 					}
 				}
+				Game::isInMatrix = false;
 			}		
 		}	
 	}
@@ -425,6 +423,13 @@ bool Game::isSeleckted(int idx) const
 			tile.isSelected = false;
 		}
 		firstPlayer->playerTiles[idx].isSelected = true;
+		return true;
+	} else if (Game::playerFlag == 2) 
+	{
+		for (auto& tile : secondPlayer->playerTiles) {
+			tile.isSelected = false;
+		}
+		secondPlayer->playerTiles[idx].isSelected = true;
 		return true;
 	}
 

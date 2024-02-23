@@ -24,7 +24,7 @@ public:
 	std::map<std::string, int> secondFreePos;
 
 	//void printMap() const;
-	void checkForPlacement(Tile playerTile, int xDown, int yDown, int xUp, int yUp, int &xPos, int &yPos);
+	bool checkForPlacement(Tile playerTile, int xDown, int yDown, int xUp, int yUp);
 	//void moveTileInLeft();
 	void createMap();
 	void render();

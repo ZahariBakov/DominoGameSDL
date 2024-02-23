@@ -101,7 +101,7 @@ void Table::checkForPlacement(Tile playerTile, int xDown, int yDown, int xUp, in
 
 	if (xPress == xUnpress && yPress == yUnpress) {
 		if (playerTile.getFirst() == firstFree || playerTile.getSecond() == firstFree) {
-			std::cout << "first free is with pos: " << firstFreePos["x"] << " " << firstFreePos["y"] << std::endl;
+			std::cout << "first free is with pos X,Y: " << firstFreePos["x"] << " " << firstFreePos["y"] << std::endl;
 
 			if ((xPress == firstFreePos["x"] - 1 || xPress == firstFreePos["x"] + 1 || xPress == firstFreePos["x"]) && (yPress == firstFreePos["y"]) ||
 				((yPress == firstFreePos["y"] - 1 || yPress == firstFreePos["y"] + 1 || yPress == firstFreePos["y"]) && (xPress == firstFreePos["x"]))) {
@@ -114,7 +114,7 @@ void Table::checkForPlacement(Tile playerTile, int xDown, int yDown, int xUp, in
 			}
 		}
 		if (playerTile.getFirst() == secondFree || playerTile.getSecond() == secondFree) {
-			std::cout << "second free is with pos: " << secondFreePos["x"] << " " << secondFreePos["y"] << std::endl;
+			std::cout << "second free is with pos X,Y: " << secondFreePos["x"] << " " << secondFreePos["y"] << std::endl;
 
 			if ((xPress == secondFreePos["x"] - 1 || xPress == secondFreePos["x"] + 1 || xPress == secondFreePos["x"]) && (yPress == secondFreePos["y"]) ||
 				((yPress == secondFreePos["y"] - 1 || yPress == secondFreePos["y"] + 1 || yPress == secondFreePos["y"]) && (xPress == secondFreePos["x"]))) {
@@ -133,10 +133,11 @@ void Table::moveTileInLeft() {
 	Tile lastTile = tableTiles.back();
 
 	if (lastTile.getFirst() == lastTile.getSecond()) {
+		tableTiles.pop_back();
 		std::string lastCoord = tileYX.back();
 		tileYX.pop_back();
-		int xPos = 0;
-		int yPos = 0;
+		int xPos = 1;
+		int yPos = 1;
 
 		std::stringstream stream(lastCoord);
 		std::string temp;
@@ -153,14 +154,25 @@ void Table::moveTileInLeft() {
 			}
 		}
 
-		map[yPos][xPos] = lastTile.getSecond();
+		//map[yPos][xPos] = lastTile.getSecond();
 		map[yPos][xPos - 1] = lastTile.getFirst();
+		map[yPos][xPos + 1] = "*";
 		std::stringstream ss;
 		ss << yPos << "," << (xPos - 1);
 		coordinates = ss.str();
 		tileYX.push_back(coordinates);
-		secondFreePos["y"] = yPos;
-		secondFreePos["x"] = xPos - 1;
+
+		if (lastTile.getFirst() == firstFree) {
+			firstFreePos["y"] = yPos;
+			firstFreePos["x"] = xPos - 1;
+		}
+		else {
+			secondFreePos["y"] = yPos;
+			secondFreePos["x"] = xPos - 1;
+		}
+		
+		tableTiles.push_back(lastTile);
+		printMap();
 	}
 }
 

@@ -29,7 +29,7 @@ public:
 private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
-	bool running, isInMatrix, isLeftArrow;
+	bool running, isInMatrix;
 	bool playerTileClicked(int idx) const;
 
 	int mouseDownX, mouseDownY, gameFlag, playerFlag;

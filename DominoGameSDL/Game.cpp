@@ -20,7 +20,6 @@ Game::Game() {
 
 	Game::running     = true;
 	Game::isInMatrix  = false;
-	Game::isLeftArrow = false;
 
 	Game::mouseDownX = 0;
 	Game::mouseDownY = 0;
@@ -201,11 +200,6 @@ void Game::render() {
 
 		if (Game::gameFlag == 3) {
 			SDL_RenderCopy(renderer, okTex, NULL, &okRect);
-
-			if (Game::isLeftArrow) {
-				table->moveTileInLeft();
-				Game::isLeftArrow = false;
-			}
 		}
 
 
@@ -270,7 +264,7 @@ void Game::handleEvents() {
 			}; break;
 			case SDL_KEYDOWN: {
 				if (event.key.keysym.sym == SDLK_LEFT && Game::gameFlag == 3) {
-					Game::isLeftArrow = true;
+					table->moveTileInLeft();
 					std::cout << "left arrow" << std::endl;
 				}
 				if (event.key.keysym.sym == SDLK_RIGHT && Game::gameFlag == 3) {

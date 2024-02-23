@@ -26,5 +26,6 @@ void Player::render()
 
 void Player::removeTile(int idx) 
 {
-	playerTiles.erase(playerTiles.begin() + idx);
+	//playerTiles.erase(playerTiles.begin() + idx);
+	playerTiles[idx].setValues();
 }

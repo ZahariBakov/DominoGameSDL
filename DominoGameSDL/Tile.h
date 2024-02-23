@@ -14,6 +14,8 @@ public:
 	void tileRender();
 	void rotate();
 	void setPosition(int x, int y);
+	void setValues();
+
 	bool isSelected;
 
 private:

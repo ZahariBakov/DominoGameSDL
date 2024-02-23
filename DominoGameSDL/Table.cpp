@@ -7,8 +7,6 @@ const int matrixX = 300;
 const int matrixY = 10;
 const int matrixPieceSize = 32;
 
-//std::string coordinates;
-
 Table::Table() {
 	this->createMap();
 }
@@ -20,14 +18,6 @@ void Table::addTile(Tile& newTile, int xPos, int yPos) {
 		this->secondFree = newTile.getSecond();
 		tableBox[yPos][xPos].setValue(newTile.getFirst());
 		tableBox[yPos][xPos + 1].setValue(newTile.getSecond());
-		//map[yPos][xPos] = firstFree;
-		//map[yPos + 1][xPos] = secondFree;
-/*		firstFreePos["x"] = 9;
-		firstFreePos["y"] = 9;
-		secondFreePos["y"] = 10;
-		secondFreePos["x"] = 9*/;
-		//coordinates = "9,9";
-		//tileYX.push_back(coordinates);
 	}
 	else 
 	{
@@ -72,72 +62,10 @@ void Table::addTile(Tile& newTile, int xPos, int yPos) {
 			tableBox[yPos][xPos + 1].setValue(newTile.getSecond());
 		}
 		
-		std::cout << "First free: " << firstFree << " Secodn free: " << secondFree << std::endl;
+		std::cout << "First free: " << firstFree << " Second free: " << secondFree << std::endl;
 	}
-	//else {
-	//	if (newTile.getFirst() == firstFree && map[yPos][xPos + 1] == "*") {
-	//		this->firstFree = newTile.getSecond();
-	//		map[yPos][xPos] = newTile.getFirst();
-	//		map[yPos][xPos + 1] = newTile.getSecond();
-	//		std::stringstream ss;
-	//		ss << yPos << "," << xPos;
-	//		coordinates = ss.str();
-	//		tileYX.push_back(coordinates);
-	//		firstFreePos["x"] = xPos + 1;
-	//		firstFreePos["y"] = yPos;
-	//	}
-	//	else if (newTile.getFirst() == secondFree && map[yPos][xPos + 1] == "*") {
-	//		this->secondFree = newTile.getSecond();
-	//		map[yPos][xPos] = newTile.getFirst();
-	//		map[yPos][xPos + 1] = newTile.getSecond();
-	//		std::stringstream ss;
-	//		ss << yPos << "," << xPos;
-	//		coordinates = ss.str();
-	//		tileYX.push_back(coordinates);
-	//		secondFreePos["y"] = yPos;
-	//		secondFreePos["x"] = xPos + 1;
-	//	}
-	//	else if (newTile.getSecond() == firstFree && map[yPos][xPos - 1] == "*") {
-	//		this->firstFree = newTile.getFirst();
-	//		map[yPos][xPos] = newTile.getSecond();
-	//		map[yPos][xPos - 1] = newTile.getFirst();
-	//		std::stringstream ss;
-	//		ss << yPos << "," << (xPos - 1);
-	//		coordinates = ss.str();
-	//		tileYX.push_back(coordinates);
-	//		firstFreePos["x"] = xPos - 1;
-	//		firstFreePos["y"] = yPos;
-	//	}
-	//	else if (newTile.getSecond() == secondFree && map[yPos][xPos - 1] == "*") {
-	//		this->secondFree = newTile.getFirst();
-	//		map[yPos][xPos] = newTile.getSecond();
-	//		map[yPos][xPos - 1] = newTile.getFirst();
-	//		std::stringstream ss;
-	//		ss << yPos << "," << (xPos - 1);
-	//		coordinates = ss.str();
-	//		tileYX.push_back(coordinates);
-	//		secondFreePos["y"] = yPos;
-	//		secondFreePos["x"] = xPos - 1;
-	//	}
-	//}
-
-	//this->tableTiles.push_back(newTile);
-	//std::cout << "First free piece of tile is: " << firstFree << std::endl;
-	//std::cout << "Second free piece of tile is: " << secondFree << std::endl;
-	//std::cout << "First free pos [" << firstFreePos["x"] << "][" << firstFreePos["y"] << "]\n";
-	//std::cout << "Second free pos [" << secondFreePos["x"] << "][" << secondFreePos["y"] << "]\n";
-	//std::cout << "Table add tile." << std::endl;
-	//printMap();
 }
 
-//void Table::printMap() const {
-//	for (int row = 0; row < 20; ++row) {
-//		for (int col = 0; col < 20; ++col) {
-//			std::cout << map[row][col];
-//		}
-//		std::cout << std::endl;
-//	}
-//}
 
 bool Table::checkForPlacement(Tile playerTile, int xDown, int yDown, int xUp, int yUp) {
 	int xPress =   (xDown - matrixX) / matrixPieceSize;

@@ -39,3 +39,10 @@ void Tile::setPosition(int x, int y)
 	_first.setPosition(x, y);
 	_second.setPosition(x + 32, y);
 }
+
+void Tile::setValues()
+{
+	_first.setValue("10");
+	_second.setValue("10");
+}
+

@@ -5,11 +5,13 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <SDL_image.h>
+#include <SDL_mixer.h>
 
 #include "TextureManager.h"
 #include "Domino.h"
 #include "Player.h"
 #include "Table.h"
+#include "SoundManager.h"
 
 class Game {
 public:
@@ -17,6 +19,9 @@ public:
 	~Game();
 
 	bool init(const char* title, int xpos, int ypos, int width, int height, int flags);
+	bool ttf_init();
+
+	void LoadAndPlaySound();
 
 	void render();
 	void handleEvents();

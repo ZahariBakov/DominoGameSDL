@@ -89,121 +89,6 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 				table = new Table();
 				//dominoTiles = new Domino(renderer, 9);
 				table->setRenderer(renderer);
-				
-				if (TTF_Init() == -1) {
-					return false;
-				}
-
-				TTF_Font* font1 = TTF_OpenFont("fonts/segoepr.ttf", 28);
-				TTF_Font* font2 = TTF_OpenFont("fonts/segoepr.ttf", 72);
-
-				if (font1 == NULL || font2 == NULL) {
-					std::cout << "Font 1 or Font 2" << std::endl;
-					return false;
-				}
-
-				int ww, wh;
-				SDL_GetWindowSize(window, &ww, &wh); // get window size
-
-				SDL_Surface* tempSurfaceText = NULL;
-
-				tempSurfaceText = TTF_RenderText_Blended(font1, "NEW GAME", { 255, 255, 255, 255 });
-				newTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
-
-				tempSurfaceText = TTF_RenderText_Blended(font1, "MENU", { 255, 255, 255, 255 });
-				menuTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
-
-				tempSurfaceText = TTF_RenderText_Blended(font2, "MENU", { 255, 255, 255, 255 });
-				menuTitleTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
-
-				tempSurfaceText = TTF_RenderText_Blended(font1, "PASS", { 255, 255, 255, 255 });
-				passTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
-
-				tempSurfaceText = TTF_RenderText_Blended(font1, "CLASSIC", { 255, 255, 255, 255 });
-				classicTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
-
-				tempSurfaceText = TTF_RenderText_Blended(font1, "PLAYER", { 255, 255, 255, 255 });
-				playerTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
-
-				tempSurfaceText = TTF_RenderText_Blended(font2, "FIRST PLAYER WIN", { 255, 255, 255, 255 });
-				firstPlayerWinTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
-
-				tempSurfaceText = TTF_RenderText_Blended(font2, "SECOND PLAYER WIN", { 255, 255, 255, 255 });
-				secondPlayerWinTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
-
-				std::string tmp = std::to_string(Game::playerFlag);
-				char const* playerNum = tmp.c_str();
-
-				tempSurfaceText = TTF_RenderText_Blended(font1, playerNum, { 255, 255, 255, 255 });
-				playerNumTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
-
-				tempSurfaceText = TTF_RenderText_Blended(font1, "OK", { 255, 255, 255, 255 });
-				okTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
-
-				tempSurfaceText = TTF_RenderText_Blended(font1, "EASY", { 255, 255, 255, 255 });
-				easyTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
-
-				tempSurfaceText = TTF_RenderText_Blended(font1, "NORMAL", { 255, 255, 255, 255 });
-				normalTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
-
-				tempSurfaceText = TTF_RenderText_Blended(font1, "HARD", { 255, 255, 255, 255 });
-				hardTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
-
-				tempSurfaceText = TTF_RenderText_Blended(font1, "WHITE", { 255, 255, 255, 255 });
-				whiteTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
-
-				tempSurfaceText = TTF_RenderText_Blended(font1, "BLACK", { 255, 255, 255, 255 });
-				blackTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
-
-				int tw, th;
-				SDL_QueryTexture(newTex, 0, 0, &tw, &th);
-				newRect = { 10, 10, tw, th };
-
-				SDL_QueryTexture(menuTex, 0, 0, &tw, &th);
-				menuRect = { 10, 40, tw, th };
-
-				SDL_QueryTexture(menuTitleTex, 0, 0, &tw, &th);
-				menuTitleRect = { ww / 2 - tw / 2, 40, tw, th };
-
-				SDL_QueryTexture(passTex, 0, 0, &tw, &th);
-				passRect = { 10, 70, tw, th };
-
-				SDL_QueryTexture(classicTex, 0, 0, &tw, &th);
-				classicRect = { 10, 150, tw, th };
-
-				SDL_QueryTexture(playerTex, 0, 0, &tw, &th);
-				playerRect = { 10, wh - 110, tw, th };
-
-				SDL_QueryTexture(playerNumTex, 0, 0, &tw, &th);
-				playerNumRect = { 140, wh - 110, tw, th };
-
-				SDL_QueryTexture(okTex, 0, 0, &tw, &th);
-				okRect = { 10, 100, tw, th };
-
-				SDL_QueryTexture(firstPlayerWinTex, 0, 0, &tw, &th);
-				firstPlayerWinRect = { 250, 250, tw, th };
-
-				SDL_QueryTexture(secondPlayerWinTex, 0, 0, &tw, &th);
-				secondPlayerWinRect = { 250, 250, tw, th };
-
-				SDL_QueryTexture(easyTex, 0, 0, &tw, &th);
-				easyRect = { 50, 200, tw, th };
-
-				SDL_QueryTexture(normalTex, 0, 0, &tw, &th);
-				normalRect = { 150, 200, tw, th };
-
-				SDL_QueryTexture(hardTex, 0, 0, &tw, &th);
-				hardRect = { 320, 200, tw, th };
-
-				SDL_QueryTexture(whiteTex, 0, 0, &tw, &th);
-				whiteRect = { 50, 250, tw, th };
-
-				SDL_QueryTexture(blackTex, 0, 0, &tw, &th);
-				blackRect = { 200, 250, tw, th };
-
-				SDL_FreeSurface(tempSurfaceText);
-				TTF_CloseFont(font1);
-				TTF_CloseFont(font2);
 			}
 			else {
 				std::cout << "Renderer init failed!\n";
@@ -223,6 +108,130 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 	running = true;
 
 	return true;
+}
+
+bool Game::ttf_init() {
+	if (TTF_Init() == -1) {
+		return false;
+	}
+
+	TTF_Font* font1 = TTF_OpenFont("fonts/segoepr.ttf", 28);
+	TTF_Font* font2 = TTF_OpenFont("fonts/segoepr.ttf", 72);
+
+	if (font1 == NULL || font2 == NULL) {
+		std::cout << "Font 1 or Font 2" << std::endl;
+		return false;
+	}
+
+	int ww, wh;
+	SDL_GetWindowSize(window, &ww, &wh); // get window size
+
+	SDL_Surface* tempSurfaceText = NULL;
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, "NEW GAME", { 255, 255, 255, 255 });
+	newTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, "MENU", { 255, 255, 255, 255 });
+	menuTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	tempSurfaceText = TTF_RenderText_Blended(font2, "MENU", { 255, 255, 255, 255 });
+	menuTitleTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, "PASS", { 255, 255, 255, 255 });
+	passTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, "CLASSIC", { 255, 255, 255, 255 });
+	classicTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, "PLAYER", { 255, 255, 255, 255 });
+	playerTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	tempSurfaceText = TTF_RenderText_Blended(font2, "FIRST PLAYER WIN", { 255, 255, 255, 255 });
+	firstPlayerWinTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	tempSurfaceText = TTF_RenderText_Blended(font2, "SECOND PLAYER WIN", { 255, 255, 255, 255 });
+	secondPlayerWinTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	std::string tmp = std::to_string(Game::playerFlag);
+	char const* playerNum = tmp.c_str();
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, playerNum, { 255, 255, 255, 255 });
+	playerNumTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, "OK", { 255, 255, 255, 255 });
+	okTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, "EASY", { 255, 255, 255, 255 });
+	easyTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, "NORMAL", { 255, 255, 255, 255 });
+	normalTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, "HARD", { 255, 255, 255, 255 });
+	hardTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, "WHITE", { 255, 255, 255, 255 });
+	whiteTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, "BLACK", { 255, 255, 255, 255 });
+	blackTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	int tw, th;
+	SDL_QueryTexture(newTex, 0, 0, &tw, &th);
+	newRect = { 10, 10, tw, th };
+
+	SDL_QueryTexture(menuTex, 0, 0, &tw, &th);
+	menuRect = { 10, 40, tw, th };
+
+	SDL_QueryTexture(menuTitleTex, 0, 0, &tw, &th);
+	menuTitleRect = { ww / 2 - tw / 2, 40, tw, th };
+
+	SDL_QueryTexture(passTex, 0, 0, &tw, &th);
+	passRect = { 10, 70, tw, th };
+
+	SDL_QueryTexture(classicTex, 0, 0, &tw, &th);
+	classicRect = { 10, 150, tw, th };
+
+	SDL_QueryTexture(playerTex, 0, 0, &tw, &th);
+	playerRect = { 10, wh - 110, tw, th };
+
+	SDL_QueryTexture(playerNumTex, 0, 0, &tw, &th);
+	playerNumRect = { 140, wh - 110, tw, th };
+
+	SDL_QueryTexture(okTex, 0, 0, &tw, &th);
+	okRect = { 10, 100, tw, th };
+
+	SDL_QueryTexture(firstPlayerWinTex, 0, 0, &tw, &th);
+	firstPlayerWinRect = { 250, 250, tw, th };
+
+	SDL_QueryTexture(secondPlayerWinTex, 0, 0, &tw, &th);
+	secondPlayerWinRect = { 250, 250, tw, th };
+
+	SDL_QueryTexture(easyTex, 0, 0, &tw, &th);
+	easyRect = { 50, 200, tw, th };
+
+	SDL_QueryTexture(normalTex, 0, 0, &tw, &th);
+	normalRect = { 150, 200, tw, th };
+
+	SDL_QueryTexture(hardTex, 0, 0, &tw, &th);
+	hardRect = { 320, 200, tw, th };
+
+	SDL_QueryTexture(whiteTex, 0, 0, &tw, &th);
+	whiteRect = { 50, 250, tw, th };
+
+	SDL_QueryTexture(blackTex, 0, 0, &tw, &th);
+	blackRect = { 200, 250, tw, th };
+
+	SDL_FreeSurface(tempSurfaceText);
+	TTF_CloseFont(font1);
+	TTF_CloseFont(font2);
+
+	return true;
+}
+
+void Game::LoadAndPlaySound()
+{
+	SoundManager::Instance()->load("assets/sounds/win.wav", "win");
 }
 
 void Game::render() {
@@ -290,6 +299,7 @@ void Game::render() {
 
 		if (Game::gameFlag == 4) {
 			SDL_RenderCopy(renderer, menuTex, NULL, &menuRect);
+			SoundManager::Instance()->playSound("win", -1, 0);
 		}
 	}
 	SDL_SetRenderDrawColor(renderer, 64, 64, 64, 255);

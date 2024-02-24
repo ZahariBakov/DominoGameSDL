@@ -252,14 +252,14 @@ void Game::render() {
 		if (Game::playerFlag == 1) 
 		{
 			firstPlayer->render();
-			if (firstPlayer->playedTiles > 5) {
+			if (firstPlayer->playedTiles > playedTileToWin) {
 				Game::gameFlag = 4;
 				SDL_RenderCopy(renderer, firstPlayerWinTex, NULL, &firstPlayerWinRect);
 			}
 		} else if (Game::playerFlag == 2) 
 		{
 			secondPlayer->render();
-			if (secondPlayer->playedTiles > 5) {
+			if (secondPlayer->playedTiles > playedTileToWin) {
 				Game::gameFlag = 4;
 				SDL_RenderCopy(renderer, secondPlayerWinTex, NULL, &secondPlayerWinRect);
 			}
@@ -536,6 +536,10 @@ void Game::startNewGame() {
 	std::cout << "dificulty " << difficulty << std::endl;
 	dominoTiles = new Domino(renderer, difficulty);
 	dominoTiles->shuffle();
+
+	if (difficulty > 0) {
+		playedTileToWin = 10;
+	}
 
 	if (firstPlayer->playerTiles.size() > 0) {
 		firstPlayer->playerTiles.clear();

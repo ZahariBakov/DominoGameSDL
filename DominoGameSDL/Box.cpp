@@ -14,7 +14,7 @@ Box::Box(SDL_Renderer* renderer, std::string value, int x, int y) {
 	this->_x = x;
 	this->_y = y;
 	this->_renderer = renderer;
-	std::string path = "assets/" + value + ".png";
+	std::string path = "assets/classic/" + value + ".png";
 
 	TextureManager::Instance()->loadTexture(path.c_str(), value, _renderer);
 	

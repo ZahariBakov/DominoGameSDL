@@ -7,8 +7,8 @@ Tile::Tile() {
 	_tileX = _tileY = 0;
 }
 
-Tile::Tile(SDL_Renderer* ren, std::string first, std::string second, int tileX, int tileY) 
-	: _first(ren, first, tileX, tileY), _second(ren, second, tileX + 32, tileY) {
+Tile::Tile(SDL_Renderer* ren, std::string first, std::string second, int tileX, int tileY, int type)
+	: _first(ren, first, tileX, tileY, type), _second(ren, second, tileX + 32, tileY, type) {
 
 	this->isSelected = false;
 	_tileX = tileX;

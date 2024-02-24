@@ -7,7 +7,7 @@
 class Box {
 public:
 	Box();
-	Box(SDL_Renderer* renderer, std::string value, int x, int y);
+	Box(SDL_Renderer* renderer, std::string value, int x, int y, int type);
 
 	std::string getValue() const;
 	int getY() const;

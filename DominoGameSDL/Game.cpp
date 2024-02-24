@@ -27,7 +27,8 @@ Game::Game() {
 	Game::gameFlag		  = 0;
 	Game::playerFlag	  = 1;
 	Game::difficulty      = 5;
-	Game::playedTileToWin = 5;
+	Game::playedTileToWin = 7;
+	Game::tilesType       = 3;
 
 	Game::newTex			 = NULL;
 	Game::menuTex			 = NULL;
@@ -42,6 +43,8 @@ Game::Game() {
 	Game::easyTex            = NULL;
 	Game::normalTex          = NULL;
 	Game::hardTex            = NULL;
+	Game::whiteTex           = NULL;
+	Game::blackTex           = NULL;
 
 	Game::newRect			  = { 0, 0, 0, 0 };
 	Game::menuRect			  = { 0, 0, 0, 0 };
@@ -56,6 +59,8 @@ Game::Game() {
 	Game::easyRect            = { 0, 0, 0, 0 };
 	Game::normalRect          = { 0, 0, 0, 0 };
 	Game::hardRect            = { 0, 0, 0, 0 };
+	Game::whiteRect           = { 0, 0, 0, 0 };
+	Game::blackRect           = { 0, 0, 0, 0 };
 }
 
 Game::~Game() {
@@ -144,6 +149,12 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 				tempSurfaceText = TTF_RenderText_Blended(font1, "HARD", { 255, 255, 255, 255 });
 				hardTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
 
+				tempSurfaceText = TTF_RenderText_Blended(font1, "WHITE", { 255, 255, 255, 255 });
+				whiteTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+				tempSurfaceText = TTF_RenderText_Blended(font1, "BLACK", { 255, 255, 255, 255 });
+				blackTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
 				int tw, th;
 				SDL_QueryTexture(newTex, 0, 0, &tw, &th);
 				newRect = { 10, 10, tw, th };
@@ -184,6 +195,12 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 				SDL_QueryTexture(hardTex, 0, 0, &tw, &th);
 				hardRect = { 320, 200, tw, th };
 
+				SDL_QueryTexture(whiteTex, 0, 0, &tw, &th);
+				whiteRect = { 50, 250, tw, th };
+
+				SDL_QueryTexture(blackTex, 0, 0, &tw, &th);
+				blackRect = { 200, 250, tw, th };
+
 				SDL_FreeSurface(tempSurfaceText);
 				TTF_CloseFont(font1);
 				TTF_CloseFont(font2);
@@ -222,10 +239,16 @@ void Game::render() {
 	else if (Game::gameFlag == 1) {
 		SDL_RenderCopy(renderer, menuTitleTex, NULL, &menuTitleRect);
 		SDL_RenderCopy(renderer, classicTex, NULL, &classicRect);
-		if (difficulty == 4) {
+
+		if (Game::difficulty == 4) {
 			SDL_RenderCopy(renderer, easyTex, NULL, &easyRect);
 			SDL_RenderCopy(renderer, normalTex, NULL, &normalRect);
 			SDL_RenderCopy(renderer, hardTex, NULL, &hardRect);
+		}
+
+		if (Game::tilesType == 4) {
+			SDL_RenderCopy(renderer, whiteTex, NULL, &whiteRect);
+			SDL_RenderCopy(renderer, blackTex, NULL, &blackRect);
 		}
 	}
 	else {
@@ -252,14 +275,14 @@ void Game::render() {
 		if (Game::playerFlag == 1) 
 		{
 			firstPlayer->render();
-			if (firstPlayer->playedTiles > playedTileToWin) {
+			if (firstPlayer->playedTiles >= playedTileToWin) {
 				Game::gameFlag = 4;
 				SDL_RenderCopy(renderer, firstPlayerWinTex, NULL, &firstPlayerWinRect);
 			}
 		} else if (Game::playerFlag == 2) 
 		{
 			secondPlayer->render();
-			if (secondPlayer->playedTiles > playedTileToWin) {
+			if (secondPlayer->playedTiles >= playedTileToWin) {
 				Game::gameFlag = 4;
 				SDL_RenderCopy(renderer, secondPlayerWinTex, NULL, &secondPlayerWinRect);
 			}
@@ -394,34 +417,50 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 	btnW = 82;
 
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
-		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1 && difficulty == 4) {
+		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1 && Game::difficulty == 4) {
 		std::cout << "EASY buttons is clicked!" << std::endl;
-
-		difficulty = 0;
-		Game::startNewGame();
-		Game::gameFlag = 2;
+		Game::tilesType = 4;
+		Game::difficulty = 0;
 	}
 	
 	btnX = 150;
 	btnW = 134;
 
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
-		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1 && difficulty == 4) {
+		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1 && Game::difficulty == 4) {
 		std::cout << "NORMAL buttons is clicked!" << std::endl;
-
-		difficulty = 1;
-		Game::startNewGame();
-		Game::gameFlag = 2;
+		Game::tilesType = 4;
+		Game::difficulty = 1;
 	}
 
 	btnX = 322;
 	btnW = 88;
 
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
-		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1 && difficulty == 4) {
+		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1 && Game::difficulty == 4) {
 		std::cout << "HARD buttons is clicked!" << std::endl;
+		Game::tilesType = 4;
+		Game::difficulty = 2;
+	}
 
-		difficulty = 2;
+	btnX = 50;
+	btnY = 265;
+	btnW = 100;
+
+	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
+		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1 && Game::tilesType == 4) {
+		std::cout << "WHITE buttons is clicked!" << std::endl;
+		Game::tilesType = 0;
+		Game::startNewGame();
+		Game::gameFlag = 2;
+	}
+
+	btnX = 200;
+
+	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
+		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1 && Game::tilesType == 4) {
+		std::cout << "BLACK buttons is clicked!" << std::endl;
+		Game::tilesType = 1;
 		Game::startNewGame();
 		Game::gameFlag = 2;
 	}
@@ -534,7 +573,8 @@ bool Game::isRunning() const {
 
 void Game::startNewGame() {
 	std::cout << "dificulty " << difficulty << std::endl;
-	dominoTiles = new Domino(renderer, difficulty);
+	std::cout << "tile type  " << tilesType << std::endl;
+	dominoTiles = new Domino(renderer, difficulty, tilesType);
 	dominoTiles->shuffle();
 
 	if (difficulty > 0) {
@@ -556,7 +596,8 @@ void Game::startNewGame() {
 
 	Tile tmpTile = dominoTiles->giveTile();
 	table->addTile(tmpTile);
-	difficulty = 5;
+	Game::difficulty = 5;
+	Game::tilesType = 3;
 	std::cout << "Table have tile" << std::endl;
 }
 

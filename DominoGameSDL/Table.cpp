@@ -31,6 +31,16 @@ void Table::addTile(Tile& newTile, int xPos, int yPos) {
 			tableBox[yPos][xPos].setValue(newTile.getSecond());
 			tableBox[yPos][xPos - 1].setValue(newTile.getFirst());
 		}
+		else  if ((newTile.getFirst() == secondFree) &&
+			((tableBox[yPos][xPos + 1].getValue() == firstFree) || (tableBox[yPos][xPos - 1].getValue() == firstFree) ||
+				(tableBox[yPos + 1][xPos].getValue() == firstFree) || (tableBox[yPos - 1][xPos].getValue() == firstFree)) &&
+			(tableBox[yPos][xPos + 1].getValue() == "*"))
+		{
+			std::cout << "First tile " << newTile.getFirst() << " = second free " << secondFree << std::endl;
+			secondFree = newTile.getSecond();
+			tableBox[yPos][xPos].setValue(newTile.getFirst());
+			tableBox[yPos][xPos + 1].setValue(newTile.getSecond());
+		}
 		else if ((newTile.getSecond() == secondFree) &&
 			((tableBox[yPos][xPos + 1].getValue() == secondFree) || (tableBox[yPos][xPos - 1].getValue() == secondFree) ||
 				(tableBox[yPos + 1][xPos].getValue() == secondFree) || (tableBox[yPos - 1][xPos].getValue() == secondFree)) &&
@@ -50,16 +60,6 @@ void Table::addTile(Tile& newTile, int xPos, int yPos) {
 			firstFree = newTile.getSecond();
 			tableBox[yPos][xPos].setValue(newTile.getFirst());
 			tableBox[yPos][xPos + 1].setValue(newTile.getSecond());		
-		} 
-		else  if ((newTile.getFirst() == secondFree) &&
-			((tableBox[yPos][xPos + 1].getValue() == firstFree) || (tableBox[yPos][xPos - 1].getValue() == firstFree) ||
-				(tableBox[yPos + 1][xPos].getValue() == firstFree) || (tableBox[yPos - 1][xPos].getValue() == firstFree)) &&
-			(tableBox[yPos][xPos + 1].getValue() == "*"))
-		{
-			std::cout << "First tile " << newTile.getFirst() << " = second free " << secondFree << std::endl;
-			secondFree = newTile.getSecond();
-			tableBox[yPos][xPos].setValue(newTile.getFirst());
-			tableBox[yPos][xPos + 1].setValue(newTile.getSecond());
 		}	
 	}
 

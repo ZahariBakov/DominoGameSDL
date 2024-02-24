@@ -6,6 +6,7 @@ Player::Player() {
 	this->isPossible = false;
 	_x = 150;
 	_y = 670;
+	playedTiles = 0;
 }
 
 void Player::addTiles(Domino& domino) {
@@ -28,4 +29,5 @@ void Player::removeTile(int idx)
 {
 	//playerTiles.erase(playerTiles.begin() + idx);
 	playerTiles[idx].setValues();
+	playedTiles++;
 }

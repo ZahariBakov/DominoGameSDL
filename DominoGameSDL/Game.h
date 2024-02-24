@@ -17,7 +17,6 @@ public:
 	~Game();
 
 	bool init(const char* title, int xpos, int ypos, int width, int height, int flags);
-	bool ttf_init();
 
 	void render();
 	void handleEvents();
@@ -42,7 +41,9 @@ private:
 		* classicTex,
 		* playerTex,
 		* playerNumTex,
-		* okTex;
+		* okTex,
+		* firstPlayerWinTex,
+		* secondPlayerWinTex;
 
 	SDL_Rect newRect,
 		menuRect,
@@ -51,7 +52,9 @@ private:
 		classicRect,
 		playerRect,
 		playerNumRect,
-		okRect;
+		okRect,
+		firstPlayerWinRect,
+		secondPlayerWinRect;
 
 	void startNewGame();
 	int nextPlayer(int currPlayer);

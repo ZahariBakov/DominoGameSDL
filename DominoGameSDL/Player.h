@@ -12,6 +12,8 @@ public:
 	void render();
 	void removeTile(int idx);
 
+	int playedTiles;
+
 	bool isPossible;
 private:
 	int _x;

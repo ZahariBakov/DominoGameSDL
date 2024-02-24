@@ -4,16 +4,24 @@
 #include <random>
 #include <algorithm>
 
-Domino::Domino(SDL_Renderer* renderer) {
+Domino::Domino(SDL_Renderer* renderer, int difficulty) {
 	this->_tileIdx = 0;
+	int maxTileNum = 5;
 
-	for (int i = 0; i < 7; ++i) {
-		for (int j = i; j < 7; ++j) {
+	if (difficulty == 1) {
+		maxTileNum = 7;
+	}
+	else if (difficulty == 2) {
+		maxTileNum = 9;
+	}
+
+	for (int i = 0; i < maxTileNum; ++i) {
+		for (int j = i; j < maxTileNum; ++j) {
 			dominoTiles.push_back(Tile(renderer, std::to_string(i), std::to_string(j), 0, 0));
 		}
 	}
 
-	std::cout << "Domino tiles is created!" << std::endl;
+	std::cout << "Domino tiles is created! " << dominoTiles.size() << std::endl;
 }
 
 void Domino::shuffle() {

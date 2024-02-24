@@ -66,7 +66,6 @@ void Table::addTile(Tile& newTile, int xPos, int yPos) {
 	std::cout << "First free: " << firstFree << " Second free: " << secondFree << std::endl;
 }
 
-
 bool Table::checkForPlacement(Tile playerTile, int xDown, int yDown, int xUp, int yUp) {
 	int xPress =   (xDown - matrixX) / matrixPieceSize;
 	int yPress =   (yDown - matrixY) / matrixPieceSize;
@@ -148,7 +147,7 @@ void Table::createMap() {
 		}
 	}
 
-	std::cout << "map is created" << std::endl;
+	std::cout << "Map is created!" << std::endl;
 }
 
 void Table::render() {

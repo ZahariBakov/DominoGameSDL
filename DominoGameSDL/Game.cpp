@@ -22,10 +22,12 @@ Game::Game() {
 	Game::running     = true;
 	Game::isInMatrix  = false;
 
-	Game::mouseDownX = 0;
-	Game::mouseDownY = 0;
-	Game::gameFlag   = 0;
-	Game::playerFlag = 1;
+	Game::mouseDownX	  = 0;
+	Game::mouseDownY	  = 0;
+	Game::gameFlag		  = 0;
+	Game::playerFlag	  = 1;
+	Game::difficulty      = 5;
+	Game::playedTileToWin = 5;
 
 	Game::newTex			 = NULL;
 	Game::menuTex			 = NULL;
@@ -37,6 +39,9 @@ Game::Game() {
 	Game::okTex              = NULL;
 	Game::firstPlayerWinTex  = NULL;
 	Game::secondPlayerWinTex = NULL;
+	Game::easyTex            = NULL;
+	Game::normalTex          = NULL;
+	Game::hardTex            = NULL;
 
 	Game::newRect			  = { 0, 0, 0, 0 };
 	Game::menuRect			  = { 0, 0, 0, 0 };
@@ -48,6 +53,9 @@ Game::Game() {
 	Game::okRect			  = { 0, 0, 0, 0 };
 	Game::firstPlayerWinRect  = { 0, 0, 0, 0 };
 	Game::secondPlayerWinRect = { 0, 0, 0, 0 };
+	Game::easyRect            = { 0, 0, 0, 0 };
+	Game::normalRect          = { 0, 0, 0, 0 };
+	Game::hardRect            = { 0, 0, 0, 0 };
 }
 
 Game::~Game() {
@@ -74,7 +82,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 				firstPlayer  = new Player();
 				secondPlayer = new Player();
 				table = new Table();
-				dominoTiles = new Domino(renderer);
+				//dominoTiles = new Domino(renderer, 9);
 				table->setRenderer(renderer);
 				
 				if (TTF_Init() == -1) {
@@ -127,6 +135,15 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 				tempSurfaceText = TTF_RenderText_Blended(font1, "OK", { 255, 255, 255, 255 });
 				okTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
 
+				tempSurfaceText = TTF_RenderText_Blended(font1, "EASY", { 255, 255, 255, 255 });
+				easyTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+				tempSurfaceText = TTF_RenderText_Blended(font1, "NORMAL", { 255, 255, 255, 255 });
+				normalTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+				tempSurfaceText = TTF_RenderText_Blended(font1, "HARD", { 255, 255, 255, 255 });
+				hardTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
 				int tw, th;
 				SDL_QueryTexture(newTex, 0, 0, &tw, &th);
 				newRect = { 10, 10, tw, th };
@@ -157,6 +174,15 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 
 				SDL_QueryTexture(secondPlayerWinTex, 0, 0, &tw, &th);
 				secondPlayerWinRect = { 250, 250, tw, th };
+
+				SDL_QueryTexture(easyTex, 0, 0, &tw, &th);
+				easyRect = { 50, 200, tw, th };
+
+				SDL_QueryTexture(normalTex, 0, 0, &tw, &th);
+				normalRect = { 150, 200, tw, th };
+
+				SDL_QueryTexture(hardTex, 0, 0, &tw, &th);
+				hardRect = { 320, 200, tw, th };
 
 				SDL_FreeSurface(tempSurfaceText);
 				TTF_CloseFont(font1);
@@ -196,6 +222,11 @@ void Game::render() {
 	else if (Game::gameFlag == 1) {
 		SDL_RenderCopy(renderer, menuTitleTex, NULL, &menuTitleRect);
 		SDL_RenderCopy(renderer, classicTex, NULL, &classicRect);
+		if (difficulty == 4) {
+			SDL_RenderCopy(renderer, easyTex, NULL, &easyRect);
+			SDL_RenderCopy(renderer, normalTex, NULL, &normalRect);
+			SDL_RenderCopy(renderer, hardTex, NULL, &hardRect);
+		}
 	}
 	else {
 		for (int row = 0; row < 20; ++row) {
@@ -218,20 +249,17 @@ void Game::render() {
 			SDL_RenderCopy(renderer, okTex, NULL, &okRect);
 		}
 
-
-		
-
 		if (Game::playerFlag == 1) 
 		{
 			firstPlayer->render();
-			if (firstPlayer->playedTiles > 0) {
+			if (firstPlayer->playedTiles > 5) {
 				Game::gameFlag = 4;
 				SDL_RenderCopy(renderer, firstPlayerWinTex, NULL, &firstPlayerWinRect);
 			}
 		} else if (Game::playerFlag == 2) 
 		{
 			secondPlayer->render();
-			if (secondPlayer->playedTiles > 0) {
+			if (secondPlayer->playedTiles > 5) {
 				Game::gameFlag = 4;
 				SDL_RenderCopy(renderer, secondPlayerWinTex, NULL, &secondPlayerWinRect);
 			}
@@ -316,10 +344,11 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && (Game::gameFlag == 2 || Game::gameFlag == 4)) {
 		Game::gameFlag = 1;
-		std::cout << "MENU Button is clicked!" << std::endl;
 		firstPlayer->playedTiles = 0;
 		secondPlayer->playedTiles = 0;
-
+		difficulty = 5;
+		std::cout << "MENU Button is clicked!" << std::endl;
+		
 		return;
 	}
 
@@ -353,12 +382,48 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1) {
-		Game::startNewGame();
-		Game::gameFlag = 2;
+		difficulty = 4;
 
 		std::cout << "CLASSIC Button is clicked!" << std::endl;
 
 		return;
+	}
+
+	btnX = 50;
+	btnY = 215;
+	btnW = 82;
+
+	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
+		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1 && difficulty == 4) {
+		std::cout << "EASY buttons is clicked!" << std::endl;
+
+		difficulty = 0;
+		Game::startNewGame();
+		Game::gameFlag = 2;
+	}
+	
+	btnX = 150;
+	btnW = 134;
+
+	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
+		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1 && difficulty == 4) {
+		std::cout << "NORMAL buttons is clicked!" << std::endl;
+
+		difficulty = 1;
+		Game::startNewGame();
+		Game::gameFlag = 2;
+	}
+
+	btnX = 322;
+	btnW = 88;
+
+	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
+		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1 && difficulty == 4) {
+		std::cout << "HARD buttons is clicked!" << std::endl;
+
+		difficulty = 2;
+		Game::startNewGame();
+		Game::gameFlag = 2;
 	}
 
 	btnX = 150;
@@ -448,6 +513,7 @@ bool Game::isSeleckted(int idx) const
 			tile.isSelected = false;
 		}
 		firstPlayer->playerTiles[idx].isSelected = true;
+
 		return true;
 	} else if (Game::playerFlag == 2) 
 	{
@@ -455,6 +521,7 @@ bool Game::isSeleckted(int idx) const
 			tile.isSelected = false;
 		}
 		secondPlayer->playerTiles[idx].isSelected = true;
+
 		return true;
 	}
 
@@ -466,6 +533,8 @@ bool Game::isRunning() const {
 }
 
 void Game::startNewGame() {
+	std::cout << "dificulty " << difficulty << std::endl;
+	dominoTiles = new Domino(renderer, difficulty);
 	dominoTiles->shuffle();
 
 	if (firstPlayer->playerTiles.size() > 0) {
@@ -476,13 +545,14 @@ void Game::startNewGame() {
 	}
 
 
-	firstPlayer->addTiles(*dominoTiles);
+	firstPlayer->addTiles(*dominoTiles, difficulty);
 	std::cout << "First player have tiles" << std::endl;
-	secondPlayer->addTiles(*dominoTiles);
+	secondPlayer->addTiles(*dominoTiles, difficulty);
 	std::cout << "Second player have tiles" << std::endl;
 
 	Tile tmpTile = dominoTiles->giveTile();
 	table->addTile(tmpTile);
+	difficulty = 5;
 	std::cout << "Table have tile" << std::endl;
 }
 
@@ -504,35 +574,4 @@ void Game::CoordinatesToInt() {
 		tableCoordInt[idx] = value;
 		++idx;
 	}
-}
-
-bool Game::playerTileClicked(int idx) const {
-	if (true) {
-
-		std::cout << "First player current tile is " << firstPlayer->playerTiles[idx].getFirst() << " " 
-			<< firstPlayer->playerTiles[idx].getSecond() << std::endl;
-
-		if ((firstPlayer->playerTiles[idx].getFirst() == table->firstFree) || (firstPlayer->playerTiles[idx].getFirst() == table->secondFree) ||
-			(firstPlayer->playerTiles[idx].getSecond() == table->firstFree) || (firstPlayer->playerTiles[idx].getSecond() == table->secondFree)) {
-			std::cout << "Is posible" << std::endl;
-			return true;
-		}
-	}
-	else {
-		for (auto &tile : secondPlayer->playerTiles) {
-			tile.isSelected = false;
-		}
-		secondPlayer->playerTiles[idx].isSelected = true;
-
-		std::cout << "Second player current tile is " << secondPlayer->playerTiles[idx].getFirst() << " "
-			<< secondPlayer->playerTiles[idx].getSecond() << std::endl;
-
-		if ((secondPlayer->playerTiles[idx].getFirst() == table->firstFree) || (secondPlayer->playerTiles[idx].getFirst() == table->secondFree) ||
-			(secondPlayer->playerTiles[idx].getSecond() == table->firstFree) || (secondPlayer->playerTiles[idx].getSecond() == table->secondFree)) {
-			std::cout << "Is posible" << std::endl;
-			return true;
-		}
-	}
-
-	return false;
 }

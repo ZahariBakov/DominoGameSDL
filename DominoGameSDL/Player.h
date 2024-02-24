@@ -8,7 +8,7 @@ public:
 
 	std::vector<Tile> playerTiles;
 
-	void addTiles(Domino& domino);
+	void addTiles(Domino& domino, int difficulty);
 	void render();
 	void removeTile(int idx);
 

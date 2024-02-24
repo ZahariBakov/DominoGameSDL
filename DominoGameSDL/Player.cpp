@@ -9,8 +9,14 @@ Player::Player() {
 	playedTiles = 0;
 }
 
-void Player::addTiles(Domino& domino) {
-	for (int i = 0; i < 10; ++i) {
+void Player::addTiles(Domino& domino, int difficulty) {
+	int tileNum = 7;
+
+	if (difficulty > 0) {
+		tileNum = 10;
+	}
+
+	for (int i = 0; i < tileNum; ++i) {
 		this->playerTiles.push_back(domino.giveTile());
 		playerTiles[i].setPosition(_x + i * 100, _y);
 	}

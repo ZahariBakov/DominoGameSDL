@@ -6,7 +6,7 @@
 
 class Domino {
 public:
-	Domino(SDL_Renderer* renderer);
+	Domino(SDL_Renderer* renderer, int difficulty);
 
 	std::vector<Tile> dominoTiles;
 

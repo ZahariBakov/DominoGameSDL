@@ -30,9 +30,8 @@ private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	bool running, isInMatrix;
-	bool playerTileClicked(int idx) const;
-
-	int mouseDownX, mouseDownY, gameFlag, playerFlag;
+	//bool playerTileClicked(int idx) const;
+	int mouseDownX, mouseDownY, gameFlag, playerFlag, difficulty, playedTileToWin;
 
 	SDL_Texture* newTex,
 		* menuTex,
@@ -43,7 +42,10 @@ private:
 		* playerNumTex,
 		* okTex,
 		* firstPlayerWinTex,
-		* secondPlayerWinTex;
+		* secondPlayerWinTex,
+		* easyTex,
+		* normalTex,
+		* hardTex;
 
 	SDL_Rect newRect,
 		menuRect,
@@ -54,7 +56,10 @@ private:
 		playerNumRect,
 		okRect,
 		firstPlayerWinRect,
-		secondPlayerWinRect;
+		secondPlayerWinRect,
+		easyRect,
+		normalRect,
+		hardRect;
 
 	void startNewGame();
 	int nextPlayer(int currPlayer);

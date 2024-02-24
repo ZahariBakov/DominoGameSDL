@@ -15,7 +15,7 @@ public:
 
 	void setPosition(int x, int y);
 	void setValue(std::string value);
-	void render();
+	void render() const;
 	void setRenderer(SDL_Renderer* renderer);
 
 

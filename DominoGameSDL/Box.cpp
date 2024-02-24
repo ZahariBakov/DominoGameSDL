@@ -42,7 +42,7 @@ void Box::setValue(std::string value)
 	_value = value;
 }
 
-void Box::render() {
+void Box::render() const {
 	if (_value == "*") {
 		return;
 	}

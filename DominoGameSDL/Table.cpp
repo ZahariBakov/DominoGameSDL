@@ -72,17 +72,22 @@ bool Table::checkForPlacement(Tile playerTile, int xDown, int yDown, int xUp, in
 	int yPress =   (yDown - matrixY) / matrixPieceSize;
 	int xUnpress = (xUp - matrixX)   / matrixPieceSize;
 	int yUnpress = (yUp - matrixY)   / matrixPieceSize;
+	std::cout << "xDown-yDown " << xPress << "-" << yPress << std::endl;
 
-	if (tableBox[yPress][xPress].getValue() == "*" &&
-		((tableBox[yPress][xPress].getValue()    == playerTile.getFirst() || tableBox[yPress][xPress].getValue()     == playerTile.getSecond()) ||
-		(tableBox[yPress][xPress + 1].getValue() == playerTile.getFirst() || tableBox[yPress][xPress + 1].getValue() == playerTile.getSecond()) ||
-		(tableBox[yPress][xPress - 1].getValue() == playerTile.getFirst() || tableBox[yPress][xPress - 1].getValue() == playerTile.getSecond()) ||
-		(tableBox[yPress + 1][xPress].getValue() == playerTile.getFirst() || tableBox[yPress + 1][xPress].getValue() == playerTile.getSecond()) ||
-		(tableBox[yPress - 1][xPress].getValue() == playerTile.getFirst() || tableBox[yPress - 1][xPress].getValue() == playerTile.getSecond())))
+	if (xPress > 0 && yPress > 0 && xUnpress > 0 && yUnpress > 0 && xPress < 19 && yPress < 19 && xUnpress < 19 && yUnpress < 19
+		&& (xPress == xUnpress) && (yPress == yUnpress)) 
 	{
-		std::cout << "Add tile" << std::endl;
-		addTile(playerTile, xPress, yPress);
-		return true;
+		if (tableBox[yPress][xPress].getValue() == "*" &&
+			((tableBox[yPress][xPress].getValue() == playerTile.getFirst() || tableBox[yPress][xPress].getValue() == playerTile.getSecond()) ||
+				(tableBox[yPress][xPress + 1].getValue() == playerTile.getFirst() || tableBox[yPress][xPress + 1].getValue() == playerTile.getSecond()) ||
+				(tableBox[yPress][xPress - 1].getValue() == playerTile.getFirst() || tableBox[yPress][xPress - 1].getValue() == playerTile.getSecond()) ||
+				(tableBox[yPress + 1][xPress].getValue() == playerTile.getFirst() || tableBox[yPress + 1][xPress].getValue() == playerTile.getSecond()) ||
+				(tableBox[yPress - 1][xPress].getValue() == playerTile.getFirst() || tableBox[yPress - 1][xPress].getValue() == playerTile.getSecond())))
+		{
+			std::cout << "Add tile" << std::endl;
+			addTile(playerTile, xPress, yPress);
+			return true;
+		}
 	}
 
 	return false;

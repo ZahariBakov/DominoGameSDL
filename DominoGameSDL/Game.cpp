@@ -294,23 +294,24 @@ void Game::render() {
 			SDL_RenderCopy(renderer, firstPlayerNumTex, NULL, &firstPlayerNumRect);
 
 			firstPlayer->render();
-			if (firstPlayer->playedTiles >= playedTileToWin) {
-				Game::gameFlag = 4;
-				SDL_RenderCopy(renderer, firstPlayerWinTex, NULL, &firstPlayerWinRect);
-			}
+			
 		} else if (Game::playerFlag == 2) 
 		{
 			SDL_RenderCopy(renderer, secondPlayerNumTex, NULL, &secondPlayerNumRect);
 
 			secondPlayer->render();
-			if (secondPlayer->playedTiles >= playedTileToWin) {
-				Game::gameFlag = 4;
-				SDL_RenderCopy(renderer, secondPlayerWinTex, NULL, &secondPlayerWinRect);
-			}
 		}
 
 		if (Game::gameFlag == 4) {
 			SDL_RenderCopy(renderer, menuTex, NULL, &menuRect);
+
+			if (Game::playerFlag == 1) {
+				SDL_RenderCopy(renderer, firstPlayerWinTex, NULL, &firstPlayerWinRect);
+			}
+			else {
+				SDL_RenderCopy(renderer, secondPlayerWinTex, NULL, &secondPlayerWinRect);
+			}
+
 			Game::playSound("win");
 		}
 	}
@@ -392,9 +393,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 		firstPlayer->playedTiles = 0;
 		secondPlayer->playedTiles = 0;
 		difficulty = 5;
-		if (toPlaySound) {
-			toPlaySound = false;
-		}
+		Game::toPlaySound = false;
 		std::cout << "MENU Button is clicked!" << std::endl;
 		
 		return;
@@ -418,11 +417,16 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 3) {
-		Game::playerFlag = nextPlayer(playerFlag);
 		Game::gameFlag = 2;
-		if (toPlaySound) {
-			toPlaySound = false;
+		Game::toPlaySound = false;
+		
+		if (Game::checkForWin()) {
+			Game::gameFlag = 4;
 		}
+		else {
+			Game::playerFlag = nextPlayer(playerFlag);
+		}
+
 		std::cout << "OK Button is clicked! Next player is: " << playerFlag << std::endl;
 
 		return;
@@ -507,7 +511,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 
 			if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 				(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH))) {
-				Game::isSeleckted(i);
+				Game::isSelected(i);
 				std::cout << "First player tile is clicked " << firstPlayer->playerTiles[i].getFirst() << "-" 
 					<< firstPlayer->playerTiles[i].getSecond() << std::endl;
 			}
@@ -517,6 +521,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 			if ((xDown > matrixX && xDown < (matrixX + matrixPieceSize * 20)) && (xUp > matrixX && xUp < (matrixX + matrixPieceSize * 20)) &&
 				(yDown > matrixY && yDown < (matrixY + matrixPieceSize * 20)) && (yUp > matrixY && yUp < (matrixY + matrixPieceSize * 20))) {
 				Game::isInMatrix = true;
+				Game::toPlaySound = false;
 				std::cout << "First player click in matrix" << std::endl;
 			}
 
@@ -544,7 +549,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 
 			if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 				(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH))) {
-				Game::isSeleckted(i);
+				Game::isSelected(i);
 				std::cout << "Second player tile is clicked " << secondPlayer->playerTiles[i].getFirst() 
 					<< "-" << secondPlayer->playerTiles[i].getSecond() << std::endl;
 			}
@@ -554,6 +559,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 			if ((xDown > matrixX && xDown < (matrixX + matrixPieceSize * 20)) && (xUp > matrixX && xUp < (matrixX + matrixPieceSize * 20)) &&
 				(yDown > matrixY && yDown < (matrixY + matrixPieceSize * 20)) && (yUp > matrixY && yUp < (matrixY + matrixPieceSize * 20))) {
 				Game::isInMatrix = true;
+				Game::toPlaySound = false;
 				std::cout << "Second player click in matrix" << std::endl;
 			}
 
@@ -576,7 +582,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 	}
 }
 
-bool Game::isSeleckted(int idx) const
+bool Game::isSelected(int idx) const
 {
 	if (Game::playerFlag == 1) {
 		for (auto& tile : firstPlayer->playerTiles) {
@@ -598,11 +604,13 @@ bool Game::isSeleckted(int idx) const
 	return false;
 }
 
-bool Game::isRunning() const {
+bool Game::isRunning() const 
+{
 	return Game::running;
 }
 
-void Game::startNewGame() {
+void Game::startNewGame() 
+{
 	std::cout << "dificulty " << difficulty << std::endl;
 	std::cout << "tile type  " << tilesType << std::endl;
 	dominoTiles = new Domino(renderer, difficulty, tilesType);
@@ -634,7 +642,8 @@ void Game::startNewGame() {
 	Game::toPlaySound = false;
 }
 
-int Game::nextPlayer(int currPlayer) {
+int Game::nextPlayer(int currPlayer) 
+{
 	if (currPlayer == 1) {
 		return 2;
 	}
@@ -642,7 +651,8 @@ int Game::nextPlayer(int currPlayer) {
 	return 1;
 }
 
-void Game::CoordinatesToInt() {
+void Game::CoordinatesToInt() 
+{
 	std::stringstream stream(tableCoordinates);
 	std::string temp;
 	int idx = 0;
@@ -654,9 +664,22 @@ void Game::CoordinatesToInt() {
 	}
 }
 
-void Game::playSound(std::string id) {
+void Game::playSound(std::string id) 
+{
 	if (!toPlaySound) {
 		toPlaySound = true;
 		SoundManager::Instance()->playSound(id, 0, 0);
 	}
+}
+
+bool Game::checkForWin() const 
+{
+	if (firstPlayer->playedTiles >= playedTileToWin && Game::playerFlag == 1) {
+		return true;
+	}
+	else if (secondPlayer->playedTiles >= playedTileToWin && Game::playerFlag == 2) {
+		return true;
+	}
+
+	return false;
 }

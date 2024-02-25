@@ -27,7 +27,7 @@ public:
 	void handleEvents();
 	void clean();
 	void isClicked(int xDown, int yDown, int xUp, int yUp);
-	bool isSeleckted(int idx) const;
+	bool isSelected(int idx) const;
 
 	bool isRunning() const;
 	
@@ -76,4 +76,5 @@ private:
 	int nextPlayer(int currPlayer);
 	void CoordinatesToInt();
 	void playSound(std::string id);
+	bool checkForWin() const;
 };

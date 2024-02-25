@@ -37,7 +37,8 @@ Game::Game() {
 	Game::passTex			 = NULL;
 	Game::classicTex		 = NULL;
 	Game::playerTex			 = NULL;
-	Game::playerNumTex       = NULL;
+	Game::firstPlayerNumTex  = NULL;
+	Game::secondPlayerNumTex = NULL;
 	Game::okTex              = NULL;
 	Game::firstPlayerWinTex  = NULL;
 	Game::secondPlayerWinTex = NULL;
@@ -53,7 +54,8 @@ Game::Game() {
 	Game::passRect			  = { 0, 0, 0, 0 };
 	Game::classicRect		  = { 0, 0, 0, 0 };
 	Game::playerRect		  = { 0, 0, 0, 0 };
-	Game::playerNumRect		  = { 0, 0, 0, 0 };
+	Game::firstPlayerNumRect  = { 0, 0, 0, 0 };
+	Game::secondPlayerNumRect = { 0, 0, 0, 0 };
 	Game::okRect			  = { 0, 0, 0, 0 };
 	Game::firstPlayerWinRect  = { 0, 0, 0, 0 };
 	Game::secondPlayerWinRect = { 0, 0, 0, 0 };
@@ -153,11 +155,11 @@ bool Game::ttf_init() {
 	tempSurfaceText = TTF_RenderText_Blended(font2, "SECOND PLAYER WIN", { 255, 255, 255, 255 });
 	secondPlayerWinTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
 
-	std::string tmp = std::to_string(Game::playerFlag);
-	char const* playerNum = tmp.c_str();
+	tempSurfaceText = TTF_RenderText_Blended(font1, "1", { 255, 255, 255, 255 });
+	firstPlayerNumTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
 
-	tempSurfaceText = TTF_RenderText_Blended(font1, playerNum, { 255, 255, 255, 255 });
-	playerNumTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+	tempSurfaceText = TTF_RenderText_Blended(font1, "2", {255, 255, 255, 255});
+	secondPlayerNumTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
 
 	tempSurfaceText = TTF_RenderText_Blended(font1, "OK", { 255, 255, 255, 255 });
 	okTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
@@ -196,8 +198,11 @@ bool Game::ttf_init() {
 	SDL_QueryTexture(playerTex, 0, 0, &tw, &th);
 	playerRect = { 10, wh - 110, tw, th };
 
-	SDL_QueryTexture(playerNumTex, 0, 0, &tw, &th);
-	playerNumRect = { 140, wh - 110, tw, th };
+	SDL_QueryTexture(firstPlayerNumTex, 0, 0, &tw, &th);
+	firstPlayerNumRect = { 140, wh - 110, tw, th };
+
+	SDL_QueryTexture(secondPlayerNumTex, 0, 0, &tw, &th);
+	secondPlayerNumRect = { 140, wh - 110, tw, th };
 
 	SDL_QueryTexture(okTex, 0, 0, &tw, &th);
 	okRect = { 10, 100, tw, th };
@@ -279,7 +284,6 @@ void Game::render() {
 		}
 		
 		SDL_RenderCopy(renderer, playerTex, NULL, &playerRect);
-		SDL_RenderCopy(renderer, playerNumTex, NULL, &playerNumRect);
 
 		if (Game::gameFlag == 3) {
 			SDL_RenderCopy(renderer, okTex, NULL, &okRect);
@@ -287,6 +291,8 @@ void Game::render() {
 
 		if (Game::playerFlag == 1) 
 		{
+			SDL_RenderCopy(renderer, firstPlayerNumTex, NULL, &firstPlayerNumRect);
+
 			firstPlayer->render();
 			if (firstPlayer->playedTiles >= playedTileToWin) {
 				Game::gameFlag = 4;
@@ -294,6 +300,8 @@ void Game::render() {
 			}
 		} else if (Game::playerFlag == 2) 
 		{
+			SDL_RenderCopy(renderer, secondPlayerNumTex, NULL, &secondPlayerNumRect);
+
 			secondPlayer->render();
 			if (secondPlayer->playedTiles >= playedTileToWin) {
 				Game::gameFlag = 4;

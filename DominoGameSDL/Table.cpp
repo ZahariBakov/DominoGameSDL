@@ -86,11 +86,13 @@ bool Table::checkForPlacement(Tile playerTile, int xDown, int yDown, int xUp, in
 		&& (xPress == xUnpress) && (yPress == yUnpress)) 
 	{
 		if (tableBox[yPress][xPress].getValue() == "*" &&
+			(playerTile.getFirst() == firstFree || playerTile.getFirst() == secondFree || playerTile.getSecond() == firstFree || playerTile.getSecond() == secondFree) &&
 			((tableBox[yPress][xPress].getValue() == playerTile.getFirst() || tableBox[yPress][xPress].getValue() == playerTile.getSecond()) ||
 				(tableBox[yPress][xPress + 1].getValue() == playerTile.getFirst() || tableBox[yPress][xPress + 1].getValue() == playerTile.getSecond()) ||
 				(tableBox[yPress][xPress - 1].getValue() == playerTile.getFirst() || tableBox[yPress][xPress - 1].getValue() == playerTile.getSecond()) ||
 				(tableBox[yPress + 1][xPress].getValue() == playerTile.getFirst() || tableBox[yPress + 1][xPress].getValue() == playerTile.getSecond()) ||
-				(tableBox[yPress - 1][xPress].getValue() == playerTile.getFirst() || tableBox[yPress - 1][xPress].getValue() == playerTile.getSecond())))
+				(tableBox[yPress - 1][xPress].getValue() == playerTile.getFirst() || tableBox[yPress - 1][xPress].getValue() == playerTile.getSecond()))
+			)
 		{
 			std::cout << "Add tile" << std::endl;
 			addTile(playerTile, xPress, yPress);

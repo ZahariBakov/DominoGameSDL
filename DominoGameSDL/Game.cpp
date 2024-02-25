@@ -239,8 +239,9 @@ void Game::LoadAndPlaySound()
 {
 	SoundManager::Instance()->load("assets/sounds/win.wav", "win");
 	SoundManager::Instance()->load("assets/sounds/tap.wav", "tap");
-	SoundManager::Instance()->load("assets/sounds/newGame.wav", "newGame");
+	SoundManager::Instance()->load("assets/sounds/begin.wav", "begin");
 	SoundManager::Instance()->load("assets/sounds/pass.wav", "pass");
+	SoundManager::Instance()->load("assets/sounds/welcome.wav", "welcome");
 }
 
 void Game::render() {
@@ -252,6 +253,7 @@ void Game::render() {
 	if (Game::gameFlag == 0) {
 		TextureManager::Instance()->drawTexture("welcome", 0, 0, ww, wh, renderer);
 		SDL_RenderCopy(renderer, newTex, NULL, &newRect);
+		Game::playSound("welcome");
 
 	}
 	else if (Game::gameFlag == 1) {
@@ -272,7 +274,8 @@ void Game::render() {
 	else {
 		for (int row = 0; row < 20; ++row) {
 			for (int col = 0; col < 20; ++col) {
-				TextureManager::Instance()->drawTexture("piece", matrixX + (row * matrixPieceSize), matrixY + (col * matrixPieceSize), matrixPieceSize, matrixPieceSize, renderer);
+				TextureManager::Instance()->drawTexture("piece", matrixX + (row * matrixPieceSize), 
+					matrixY + (col * matrixPieceSize), matrixPieceSize, matrixPieceSize, renderer);
 			}
 		}
 
@@ -454,6 +457,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 		std::cout << "EASY buttons is clicked!" << std::endl;
 		Game::tilesType = 4;
 		Game::difficulty = 0;
+		Game::toPlaySound = false;
 	}
 	
 	btnX = 150;
@@ -464,6 +468,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 		std::cout << "NORMAL buttons is clicked!" << std::endl;
 		Game::tilesType = 4;
 		Game::difficulty = 1;
+		Game::toPlaySound = false;
 	}
 
 	btnX = 322;
@@ -474,6 +479,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 		std::cout << "HARD buttons is clicked!" << std::endl;
 		Game::tilesType = 4;
 		Game::difficulty = 2;
+		Game::toPlaySound = false;
 	}
 
 	btnX = 50;
@@ -615,7 +621,7 @@ void Game::startNewGame()
 	std::cout << "tile type  " << tilesType << std::endl;
 	dominoTiles = new Domino(renderer, difficulty, tilesType);
 	dominoTiles->shuffle();
-	Game::playSound("newGame");
+	Game::playSound("begin");
 
 	if (difficulty > 0) {
 		playedTileToWin = 10;

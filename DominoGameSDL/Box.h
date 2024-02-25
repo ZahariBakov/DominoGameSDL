@@ -18,10 +18,9 @@ public:
 	void render() const;
 	void setRenderer(SDL_Renderer* renderer);
 
-
 private:
-	std::string _value;
+	std::string _value; 
 	int _x;
-	int _y;
+	int _y; 
 	SDL_Renderer* _renderer;
 };

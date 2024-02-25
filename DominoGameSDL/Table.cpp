@@ -82,8 +82,7 @@ bool Table::checkForPlacement(Tile playerTile, int xDown, int yDown, int xUp, in
 	int yUnpress = (yUp - matrixY)   / matrixPieceSize;
 	std::cout << "xDown-yDown " << xPress << "-" << yPress << std::endl;
 
-	if (xPress > 0 && yPress > 0 && xUnpress > 0 && yUnpress > 0 && xPress < 19 && yPress < 19 && xUnpress < 19 && yUnpress < 19
-		&& (xPress == xUnpress) && (yPress == yUnpress)) 
+	if ((xPress == xUnpress) && (yPress == yUnpress) && (xPress - 1 >= 0) && (xPress + 1 <= 19) && (yPress - 1 >= 0) && (yPress + 1 <= 19))
 	{
 		if (tableBox[yPress][xPress].getValue() == "*" &&
 			(playerTile.getFirst() == firstFree || playerTile.getFirst() == secondFree || playerTile.getSecond() == firstFree || playerTile.getSecond() == secondFree) &&

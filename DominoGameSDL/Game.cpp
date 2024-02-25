@@ -233,6 +233,9 @@ bool Game::ttf_init() {
 void Game::LoadAndPlaySound()
 {
 	SoundManager::Instance()->load("assets/sounds/win.wav", "win");
+	SoundManager::Instance()->load("assets/sounds/tap.wav", "tap");
+	SoundManager::Instance()->load("assets/sounds/newGame.wav", "newGame");
+	SoundManager::Instance()->load("assets/sounds/pass.wav", "pass");
 }
 
 void Game::render() {
@@ -395,7 +398,8 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 2) {
 		Game::playerFlag = nextPlayer(playerFlag);
-
+		Game::playSound("pass");
+		Game::toPlaySound = false;
 		std::cout << "PASS Button is clicked! Next player is: " << playerFlag << std::endl;
 
 		return;
@@ -408,6 +412,9 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 3) {
 		Game::playerFlag = nextPlayer(playerFlag);
 		Game::gameFlag = 2;
+		if (toPlaySound) {
+			toPlaySound = false;
+		}
 		std::cout << "OK Button is clicked! Next player is: " << playerFlag << std::endl;
 
 		return;
@@ -514,6 +521,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 							firstPlayer->removeTile(i);
 							Game::gameFlag = 3;	
 							firstPlayer->isPossible = false;
+							Game::playSound("tap");
 						}
 					}
 				}
@@ -550,6 +558,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 							secondPlayer->removeTile(i);
 							Game::gameFlag = 3;
 							secondPlayer->isPossible = false;
+							Game::playSound("tap");
 						}
 					}
 				}
@@ -590,6 +599,7 @@ void Game::startNewGame() {
 	std::cout << "tile type  " << tilesType << std::endl;
 	dominoTiles = new Domino(renderer, difficulty, tilesType);
 	dominoTiles->shuffle();
+	Game::playSound("newGame");
 
 	if (difficulty > 0) {
 		playedTileToWin = 10;
@@ -613,6 +623,7 @@ void Game::startNewGame() {
 	Game::difficulty = 5;
 	Game::tilesType = 3;
 	std::cout << "Table have tile" << std::endl;
+	Game::toPlaySound = false;
 }
 
 int Game::nextPlayer(int currPlayer) {

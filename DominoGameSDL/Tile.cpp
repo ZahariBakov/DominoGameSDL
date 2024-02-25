@@ -29,7 +29,23 @@ void Tile::tileRender() {
 }
 
 void Tile::rotate() {
-	//TODO...
+	if (_first.getX() == _second.getX() - 32) {
+		std::cout << "tile is horizontal" << std::endl;
+		
+		_second.setPosition(_second.getX() - 32, _second.getY() + 32);
+	}
+	else if (_first.getY() == _second.getY() - 32) {
+		std::cout << "tile is upper head" << std::endl;
+		_second.setPosition(_second.getX() - 64, _second.getY());
+	}
+	else if (_first.getX() == _second.getX() + 32) {
+		std::cout << "tile is flip horizontal" << std::endl;
+		_second.setPosition(_second.getX() - 32, _second.getY() - 32);
+	}
+	else if (_first.getY() == _second.getY() + 32) {
+		std::cout << "tile is down head" << std::endl;
+		_second.setPosition(_second.getX(), _second.getY());
+	}
 }
 
 void Tile::setPosition(int x, int y)
@@ -45,4 +61,3 @@ void Tile::setValues()
 	_first.setValue("10");
 	_second.setValue("10");
 }
-

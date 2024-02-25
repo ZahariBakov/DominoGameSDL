@@ -11,6 +11,7 @@ public:
 	void addTiles(Domino& domino, int difficulty);
 	void render();
 	void removeTile(int idx);
+	void rotate(int idx);
 
 	int playedTiles;
 

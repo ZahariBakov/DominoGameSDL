@@ -36,7 +36,7 @@ private:
 	SDL_Renderer* renderer;
 	bool running, isInMatrix, toPlaySound;
 	//bool playerTileClicked(int idx) const;
-	int mouseDownX, mouseDownY, gameFlag, playerFlag, difficulty, playedTileToWin, tilesType;
+	int mouseDownX, mouseDownY, gameFlag, playerFlag, difficulty, playedTileToWin, tilesType, tileIdx;
 
 	SDL_Texture* newTex,
 		* menuTex,
@@ -77,4 +77,5 @@ private:
 	void CoordinatesToInt();
 	void playSound(std::string id);
 	bool checkForWin() const;
+	//void rotate(int idx);
 };

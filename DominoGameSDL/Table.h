@@ -23,7 +23,7 @@ public:
 	bool checkForPlacement(Tile playerTile, int xDown, int yDown, int xUp, int yUp);
 
 	void createMap();
-	void render();
+	void render() const;
 	void setRenderer(SDL_Renderer* renderer);
 	void clear();
 

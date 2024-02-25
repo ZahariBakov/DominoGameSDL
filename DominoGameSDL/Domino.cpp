@@ -25,11 +25,9 @@ Domino::Domino(SDL_Renderer* renderer, int difficulty, int type) {
 }
 
 void Domino::shuffle() {
-    // Create a random number generator
     std::random_device rd;
     std::mt19937 rng(rd());
 
-    // Shuffle the vector using std::shuffle
     std::shuffle(dominoTiles.begin(), dominoTiles.end(), rng);
 
 	this->_tileIdx = 0;

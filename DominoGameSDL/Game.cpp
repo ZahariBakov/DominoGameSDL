@@ -30,6 +30,7 @@ Game::Game() {
 	Game::difficulty      = 5;
 	Game::playedTileToWin = 7;
 	Game::tilesType       = 3;
+	Game::tileIdx         = 0;
 
 	Game::newTex			 = NULL;
 	Game::menuTex			 = NULL;
@@ -90,7 +91,6 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 				firstPlayer  = new Player();
 				secondPlayer = new Player();
 				table = new Table();
-				//dominoTiles = new Domino(renderer, 9);
 				table->setRenderer(renderer);
 			}
 			else {
@@ -127,7 +127,7 @@ bool Game::ttf_init() {
 	}
 
 	int ww, wh;
-	SDL_GetWindowSize(window, &ww, &wh); // get window size
+	SDL_GetWindowSize(window, &ww, &wh);
 
 	SDL_Surface* tempSurfaceText = NULL;
 
@@ -343,15 +343,16 @@ void Game::handleEvents() {
 					Game::isClicked(mouseDownX, mouseDownY, msx, msy);
 				}
 			}; break;
-			case SDL_KEYDOWN: {
-				if (event.key.keysym.sym == SDLK_LEFT && Game::gameFlag == 3) {
-					//table->moveTileInLeft();
-					std::cout << "left arrow" << std::endl;
-				}
-				if (event.key.keysym.sym == SDLK_RIGHT && Game::gameFlag == 3) {
-					std::cout << "right arrow" << std::endl;
-				}
-			}; break;
+			//case SDL_KEYDOWN: {
+			//	if (event.key.keysym.sym == SDLK_LEFT && Game::gameFlag == 6) {
+			//		//table->moveTileInLeft();
+			//		//Game::rotate(Game::tileIdx);
+			//		std::cout << "left arrow" << std::endl;
+			//	}
+			//	if (event.key.keysym.sym == SDLK_RIGHT && Game::gameFlag == 3) {
+			//		std::cout << "right arrow" << std::endl;
+			//	}
+			//}; break;
 
 			default: break;
 			}
@@ -422,7 +423,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 3) {
 		Game::gameFlag = 2;
 		Game::toPlaySound = false;
-		
+		Game::tileIdx = 0;
 		if (Game::checkForWin()) {
 			Game::gameFlag = 4;
 		}
@@ -520,6 +521,8 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 				Game::isSelected(i);
 				std::cout << "First player tile is clicked " << firstPlayer->playerTiles[i].getFirst() << "-" 
 					<< firstPlayer->playerTiles[i].getSecond() << std::endl;
+				//Game::gameFlag = 6;
+				//Game::tileIdx = i;
 			}
 		}	
 
@@ -558,6 +561,8 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 				Game::isSelected(i);
 				std::cout << "Second player tile is clicked " << secondPlayer->playerTiles[i].getFirst() 
 					<< "-" << secondPlayer->playerTiles[i].getSecond() << std::endl;
+				//Game::gameFlag = 6;
+				//Game::tileIdx = i;
 			}
 		}
 
@@ -689,3 +694,13 @@ bool Game::checkForWin() const
 
 	return false;
 }
+
+//void Game::rotate(int idx)
+//{
+//	if (Game::playerFlag == 1) {
+//		firstPlayer->rotate(idx);
+//	}
+//	else {
+//		secondPlayer->rotate(idx);
+//	}
+//}

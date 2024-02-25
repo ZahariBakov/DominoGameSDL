@@ -33,7 +33,11 @@ void Player::render()
 
 void Player::removeTile(int idx) 
 {
-	//playerTiles.erase(playerTiles.begin() + idx);
 	playerTiles[idx].setValues();
 	playedTiles++;
+}
+
+void Player::rotate(int idx) 
+{
+	playerTiles[idx].rotate();
 }

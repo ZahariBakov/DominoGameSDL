@@ -152,7 +152,6 @@ bool Table::checkForPlacement(Tile playerTile, int xDown, int yDown, int xUp, in
 void Table::createMap() {
 	for (int row = 0; row < 20; ++row) {
 		for (int col = 0; col < 20; ++col) {
-			//map[row][col] = "*";
 			tableBox[row][col].setPosition(matrixX + col * matrixPieceSize, matrixY + row * matrixPieceSize);
 		}
 	}
@@ -160,10 +159,9 @@ void Table::createMap() {
 	std::cout << "Map is created!" << std::endl;
 }
 
-void Table::render() {
+void Table::render() const {
 	for (int row = 0; row < 20; ++row) {
 		for (int col = 0; col < 20; ++col) {
-			//map[row][col] = "*";
 			tableBox[row][col].render();
 		}
 	}
@@ -174,7 +172,6 @@ void Table::setRenderer(SDL_Renderer* renderer) {
 
 	for (int row = 0; row < 20; ++row) {
 		for (int col = 0; col < 20; ++col) {
-			//map[row][col] = "*";
 			tableBox[row][col].setRenderer(_renderer);
 		}
 	}
@@ -184,9 +181,7 @@ void Table::clear()
 {
 	for (int row = 0; row < 20; ++row) {
 		for (int col = 0; col < 20; ++col) {
-			//map[row][col] = "*";
 			tableBox[row][col].setValue("*");
-			
 		}
 	}
 	firstTurn = true;

@@ -22,7 +22,6 @@ public:
 
 private:
 	SoundManager();
-	~SoundManager();
 	static SoundManager* s_mInstance;
 	std::map<std::string, Mix_Chunk*> s_mSfxs;
  };

@@ -34,7 +34,7 @@ public:
 private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
-	bool running, isInMatrix;
+	bool running, isInMatrix, toPlaySound;
 	//bool playerTileClicked(int idx) const;
 	int mouseDownX, mouseDownY, gameFlag, playerFlag, difficulty, playedTileToWin, tilesType;
 
@@ -73,4 +73,5 @@ private:
 	void startNewGame();
 	int nextPlayer(int currPlayer);
 	void CoordinatesToInt();
+	void playSound(std::string id);
 };

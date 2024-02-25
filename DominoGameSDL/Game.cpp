@@ -21,13 +21,14 @@ Game::Game() {
 
 	Game::running     = true;
 	Game::isInMatrix  = false;
+	Game::toPlaySound = false;
 
 	Game::mouseDownX	  = 0;
 	Game::mouseDownY	  = 0;
 	Game::gameFlag		  = 0;
 	Game::playerFlag	  = 1;
 	Game::difficulty      = 5;
-	Game::playedTileToWin = 7;
+	Game::playedTileToWin = 1;
 	Game::tilesType       = 3;
 
 	Game::newTex			 = NULL;
@@ -299,7 +300,7 @@ void Game::render() {
 
 		if (Game::gameFlag == 4) {
 			SDL_RenderCopy(renderer, menuTex, NULL, &menuRect);
-			SoundManager::Instance()->playSound("win", -1, 0);
+			Game::playSound("win");
 		}
 	}
 	SDL_SetRenderDrawColor(renderer, 64, 64, 64, 255);
@@ -380,6 +381,9 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 		firstPlayer->playedTiles = 0;
 		secondPlayer->playedTiles = 0;
 		difficulty = 5;
+		if (toPlaySound) {
+			toPlaySound = false;
+		}
 		std::cout << "MENU Button is clicked!" << std::endl;
 		
 		return;
@@ -628,5 +632,12 @@ void Game::CoordinatesToInt() {
 		int value = std::stoi(temp);
 		tableCoordInt[idx] = value;
 		++idx;
+	}
+}
+
+void Game::playSound(std::string id) {
+	if (!toPlaySound) {
+		toPlaySound = true;
+		SoundManager::Instance()->playSound(id, 0, 0);
 	}
 }

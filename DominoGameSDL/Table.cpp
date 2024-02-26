@@ -102,53 +102,6 @@ bool Table::checkForPlacement(Tile playerTile, int xDown, int yDown, int xUp, in
 	return false;
 }
 
-//void Table::moveTileInLeft() {
-//	Tile lastTile = tableTiles.back();
-//
-//	if (lastTile.getFirst() == lastTile.getSecond()) {
-//		tableTiles.pop_back();
-//		std::string lastCoord = tileYX.back();
-//		tileYX.pop_back();
-//		int xPos = 1;
-//		int yPos = 1;
-//
-//		std::stringstream stream(lastCoord);
-//		std::string temp;
-//		int idx = 0;
-//
-//		while (std::getline(stream, temp, ',')) {
-//			int value = std::stoi(temp);
-//			if (idx == 0) {
-//				yPos = value;
-//				++idx;
-//			}
-//			else {
-//				xPos = value;
-//			}
-//		}
-//
-//		//map[yPos][xPos] = lastTile.getSecond();
-//		map[yPos][xPos - 1] = lastTile.getFirst();
-//		map[yPos][xPos + 1] = "*";
-//		std::stringstream ss;
-//		ss << yPos << "," << (xPos - 1);
-//		coordinates = ss.str();
-//		tileYX.push_back(coordinates);
-//
-//		if (lastTile.getFirst() == firstFree) {
-//			//firstFreePos["y"] = yPos;
-//			firstFreePos["x"] = xPos - 1;
-//		}
-//		else {
-//			//secondFreePos["y"] = yPos;
-//			secondFreePos["x"] = xPos - 1;
-//		}
-//		
-//		tableTiles.push_back(lastTile);
-//		printMap();
-//	}
-//}
-
 void Table::createMap() {
 	for (int row = 0; row < 20; ++row) {
 		for (int col = 0; col < 20; ++col) {

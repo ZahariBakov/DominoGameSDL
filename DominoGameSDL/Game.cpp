@@ -343,16 +343,16 @@ void Game::handleEvents() {
 					Game::isClicked(mouseDownX, mouseDownY, msx, msy);
 				}
 			}; break;
-			//case SDL_KEYDOWN: {
-			//	if (event.key.keysym.sym == SDLK_LEFT && Game::gameFlag == 6) {
-			//		//table->moveTileInLeft();
-			//		//Game::rotate(Game::tileIdx);
-			//		std::cout << "left arrow" << std::endl;
-			//	}
-			//	if (event.key.keysym.sym == SDLK_RIGHT && Game::gameFlag == 3) {
-			//		std::cout << "right arrow" << std::endl;
-			//	}
-			//}; break;
+			case SDL_KEYDOWN: {
+				if (event.key.keysym.sym == SDLK_LEFT && Game::gameFlag == 3) {
+					//Game::rotate(Game::tileIdx);
+					//std::cout << "xDown-yDown" << Game::mouseDownX << "-" << Game::mouseDownY << std::endl;
+					std::cout << "left arrow" << std::endl;
+				}
+				if (event.key.keysym.sym == SDLK_RIGHT && Game::gameFlag == 3) {
+					std::cout << "right arrow" << std::endl;
+				}
+			}; break;
 
 			default: break;
 			}

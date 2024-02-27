@@ -28,7 +28,7 @@ Game::Game() {
 	Game::gameFlag		  = 0;
 	Game::playerFlag	  = 1;
 	Game::difficulty      = 5;
-	Game::playedTileToWin = 7;
+	Game::playedTileToWin = 1;
 	Game::tilesType       = 3;
 	Game::tileIdx         = 0;
 

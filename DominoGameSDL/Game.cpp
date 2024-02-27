@@ -345,7 +345,7 @@ void Game::handleEvents() {
 			}; break;
 			case SDL_KEYDOWN: {
 				if (event.key.keysym.sym == SDLK_LEFT && Game::gameFlag == 3) {
-					//Game::rotate(Game::tileIdx);
+					Game::rotate(Game::tileIdx);
 					//std::cout << "xDown-yDown" << Game::mouseDownX << "-" << Game::mouseDownY << std::endl;
 					std::cout << "left arrow" << std::endl;
 				}
@@ -522,7 +522,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 				std::cout << "First player tile is clicked " << firstPlayer->playerTiles[i].getFirst() << "-" 
 					<< firstPlayer->playerTiles[i].getSecond() << std::endl;
 				//Game::gameFlag = 6;
-				//Game::tileIdx = i;
+				Game::tileIdx = i;
 			}
 		}	
 
@@ -562,7 +562,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 				std::cout << "Second player tile is clicked " << secondPlayer->playerTiles[i].getFirst() 
 					<< "-" << secondPlayer->playerTiles[i].getSecond() << std::endl;
 				//Game::gameFlag = 6;
-				//Game::tileIdx = i;
+				Game::tileIdx = i;
 			}
 		}
 
@@ -695,12 +695,12 @@ bool Game::checkForWin() const
 	return false;
 }
 
-//void Game::rotate(int idx)
-//{
-//	if (Game::playerFlag == 1) {
-//		firstPlayer->rotate(idx);
-//	}
-//	else {
-//		secondPlayer->rotate(idx);
-//	}
-//}
+void Game::rotate(int idx)
+{
+	if (Game::playerFlag == 1) {
+		firstPlayer->rotate(idx);
+	}
+	else {
+		secondPlayer->rotate(idx);
+	}
+}

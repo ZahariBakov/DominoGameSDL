@@ -77,5 +77,5 @@ private:
 	void CoordinatesToInt();
 	void playSound(std::string id);
 	bool checkForWin() const;
-	//void rotate(int idx);
+	void rotate(int idx);
 };

@@ -13,6 +13,14 @@
 #include "Table.h"
 #include "SoundManager.h"
 
+enum class GameFlag {
+	Welcome,
+	MainMenu,
+	Playing,
+	Ok,
+	Win
+};
+
 class Game {
 public:
 	Game();

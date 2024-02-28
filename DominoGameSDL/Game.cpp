@@ -250,13 +250,40 @@ void Game::render() {
 
 	SDL_RenderClear(renderer);
 
-	if (Game::gameFlag == 0) {
+	if (Game::gameFlag >= 2) {
+		for (int row = 0; row < 20; ++row) {
+			for (int col = 0; col < 20; ++col) {
+				TextureManager::Instance()->drawTexture("piece", matrixX + (row * matrixPieceSize),
+					matrixY + (col * matrixPieceSize), matrixPieceSize, matrixPieceSize, renderer);
+			}
+		}
+
+		table->render();
+
+		SDL_RenderCopy(renderer, playerTex, NULL, &playerRect);
+
+		if (Game::playerFlag == 1)
+		{
+			SDL_RenderCopy(renderer, firstPlayerNumTex, NULL, &firstPlayerNumRect);
+
+			firstPlayer->render();
+
+		}
+		else if (Game::playerFlag == 2)
+		{
+			SDL_RenderCopy(renderer, secondPlayerNumTex, NULL, &secondPlayerNumRect);
+
+			secondPlayer->render();
+		}
+	}
+
+	switch (gameFlag) {
+	case static_cast<int>(GameFlag::Welcome):
 		TextureManager::Instance()->drawTexture("welcome", 0, 0, ww, wh, renderer);
 		SDL_RenderCopy(renderer, newTex, NULL, &newRect);
 		Game::playSound("welcome");
-
-	}
-	else if (Game::gameFlag == 1) {
+		break;
+	case static_cast<int>(GameFlag::MainMenu):
 		SDL_RenderCopy(renderer, menuTitleTex, NULL, &menuTitleRect);
 		SDL_RenderCopy(renderer, classicTex, NULL, &classicRect);
 
@@ -270,55 +297,31 @@ void Game::render() {
 			SDL_RenderCopy(renderer, whiteTex, NULL, &whiteRect);
 			SDL_RenderCopy(renderer, blackTex, NULL, &blackRect);
 		}
+		break;
+	case static_cast<int>(GameFlag::Playing):
+		SDL_RenderCopy(renderer, menuTex, NULL, &menuRect);
+		SDL_RenderCopy(renderer, passTex, NULL, &passRect);
+		break;
+	case static_cast<int>(GameFlag::Ok):
+		SDL_RenderCopy(renderer, okTex, NULL, &okRect);
+		break;
+	case static_cast<int>(GameFlag::Win):
+		SDL_RenderCopy(renderer, menuTex, NULL, &menuRect);
+
+		if (Game::playerFlag == 1) {
+			SDL_RenderCopy(renderer, firstPlayerWinTex, NULL, &firstPlayerWinRect);
+		}
+		else {
+			SDL_RenderCopy(renderer, secondPlayerWinTex, NULL, &secondPlayerWinRect);
+		}
+
+		Game::playSound("win");
+		break;
+	default:
+		break;
 	}
-	else {
-		for (int row = 0; row < 20; ++row) {
-			for (int col = 0; col < 20; ++col) {
-				TextureManager::Instance()->drawTexture("piece", matrixX + (row * matrixPieceSize), 
-					matrixY + (col * matrixPieceSize), matrixPieceSize, matrixPieceSize, renderer);
-			}
-		}
 
-		table->render();
-		
-		if (Game::gameFlag == 2) {
-			SDL_RenderCopy(renderer, menuTex, NULL, &menuRect);
-			SDL_RenderCopy(renderer, passTex, NULL, &passRect);
-		}
-		
-		SDL_RenderCopy(renderer, playerTex, NULL, &playerRect);
-
-		if (Game::gameFlag == 3) {
-			SDL_RenderCopy(renderer, okTex, NULL, &okRect);
-		}
-
-		if (Game::playerFlag == 1) 
-		{
-			SDL_RenderCopy(renderer, firstPlayerNumTex, NULL, &firstPlayerNumRect);
-
-			firstPlayer->render();
-			
-		} else if (Game::playerFlag == 2) 
-		{
-			SDL_RenderCopy(renderer, secondPlayerNumTex, NULL, &secondPlayerNumRect);
-
-			secondPlayer->render();
-		}
-
-		if (Game::gameFlag == 4) {
-			SDL_RenderCopy(renderer, menuTex, NULL, &menuRect);
-
-			if (Game::playerFlag == 1) {
-				SDL_RenderCopy(renderer, firstPlayerWinTex, NULL, &firstPlayerWinRect);
-			}
-			else {
-				SDL_RenderCopy(renderer, secondPlayerWinTex, NULL, &secondPlayerWinRect);
-			}
-
-			Game::playSound("win");
-		}
-	}
-	SDL_SetRenderDrawColor(renderer, 64, 64, 64, 255);
+	//SDL_SetRenderDrawColor(renderer, 64, 64, 64, 255);
 
 	SDL_RenderPresent(renderer);
 }

@@ -12,7 +12,7 @@ public:
 
 	Box tableBox[20][20];
 
-	void addTile(Tile& newTile, int xPos = 17, int yPos = 18);
+	void addTile(Tile& newTile, int xPos = 9, int yPos = 9);
 
 	std::string firstFree;
 	std::string secondFree;

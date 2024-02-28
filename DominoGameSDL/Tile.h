@@ -6,7 +6,7 @@
 class Tile {
 public:
 	Tile();
-	Tile(SDL_Renderer* ren, std::string first, std::string second, int tileX, int tileY, int type);
+	Tile(SDL_Renderer* ren, std::string first, std::string second, int tileX, int tileY, int type, std::string domino);
 
 	std::string getFirst() const;
 	std::string getSecond() const;

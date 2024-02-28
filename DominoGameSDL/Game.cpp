@@ -17,6 +17,7 @@ Domino* dominoTiles;
 
 PlayerFlag playerFlag = First;
 Difficulty difficulty = None;
+DominoType dominoType = DominoType::None;
 
 Game::Game() {
 	Game::window   = NULL;
@@ -38,6 +39,7 @@ Game::Game() {
 	Game::menuTitleTex		 = NULL;
 	Game::passTex			 = NULL;
 	Game::classicTex		 = NULL;
+	Game::vehicleTex		 = NULL;
 	Game::playerTex			 = NULL;
 	Game::firstPlayerNumTex  = NULL;
 	Game::secondPlayerNumTex = NULL;
@@ -55,6 +57,7 @@ Game::Game() {
 	Game::menuTitleRect		  = { 0, 0, 0, 0 };
 	Game::passRect			  = { 0, 0, 0, 0 };
 	Game::classicRect		  = { 0, 0, 0, 0 };
+	Game::vehicleRect		  = { 0, 0, 0, 0 };
 	Game::playerRect		  = { 0, 0, 0, 0 };
 	Game::firstPlayerNumRect  = { 0, 0, 0, 0 };
 	Game::secondPlayerNumRect = { 0, 0, 0, 0 };
@@ -147,6 +150,9 @@ bool Game::ttf_init() {
 	tempSurfaceText = TTF_RenderText_Blended(font1, "CLASSIC", { 255, 255, 255, 255 });
 	classicTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
 
+	tempSurfaceText = TTF_RenderText_Blended(font1, "VEHICLE", { 255, 255, 255, 255 });
+	vehicleTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
 	tempSurfaceText = TTF_RenderText_Blended(font1, "PLAYER", { 255, 255, 255, 255 });
 	playerTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
 
@@ -195,6 +201,9 @@ bool Game::ttf_init() {
 
 	SDL_QueryTexture(classicTex, 0, 0, &tw, &th);
 	classicRect = { 10, 150, tw, th };
+
+	SDL_QueryTexture(vehicleTex, 0, 0, &tw, &th);
+	vehicleRect = { 150, 150, tw, th };
 
 	SDL_QueryTexture(playerTex, 0, 0, &tw, &th);
 	playerRect = { 10, wh - 110, tw, th };
@@ -287,11 +296,16 @@ void Game::render() {
 	case static_cast<int>(GameFlag::MainMenu):
 		SDL_RenderCopy(renderer, menuTitleTex, NULL, &menuTitleRect);
 		SDL_RenderCopy(renderer, classicTex, NULL, &classicRect);
+		SDL_RenderCopy(renderer, vehicleTex, NULL, &vehicleRect);
 
 		if (difficulty == All) {
 			SDL_RenderCopy(renderer, easyTex, NULL, &easyRect);
 			SDL_RenderCopy(renderer, normalTex, NULL, &normalRect);
-			SDL_RenderCopy(renderer, hardTex, NULL, &hardRect);
+			
+			if (dominoType == DominoType::Classic) {
+				SDL_RenderCopy(renderer, hardTex, NULL, &hardRect);
+			}
+			
 		}
 
 		if (Game::tilesType == 4) {
@@ -447,8 +461,23 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1) {
 		difficulty = All;
+		dominoType = DominoType::Classic;
 
 		std::cout << "CLASSIC Button is clicked!" << std::endl;
+
+		return;
+	}
+
+	btnX = 150;
+	btnY = 165;
+	btnW = 130;
+
+	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
+		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1) {
+		difficulty = All;
+		dominoType = DominoType::Vehicle;
+
+		std::cout << "VEHICLE Button is clicked!" << std::endl;
 
 		return;
 	}
@@ -463,6 +492,12 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 		Game::tilesType = 4;
 		difficulty = Easy;
 		Game::toPlaySound = false;
+
+		if (dominoType == DominoType::Vehicle) {
+			Game::tilesType = 0;
+			Game::startNewGame();
+			Game::gameFlag = 2;
+		}
 	}
 	
 	btnX = 150;
@@ -474,13 +509,20 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 		Game::tilesType = 4;
 		difficulty = Normal;
 		Game::toPlaySound = false;
+
+		if (dominoType == DominoType::Vehicle) {
+			Game::tilesType = 0;
+			Game::startNewGame();
+			Game::gameFlag = 2;
+		}
 	}
 
 	btnX = 322;
 	btnW = 88;
 
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
-		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1 && difficulty == All) {
+		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1 && difficulty == All &&
+		dominoType == DominoType::Classic) {
 		std::cout << "HARD buttons is clicked!" << std::endl;
 		Game::tilesType = 4;
 		difficulty = Hard;
@@ -628,7 +670,26 @@ void Game::startNewGame()
 {
 	std::cout << "dificulty " << difficulty << std::endl;
 	std::cout << "tile type  " << tilesType << std::endl;
-	dominoTiles = new Domino(renderer, difficulty, tilesType);
+	std::string domino;
+
+	switch (dominoType)
+	{
+	case DominoType::Classic:
+		std::cout << "domino type is Classic" << std::endl;
+		domino = "classic/";
+		break;
+	case DominoType::Vehicle:
+		std::cout << "domino type is Vehicle" << std::endl;
+		domino = "vehicle/";
+		break;
+	case DominoType::None:
+		std::cout << "domino type is None" << std::endl;
+		break;
+	default:
+		break;
+	}
+
+	dominoTiles = new Domino(renderer, difficulty, tilesType, domino);
 	dominoTiles->shuffle();
 	Game::playSound("begin");
 

@@ -1,5 +1,7 @@
 #include "Box.h"
 
+#include <iostream>
+
 int side = 32;
 
 Box::Box() {
@@ -9,19 +11,26 @@ Box::Box() {
 	this->_renderer = nullptr;
 }
 
-Box::Box(SDL_Renderer* renderer, std::string value, int x, int y, int type) {
+Box::Box(SDL_Renderer* renderer, std::string value, int x, int y, int type, std::string domino) {
 	this->_value = value;
 	this->_x = x;
 	this->_y = y;
 	this->_renderer = renderer;
 	std::string typeStr = "white/";
+	std::string path;
 
 	if (type != 0) {
 		typeStr = "black/";
 	}
-
-	std::string path = "assets/classic/" + typeStr + value + ".png";
-
+	
+	if (domino == "classic/") {
+		path = "assets/" + domino + typeStr + value + ".png";
+	}
+	else {
+		path = "assets/" + domino + value + ".png";
+	}
+	
+	
 	TextureManager::Instance()->loadTexture(path.c_str(), value, _renderer);
 	
 }

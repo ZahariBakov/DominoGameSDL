@@ -4,7 +4,7 @@
 #include <random>
 #include <algorithm>
 
-Domino::Domino(SDL_Renderer* renderer, int difficulty, int type) {
+Domino::Domino(SDL_Renderer* renderer, int difficulty, int type, std::string domino) {
 	this->_tileIdx = 0;
 	int maxTileNum = 5;
 
@@ -17,7 +17,7 @@ Domino::Domino(SDL_Renderer* renderer, int difficulty, int type) {
 
 	for (int i = 0; i < maxTileNum; ++i) {
 		for (int j = i; j < maxTileNum; ++j) {
-			dominoTiles.push_back(Tile(renderer, std::to_string(i), std::to_string(j), 0, 0, type));
+			dominoTiles.push_back(Tile(renderer, std::to_string(i), std::to_string(j), 0, 0, type, domino));
 		}
 	}
 

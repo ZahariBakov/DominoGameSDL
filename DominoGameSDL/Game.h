@@ -22,8 +22,8 @@ enum class GameFlag {
 };
 
 enum PlayerFlag { First, Second };
-
 enum Difficulty { Easy, Normal, Hard, All, None };
+enum class DominoType { Classic, Vehicle, None };
 
 class Game {
 public:
@@ -54,6 +54,7 @@ private:
 		* menuTitleTex,
 		* passTex,
 		* classicTex,
+		* vehicleTex,
 		* playerTex,
 		* firstPlayerNumTex,
 		* secondPlayerNumTex,
@@ -71,6 +72,7 @@ private:
 		menuTitleRect,
 		passRect,
 		classicRect,
+		vehicleRect,
 		playerRect,
 		firstPlayerNumRect,
 		secondPlayerNumRect,

@@ -21,6 +21,8 @@ enum class GameFlag {
 	Win
 };
 
+enum PlayerFlag { First, Second };
+
 class Game {
 public:
 	Game();
@@ -44,7 +46,7 @@ private:
 	SDL_Renderer* renderer;
 	bool running, isInMatrix, toPlaySound;
 	//bool playerTileClicked(int idx) const;
-	int mouseDownX, mouseDownY, gameFlag, playerFlag, difficulty, playedTileToWin, tilesType, tileIdx;
+	int mouseDownX, mouseDownY, gameFlag, difficulty, playedTileToWin, tilesType, tileIdx;
 
 	SDL_Texture* newTex,
 		* menuTex,
@@ -81,7 +83,7 @@ private:
 		blackRect;
 
 	void startNewGame();
-	int nextPlayer(int currPlayer);
+	void nextPlayer();
 	void CoordinatesToInt();
 	void playSound(std::string id);
 	bool checkForWin() const;

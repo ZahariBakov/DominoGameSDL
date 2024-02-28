@@ -16,6 +16,7 @@ Table*  table;
 Domino* dominoTiles;
 
 PlayerFlag playerFlag = First;
+Difficulty difficulty = None;
 
 Game::Game() {
 	Game::window   = NULL;
@@ -28,7 +29,6 @@ Game::Game() {
 	Game::mouseDownX	  = 0;
 	Game::mouseDownY	  = 0;
 	Game::gameFlag		  = 0;
-	Game::difficulty      = 5;
 	Game::playedTileToWin = 1;
 	Game::tilesType       = 3;
 	Game::tileIdx         = 0;
@@ -288,7 +288,7 @@ void Game::render() {
 		SDL_RenderCopy(renderer, menuTitleTex, NULL, &menuTitleRect);
 		SDL_RenderCopy(renderer, classicTex, NULL, &classicRect);
 
-		if (Game::difficulty == 4) {
+		if (difficulty == All) {
 			SDL_RenderCopy(renderer, easyTex, NULL, &easyRect);
 			SDL_RenderCopy(renderer, normalTex, NULL, &normalRect);
 			SDL_RenderCopy(renderer, hardTex, NULL, &hardRect);
@@ -400,7 +400,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 		Game::gameFlag = 1;
 		firstPlayer->playedTiles = 0;
 		secondPlayer->playedTiles = 0;
-		difficulty = 5;
+		difficulty = None;
 		Game::toPlaySound = false;
 		std::cout << "MENU Button is clicked!" << std::endl;
 		
@@ -446,7 +446,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1) {
-		difficulty = 4;
+		difficulty = All;
 
 		std::cout << "CLASSIC Button is clicked!" << std::endl;
 
@@ -458,10 +458,10 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 	btnW = 82;
 
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
-		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1 && Game::difficulty == 4) {
+		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1 && difficulty == All) {
 		std::cout << "EASY buttons is clicked!" << std::endl;
 		Game::tilesType = 4;
-		Game::difficulty = 0;
+		difficulty = Easy;
 		Game::toPlaySound = false;
 	}
 	
@@ -469,10 +469,10 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 	btnW = 134;
 
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
-		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1 && Game::difficulty == 4) {
+		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1 && difficulty == All) {
 		std::cout << "NORMAL buttons is clicked!" << std::endl;
 		Game::tilesType = 4;
-		Game::difficulty = 1;
+		difficulty = Normal;
 		Game::toPlaySound = false;
 	}
 
@@ -480,10 +480,10 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 	btnW = 88;
 
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
-		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1 && Game::difficulty == 4) {
+		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1 && difficulty == All) {
 		std::cout << "HARD buttons is clicked!" << std::endl;
 		Game::tilesType = 4;
-		Game::difficulty = 2;
+		difficulty = Hard;
 		Game::toPlaySound = false;
 	}
 
@@ -632,7 +632,7 @@ void Game::startNewGame()
 	dominoTiles->shuffle();
 	Game::playSound("begin");
 
-	if (difficulty > 0) {
+	if (difficulty != Easy) {
 		playedTileToWin = 10;
 	}
 
@@ -651,7 +651,7 @@ void Game::startNewGame()
 
 	Tile tmpTile = dominoTiles->giveTile();
 	table->addTile(tmpTile);
-	Game::difficulty = 5;
+	difficulty = None;
 	Game::tilesType = 3;
 	std::cout << "Table have tile" << std::endl;
 	Game::toPlaySound = false;

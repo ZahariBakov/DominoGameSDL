@@ -23,6 +23,8 @@ enum class GameFlag {
 
 enum PlayerFlag { First, Second };
 
+enum Difficulty { Easy, Normal, Hard, All, None };
+
 class Game {
 public:
 	Game();
@@ -45,8 +47,7 @@ private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	bool running, isInMatrix, toPlaySound;
-	//bool playerTileClicked(int idx) const;
-	int mouseDownX, mouseDownY, gameFlag, difficulty, playedTileToWin, tilesType, tileIdx;
+	int mouseDownX, mouseDownY, gameFlag, playedTileToWin, tilesType, tileIdx;
 
 	SDL_Texture* newTex,
 		* menuTex,

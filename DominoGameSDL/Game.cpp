@@ -40,6 +40,8 @@ Game::Game() {
 	Game::passTex			 = NULL;
 	Game::classicTex		 = NULL;
 	Game::vehicleTex		 = NULL;
+	Game::flowersTex  		 = NULL;
+	Game::butterfliesTex	 = NULL;
 	Game::playerTex			 = NULL;
 	Game::firstPlayerNumTex  = NULL;
 	Game::secondPlayerNumTex = NULL;
@@ -58,6 +60,8 @@ Game::Game() {
 	Game::passRect			  = { 0, 0, 0, 0 };
 	Game::classicRect		  = { 0, 0, 0, 0 };
 	Game::vehicleRect		  = { 0, 0, 0, 0 };
+	Game::flowersRect		  = { 0, 0, 0, 0 };
+	Game::butterfliesRect	  = { 0, 0, 0, 0 };
 	Game::playerRect		  = { 0, 0, 0, 0 };
 	Game::firstPlayerNumRect  = { 0, 0, 0, 0 };
 	Game::secondPlayerNumRect = { 0, 0, 0, 0 };
@@ -153,6 +157,12 @@ bool Game::ttf_init() {
 	tempSurfaceText = TTF_RenderText_Blended(font1, "VEHICLE", { 255, 255, 255, 255 });
 	vehicleTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
 
+	tempSurfaceText = TTF_RenderText_Blended(font1, "FLOWER", { 255, 255, 255, 255 });
+	flowersTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, "BUTTERFLY", { 255, 255, 255, 255 });
+	butterfliesTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
 	tempSurfaceText = TTF_RenderText_Blended(font1, "PLAYER", { 255, 255, 255, 255 });
 	playerTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
 
@@ -204,6 +214,12 @@ bool Game::ttf_init() {
 
 	SDL_QueryTexture(vehicleTex, 0, 0, &tw, &th);
 	vehicleRect = { 150, 150, tw, th };
+
+	SDL_QueryTexture(flowersTex, 0, 0, &tw, &th);
+	flowersRect = { 300, 150, tw, th };
+
+	SDL_QueryTexture(butterfliesTex, 0, 0, &tw, &th);
+	butterfliesRect = { 450, 150, tw, th };
 
 	SDL_QueryTexture(playerTex, 0, 0, &tw, &th);
 	playerRect = { 10, wh - 110, tw, th };
@@ -297,6 +313,8 @@ void Game::render() {
 		SDL_RenderCopy(renderer, menuTitleTex, NULL, &menuTitleRect);
 		SDL_RenderCopy(renderer, classicTex, NULL, &classicRect);
 		SDL_RenderCopy(renderer, vehicleTex, NULL, &vehicleRect);
+		SDL_RenderCopy(renderer, flowersTex, NULL, &flowersRect);
+		SDL_RenderCopy(renderer, butterfliesTex, NULL, &butterfliesRect);
 
 		if (difficulty == All) {
 			SDL_RenderCopy(renderer, easyTex, NULL, &easyRect);
@@ -482,6 +500,31 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 		return;
 	}
 
+	btnX = 300;
+
+	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
+		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1) {
+		difficulty = All;
+		dominoType = DominoType::Flowers;
+
+		std::cout << "FLOWERS Button is clicked!" << std::endl;
+
+		return;
+	}
+
+	btnX = 450;
+	btnW = 175;
+
+	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
+		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1) {
+		difficulty = All;
+		dominoType = DominoType::Butterflies;
+
+		std::cout << "BUTTERFLIES Button is clicked!" << std::endl;
+
+		return;
+	}
+
 	btnX = 50;
 	btnY = 215;
 	btnW = 82;
@@ -493,7 +536,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 		difficulty = Easy;
 		Game::toPlaySound = false;
 
-		if (dominoType == DominoType::Vehicle) {
+		if (dominoType == DominoType::Vehicle || dominoType == DominoType::Flowers || dominoType == DominoType::Butterflies) {
 			Game::tilesType = 0;
 			Game::startNewGame();
 			Game::gameFlag = 2;
@@ -510,7 +553,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 		difficulty = Normal;
 		Game::toPlaySound = false;
 
-		if (dominoType == DominoType::Vehicle) {
+		if (dominoType == DominoType::Vehicle || dominoType == DominoType::Flowers || dominoType == DominoType::Butterflies) {
 			Game::tilesType = 0;
 			Game::startNewGame();
 			Game::gameFlag = 2;
@@ -681,6 +724,14 @@ void Game::startNewGame()
 	case DominoType::Vehicle:
 		std::cout << "domino type is Vehicle" << std::endl;
 		domino = "vehicle/";
+		break;
+	case DominoType::Flowers:
+		std::cout << "domino type is Flowers" << std::endl;
+		domino = "flowers/";
+		break;
+	case DominoType::Butterflies:
+		std::cout << "domino type is Butterflies" << std::endl;
+		domino = "butterflies/";
 		break;
 	case DominoType::None:
 		std::cout << "domino type is None" << std::endl;

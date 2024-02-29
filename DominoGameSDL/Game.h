@@ -67,7 +67,8 @@ private:
 		* normalTex,
 		* hardTex,
 		* whiteTex,
-		* blackTex;
+		* blackTex,
+		* quitTex;
 
 	SDL_Rect newRect,
 		menuRect,
@@ -87,11 +88,11 @@ private:
 		normalRect,
 		hardRect,
 		whiteRect,
-		blackRect;
+		blackRect,
+		quitRect;
 
 	void startNewGame();
 	void nextPlayer();
-	void CoordinatesToInt();
 	void playSound(std::string id);
 	bool checkForWin() const;
 	void rotate(int idx);

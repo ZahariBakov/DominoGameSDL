@@ -7,9 +7,6 @@ const int matrixX = 300;
 const int matrixY = 10;
 const int matrixPieceSize = 32;
 
-std::string tableCoordinates;
-int tableCoordInt[2]{};
-
 Player* firstPlayer;
 Player* secondPlayer;
 Table*  table;
@@ -19,7 +16,8 @@ PlayerFlag playerFlag = First;
 Difficulty difficulty = None;
 DominoType dominoType = DominoType::None;
 
-Game::Game() {
+Game::Game() 
+{
 	Game::window   = NULL;
 	Game::renderer = NULL;
 
@@ -53,6 +51,7 @@ Game::Game() {
 	Game::hardTex            = NULL;
 	Game::whiteTex           = NULL;
 	Game::blackTex           = NULL;
+	Game::quitTex            = NULL;
 
 	Game::newRect			  = { 0, 0, 0, 0 };
 	Game::menuRect			  = { 0, 0, 0, 0 };
@@ -73,14 +72,17 @@ Game::Game() {
 	Game::hardRect            = { 0, 0, 0, 0 };
 	Game::whiteRect           = { 0, 0, 0, 0 };
 	Game::blackRect           = { 0, 0, 0, 0 };
+	Game::quitRect            = { 0, 0, 0, 0 };
 }
 
-Game::~Game() {
+Game::~Game() 
+{
 	delete window;
 	delete renderer;
 }
 
-bool Game::init(const char* title, int xpos, int ypos, int width, int height, int flags) {
+bool Game::init(const char* title, int xpos, int ypos, int width, int height, int flags) 
+{
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
 		std::cout << "SDL init success!\n";
 
@@ -121,7 +123,8 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, in
 	return true;
 }
 
-bool Game::ttf_init() {
+bool Game::ttf_init() 
+{
 	if (TTF_Init() == -1) {
 		return false;
 	}
@@ -196,6 +199,9 @@ bool Game::ttf_init() {
 	tempSurfaceText = TTF_RenderText_Blended(font1, "BLACK", { 255, 255, 255, 255 });
 	blackTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
 
+	tempSurfaceText = TTF_RenderText_Blended(font1, "QUIT", { 255, 255, 255, 255 });
+	quitTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
 	int tw, th;
 	SDL_QueryTexture(newTex, 0, 0, &tw, &th);
 	newRect = { 10, 10, tw, th };
@@ -254,6 +260,9 @@ bool Game::ttf_init() {
 	SDL_QueryTexture(blackTex, 0, 0, &tw, &th);
 	blackRect = { 200, 250, tw, th };
 
+	SDL_QueryTexture(quitTex, 0, 0, &tw, &th);
+	quitRect = { ww - 150, wh - 100, tw, th };
+
 	SDL_FreeSurface(tempSurfaceText);
 	TTF_CloseFont(font1);
 	TTF_CloseFont(font2);
@@ -270,11 +279,16 @@ void Game::LoadAndPlaySound()
 	SoundManager::Instance()->load("assets/sounds/welcome.wav", "welcome");
 }
 
-void Game::render() {
+void Game::render() 
+{
 	int ww, wh;
 	SDL_GetWindowSize(window, &ww, &wh);
 
 	SDL_RenderClear(renderer);
+
+	if (Game::gameFlag >= 1) {
+		SDL_RenderCopy(renderer, quitTex, NULL, &quitRect);
+	}
 
 	if (Game::gameFlag >= 2) {
 		for (int row = 0; row < 20; ++row) {
@@ -359,7 +373,8 @@ void Game::render() {
 	SDL_RenderPresent(renderer);
 }
 
-void Game::handleEvents() {
+void Game::handleEvents() 
+{
 	SDL_Event event;
 	if (SDL_PollEvent(&event)) {
 		int msx, msy;
@@ -395,7 +410,8 @@ void Game::handleEvents() {
 	}
 }
 
-void Game::clean() {
+void Game::clean() 
+{
 	std::cout << "Cleaning game!\n";
 
 	delete firstPlayer;
@@ -407,7 +423,8 @@ void Game::clean() {
 	SDL_Quit();
 }
 
-void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
+void Game::isClicked(int xDown, int yDown, int xUp, int yUp) 
+{
 	int ww, wh;
 	SDL_GetWindowSize(window, &ww, &wh);
 
@@ -521,6 +538,18 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp) {
 		dominoType = DominoType::Butterflies;
 
 		std::cout << "BUTTERFLIES Button is clicked!" << std::endl;
+
+		return;
+	}
+
+	btnX = 1130;
+	btnY = 635;
+	btnW = 80;
+
+	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
+		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag >= 1) {
+		std::cout << "QUIT Button is clicked!" << std::endl;
+		Game::running = false;
 
 		return;
 	}
@@ -776,19 +805,6 @@ void Game::nextPlayer()
 	}
 	else {
 		playerFlag = First;
-	}
-}
-
-void Game::CoordinatesToInt() 
-{
-	std::stringstream stream(tableCoordinates);
-	std::string temp;
-	int idx = 0;
-
-	while (std::getline(stream, temp, ',')) {
-		int value = std::stoi(temp);
-		tableCoordInt[idx] = value;
-		++idx;
 	}
 }
 

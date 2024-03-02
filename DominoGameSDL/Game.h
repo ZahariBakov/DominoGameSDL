@@ -46,7 +46,7 @@ public:
 private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
-	bool running, isInMatrix, toPlaySound;
+	bool running, isInMatrix, toPlaySound, isReset;
 	int mouseDownX, mouseDownY, gameFlag, playedTileToWin, tilesType, tileIdx, playerWin;
 
 	SDL_Texture* newTex,
@@ -80,7 +80,8 @@ private:
 		* sevenTex,
 		* eightTex,
 		* nineTex,
-		* resetTex;
+		* resetTex,
+		* isResetTex;
 
 	SDL_Rect newRect,
 		menuRect,
@@ -113,7 +114,8 @@ private:
 		seventRect,
 		eightRect,
 		nineRect,
-		resetRect;
+		resetRect,
+		isResetRect;
 
 	void startNewGame();
 	void nextPlayer();

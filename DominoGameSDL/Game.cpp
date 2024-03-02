@@ -24,6 +24,7 @@ Game::Game()
 	Game::running     = true;
 	Game::isInMatrix  = false;
 	Game::toPlaySound = false;
+	Game::isReset     = false;
 
 	Game::mouseDownX	  = 0;
 	Game::mouseDownY	  = 0;
@@ -65,6 +66,7 @@ Game::Game()
 	Game::eightTex           = NULL;
 	Game::nineTex            = NULL;
 	Game::resetTex           = NULL;
+	Game::isResetTex         = NULL;
 
 	Game::newRect			  = { 0, 0, 0, 0 };
 	Game::menuRect			  = { 0, 0, 0, 0 };
@@ -98,6 +100,7 @@ Game::Game()
 	Game::eightRect           = { 0, 0, 0, 0 };
 	Game::nineRect            = { 0, 0, 0, 0 };
 	Game::resetRect           = { 0, 0, 0, 0 };
+	Game::isResetRect         = { 0, 0, 0, 0 };
 }
 
 Game::~Game() 
@@ -263,6 +266,9 @@ bool Game::ttf_init()
 	tempSurfaceText = TTF_RenderText_Blended(font1, "RESET SCORE", { 255, 255, 255, 255 });
 	resetTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
 
+	tempSurfaceText = TTF_RenderText_Blended(font1, "SCORE IS RESET", { 255, 255, 255, 255 });
+	isResetTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
 	int tw, th;
 	SDL_QueryTexture(newTex, 0, 0, &tw, &th);
 	newRect = { 10, 10, tw, th };
@@ -359,6 +365,9 @@ bool Game::ttf_init()
 
 	SDL_QueryTexture(resetTex, 0, 0, &tw, &th);
 	resetRect = { ww - 300, 300, tw, th };
+
+	SDL_QueryTexture(isResetTex, 0, 0, &tw, &th);
+	isResetRect = { ww - 400, 400, tw, th };
 
 	SDL_FreeSurface(tempSurfaceText);
 	TTF_CloseFont(font1);
@@ -468,6 +477,10 @@ void Game::render()
 		SDL_RenderCopy(renderer, flowersTex, NULL, &flowersRect);
 		SDL_RenderCopy(renderer, butterfliesTex, NULL, &butterfliesRect);
 		SDL_RenderCopy(renderer, resetTex, NULL, &resetRect);
+
+		if (Game::isReset) {
+			SDL_RenderCopy(renderer, isResetTex, NULL, &isResetRect);	
+		}
 
 		if (difficulty == All) {
 			SDL_RenderCopy(renderer, easyTex, NULL, &easyRect);
@@ -636,6 +649,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp)
 		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1) {
 		difficulty = All;
 		dominoType = DominoType::Classic;
+		Game::isReset = false;
 
 		std::cout << "CLASSIC Button is clicked!" << std::endl;
 
@@ -650,6 +664,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp)
 		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1) {
 		difficulty = All;
 		dominoType = DominoType::Vehicle;
+		Game::isReset = false;
 
 		std::cout << "VEHICLE Button is clicked!" << std::endl;
 
@@ -662,6 +677,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp)
 		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1) {
 		difficulty = All;
 		dominoType = DominoType::Flowers;
+		Game::isReset = false;
 
 		std::cout << "FLOWERS Button is clicked!" << std::endl;
 
@@ -675,6 +691,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp)
 		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1) {
 		difficulty = All;
 		dominoType = DominoType::Butterflies;
+		Game::isReset = false;
 
 		std::cout << "BUTTERFLIES Button is clicked!" << std::endl;
 
@@ -687,6 +704,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp)
 
 	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
 		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1) {
+		Game::isReset = true;
 		firstPlayer->resetWin();
 		secondPlayer->resetWin();
 
@@ -717,6 +735,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp)
 		Game::tilesType = 4;
 		difficulty = Easy;
 		Game::toPlaySound = false;
+		Game::isReset = false;
 
 		if (dominoType == DominoType::Vehicle || dominoType == DominoType::Flowers || dominoType == DominoType::Butterflies) {
 			Game::tilesType = 0;
@@ -734,6 +753,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp)
 		Game::tilesType = 4;
 		difficulty = Normal;
 		Game::toPlaySound = false;
+		Game::isReset = false;
 
 		if (dominoType == DominoType::Vehicle || dominoType == DominoType::Flowers || dominoType == DominoType::Butterflies) {
 			Game::tilesType = 0;
@@ -752,6 +772,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp)
 		Game::tilesType = 4;
 		difficulty = Hard;
 		Game::toPlaySound = false;
+		Game::isReset = false;
 	}
 
 	btnX = 50;
@@ -764,6 +785,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp)
 		Game::tilesType = 0;
 		Game::startNewGame();
 		Game::gameFlag = 2;
+		Game::isReset = false;
 	}
 
 	btnX = 200;
@@ -774,6 +796,7 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp)
 		Game::tilesType = 1;
 		Game::startNewGame();
 		Game::gameFlag = 2;
+		Game::isReset = false;
 	}
 
 	btnX = 150;

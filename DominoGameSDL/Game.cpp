@@ -471,6 +471,12 @@ void Game::render()
 		Game::playSound("welcome");
 		break;
 	case static_cast<int>(GameFlag::MainMenu):
+		if (firstPlayer->getWin() >= 9 || secondPlayer->getWin() >= 9) {
+			Game::isReset = true;
+			firstPlayer->resetWin();
+			secondPlayer->resetWin();
+		}
+
 		SDL_RenderCopy(renderer, menuTitleTex, NULL, &menuTitleRect);
 		SDL_RenderCopy(renderer, classicTex, NULL, &classicRect);
 		SDL_RenderCopy(renderer, vehicleTex, NULL, &vehicleRect);

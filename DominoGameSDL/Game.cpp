@@ -31,6 +31,7 @@ Game::Game()
 	Game::playedTileToWin = 1;
 	Game::tilesType       = 3;
 	Game::tileIdx         = 0;
+	Game::playerWin		  = 0;
 
 	Game::newTex			 = NULL;
 	Game::menuTex			 = NULL;
@@ -59,6 +60,11 @@ Game::Game()
 	Game::threeTex           = NULL;
 	Game::fourTex            = NULL;
 	Game::fiveTex            = NULL;
+	Game::sixTex             = NULL;
+	Game::sevenTex           = NULL;
+	Game::eightTex           = NULL;
+	Game::nineTex            = NULL;
+	Game::resetTex           = NULL;
 
 	Game::newRect			  = { 0, 0, 0, 0 };
 	Game::menuRect			  = { 0, 0, 0, 0 };
@@ -87,6 +93,11 @@ Game::Game()
 	Game::threeRect           = { 0, 0, 0, 0 };
 	Game::fourRect            = { 0, 0, 0, 0 };
 	Game::fiveRect            = { 0, 0, 0, 0 };
+	Game::sixRect             = { 0, 0, 0, 0 };
+	Game::seventRect          = { 0, 0, 0, 0 };
+	Game::eightRect           = { 0, 0, 0, 0 };
+	Game::nineRect            = { 0, 0, 0, 0 };
+	Game::resetRect           = { 0, 0, 0, 0 };
 }
 
 Game::~Game() 
@@ -237,6 +248,21 @@ bool Game::ttf_init()
 	tempSurfaceText = TTF_RenderText_Blended(font1, "5", { 255, 255, 255, 255 });
 	fiveTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
 
+	tempSurfaceText = TTF_RenderText_Blended(font1, "6", { 255, 255, 255, 255 });
+	sixTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, "7", { 255, 255, 255, 255 });
+	sevenTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, "8", { 255, 255, 255, 255 });
+	eightTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, "9", { 255, 255, 255, 255 });
+	nineTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, "RESET SCORE", { 255, 255, 255, 255 });
+	resetTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
 	int tw, th;
 	SDL_QueryTexture(newTex, 0, 0, &tw, &th);
 	newRect = { 10, 10, tw, th };
@@ -319,6 +345,21 @@ bool Game::ttf_init()
 	SDL_QueryTexture(fiveTex, 0, 0, &tw, &th);
 	fiveRect = { 90, wh - 70, tw, th };
 
+	SDL_QueryTexture(sixTex, 0, 0, &tw, &th);
+	sixRect = { 90, wh - 70, tw, th };
+
+	SDL_QueryTexture(sevenTex, 0, 0, &tw, &th);
+	seventRect = { 90, wh - 70, tw, th };
+
+	SDL_QueryTexture(eightTex, 0, 0, &tw, &th);
+	eightRect = { 90, wh - 70, tw, th };
+
+	SDL_QueryTexture(nineTex, 0, 0, &tw, &th);
+	nineRect = { 90, wh - 70, tw, th };
+
+	SDL_QueryTexture(resetTex, 0, 0, &tw, &th);
+	resetRect = { ww - 300, 300, tw, th };
+
 	SDL_FreeSurface(tempSurfaceText);
 	TTF_CloseFont(font1);
 	TTF_CloseFont(font2);
@@ -363,29 +404,7 @@ void Game::render()
 		{
 			SDL_RenderCopy(renderer, firstPlayerNumTex, NULL, &firstPlayerNumRect);
 
-			switch (firstPlayer->getWin())
-			{
-			case 0:
-				SDL_RenderCopy(renderer, zeroTex, NULL, &zeroRect);
-				break;
-			case 1:
-				SDL_RenderCopy(renderer, oneTex, NULL, &oneRect);
-				break;
-			case 2:
-				SDL_RenderCopy(renderer, twoTex, NULL, &twoRect);
-				break;
-			case 3:
-				SDL_RenderCopy(renderer, threeTex, NULL, &threeRect);
-				break;
-			case 4:
-				SDL_RenderCopy(renderer, fourTex, NULL, &fourRect);
-				break;
-			case 5:
-				SDL_RenderCopy(renderer, fiveTex, NULL, &fiveRect);
-				break;
-			default:
-				break;
-			}
+			Game::playerWin = firstPlayer->getWin();
 
 			firstPlayer->render();
 
@@ -394,31 +413,45 @@ void Game::render()
 		{
 			SDL_RenderCopy(renderer, secondPlayerNumTex, NULL, &secondPlayerNumRect);
 
-			switch (secondPlayer->getWin())
-			{
-			case 0:
-				SDL_RenderCopy(renderer, zeroTex, NULL, &zeroRect);
-				break;
-			case 1:
-				SDL_RenderCopy(renderer, oneTex, NULL, &oneRect);
-				break;
-			case 2:
-				SDL_RenderCopy(renderer, twoTex, NULL, &twoRect);
-				break;
-			case 3:
-				SDL_RenderCopy(renderer, threeTex, NULL, &threeRect);
-				break;
-			case 4:
-				SDL_RenderCopy(renderer, fourTex, NULL, &fourRect);
-				break;
-			case 5:
-				SDL_RenderCopy(renderer, fiveTex, NULL, &fiveRect);
-				break;
-			default:
-				break;
-			}
+			Game::playerWin = secondPlayer->getWin();
 
 			secondPlayer->render();
+		}
+
+		switch (Game::playerWin)
+		{
+		case 0:
+			SDL_RenderCopy(renderer, zeroTex, NULL, &zeroRect);
+			break;
+		case 1:
+			SDL_RenderCopy(renderer, oneTex, NULL, &oneRect);
+			break;
+		case 2:
+			SDL_RenderCopy(renderer, twoTex, NULL, &twoRect);
+			break;
+		case 3:
+			SDL_RenderCopy(renderer, threeTex, NULL, &threeRect);
+			break;
+		case 4:
+			SDL_RenderCopy(renderer, fourTex, NULL, &fourRect);
+			break;
+		case 5:
+			SDL_RenderCopy(renderer, fiveTex, NULL, &fiveRect);
+			break;
+		case 6:
+			SDL_RenderCopy(renderer, sixTex, NULL, &sixRect);
+			break;
+		case 7:
+			SDL_RenderCopy(renderer, sevenTex, NULL, &seventRect);
+			break;
+		case 8:
+			SDL_RenderCopy(renderer, eightTex, NULL, &eightRect);
+			break;
+		case 9:
+			SDL_RenderCopy(renderer, nineTex, NULL, &nineRect);
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -434,6 +467,7 @@ void Game::render()
 		SDL_RenderCopy(renderer, vehicleTex, NULL, &vehicleRect);
 		SDL_RenderCopy(renderer, flowersTex, NULL, &flowersRect);
 		SDL_RenderCopy(renderer, butterfliesTex, NULL, &butterfliesRect);
+		SDL_RenderCopy(renderer, resetTex, NULL, &resetRect);
 
 		if (difficulty == All) {
 			SDL_RenderCopy(renderer, easyTex, NULL, &easyRect);
@@ -473,7 +507,7 @@ void Game::render()
 		break;
 	}
 
-	//SDL_SetRenderDrawColor(renderer, 64, 64, 64, 255);
+	SDL_SetRenderDrawColor(renderer, 64, 64, 64, 255);
 
 	SDL_RenderPresent(renderer);
 }
@@ -643,6 +677,20 @@ void Game::isClicked(int xDown, int yDown, int xUp, int yUp)
 		dominoType = DominoType::Butterflies;
 
 		std::cout << "BUTTERFLIES Button is clicked!" << std::endl;
+
+		return;
+	}
+
+	btnX = 980;
+	btnY = 315;
+	btnW = 207;
+
+	if ((xDown > btnX && xDown < (btnX + btnW)) && (xUp > btnX && xUp < (btnX + btnW)) &&
+		(yDown > btnY && yDown < (btnY + btnH)) && (yUp > btnY && yUp < (btnY + btnH)) && Game::gameFlag == 1) {
+		firstPlayer->resetWin();
+		secondPlayer->resetWin();
+
+		std::cout << "RESET SCORE Button is clicked!" << std::endl;
 
 		return;
 	}

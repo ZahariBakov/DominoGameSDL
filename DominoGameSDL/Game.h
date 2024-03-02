@@ -47,7 +47,7 @@ private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	bool running, isInMatrix, toPlaySound;
-	int mouseDownX, mouseDownY, gameFlag, playedTileToWin, tilesType, tileIdx;
+	int mouseDownX, mouseDownY, gameFlag, playedTileToWin, tilesType, tileIdx, playerWin;
 
 	SDL_Texture* newTex,
 		* menuTex,
@@ -75,7 +75,12 @@ private:
 		* twoTex,
 		* threeTex,
 		* fourTex,
-		* fiveTex;
+		* fiveTex,
+		* sixTex,
+		* sevenTex,
+		* eightTex,
+		* nineTex,
+		* resetTex;
 
 	SDL_Rect newRect,
 		menuRect,
@@ -103,7 +108,12 @@ private:
 		twoRect,
 		threeRect,
 		fourRect,
-		fiveRect;
+		fiveRect,
+		sixRect,
+		seventRect,
+		eightRect,
+		nineRect,
+		resetRect;
 
 	void startNewGame();
 	void nextPlayer();

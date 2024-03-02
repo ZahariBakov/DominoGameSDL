@@ -52,6 +52,13 @@ Game::Game()
 	Game::whiteTex           = NULL;
 	Game::blackTex           = NULL;
 	Game::quitTex            = NULL;
+	Game::winTex             = NULL;
+	Game::zeroTex            = NULL;
+	Game::oneTex             = NULL;
+	Game::twoTex             = NULL;
+	Game::threeTex           = NULL;
+	Game::fourTex            = NULL;
+	Game::fiveTex            = NULL;
 
 	Game::newRect			  = { 0, 0, 0, 0 };
 	Game::menuRect			  = { 0, 0, 0, 0 };
@@ -73,6 +80,13 @@ Game::Game()
 	Game::whiteRect           = { 0, 0, 0, 0 };
 	Game::blackRect           = { 0, 0, 0, 0 };
 	Game::quitRect            = { 0, 0, 0, 0 };
+	Game::winRect             = { 0, 0, 0, 0 };
+	Game::zeroRect            = { 0, 0, 0, 0 };
+	Game::oneRect             = { 0, 0, 0, 0 };
+	Game::twoRect             = { 0, 0, 0, 0 };
+	Game::threeRect           = { 0, 0, 0, 0 };
+	Game::fourRect            = { 0, 0, 0, 0 };
+	Game::fiveRect            = { 0, 0, 0, 0 };
 }
 
 Game::~Game() 
@@ -202,6 +216,27 @@ bool Game::ttf_init()
 	tempSurfaceText = TTF_RenderText_Blended(font1, "QUIT", { 255, 255, 255, 255 });
 	quitTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
 
+	tempSurfaceText = TTF_RenderText_Blended(font1, "WIN: ", { 255, 255, 255, 255 });
+	winTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, "0", { 255, 255, 255, 255 });
+	zeroTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, "1", { 255, 255, 255, 255 });
+	oneTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, "2", { 255, 255, 255, 255 });
+	twoTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, "3", { 255, 255, 255, 255 });
+	threeTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, "4", { 255, 255, 255, 255 });
+	fourTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
+	tempSurfaceText = TTF_RenderText_Blended(font1, "5", { 255, 255, 255, 255 });
+	fiveTex = SDL_CreateTextureFromSurface(renderer, tempSurfaceText);
+
 	int tw, th;
 	SDL_QueryTexture(newTex, 0, 0, &tw, &th);
 	newRect = { 10, 10, tw, th };
@@ -263,6 +298,27 @@ bool Game::ttf_init()
 	SDL_QueryTexture(quitTex, 0, 0, &tw, &th);
 	quitRect = { ww - 150, wh - 100, tw, th };
 
+	SDL_QueryTexture(winTex, 0, 0, &tw, &th);
+	winRect = { 10, wh - 70, tw, th };
+
+	SDL_QueryTexture(zeroTex, 0, 0, &tw, &th);
+	zeroRect = { 90, wh - 70, tw, th };
+
+	SDL_QueryTexture(oneTex, 0, 0, &tw, &th);
+	oneRect = { 90, wh - 70, tw, th };
+
+	SDL_QueryTexture(twoTex, 0, 0, &tw, &th);
+	twoRect = { 90, wh - 70, tw, th };
+
+	SDL_QueryTexture(threeTex, 0, 0, &tw, &th);
+	threeRect = { 90, wh - 70, tw, th };
+
+	SDL_QueryTexture(fourTex, 0, 0, &tw, &th);
+	fourRect = { 90, wh - 70, tw, th };
+
+	SDL_QueryTexture(fiveTex, 0, 0, &tw, &th);
+	fiveRect = { 90, wh - 70, tw, th };
+
 	SDL_FreeSurface(tempSurfaceText);
 	TTF_CloseFont(font1);
 	TTF_CloseFont(font2);
@@ -301,10 +357,35 @@ void Game::render()
 		table->render();
 
 		SDL_RenderCopy(renderer, playerTex, NULL, &playerRect);
+		SDL_RenderCopy(renderer, winTex, NULL, &winRect);		
 
 		if (playerFlag == First)
 		{
 			SDL_RenderCopy(renderer, firstPlayerNumTex, NULL, &firstPlayerNumRect);
+
+			switch (firstPlayer->getWin())
+			{
+			case 0:
+				SDL_RenderCopy(renderer, zeroTex, NULL, &zeroRect);
+				break;
+			case 1:
+				SDL_RenderCopy(renderer, oneTex, NULL, &oneRect);
+				break;
+			case 2:
+				SDL_RenderCopy(renderer, twoTex, NULL, &twoRect);
+				break;
+			case 3:
+				SDL_RenderCopy(renderer, threeTex, NULL, &threeRect);
+				break;
+			case 4:
+				SDL_RenderCopy(renderer, fourTex, NULL, &fourRect);
+				break;
+			case 5:
+				SDL_RenderCopy(renderer, fiveTex, NULL, &fiveRect);
+				break;
+			default:
+				break;
+			}
 
 			firstPlayer->render();
 
@@ -312,6 +393,30 @@ void Game::render()
 		else if (playerFlag == Second)
 		{
 			SDL_RenderCopy(renderer, secondPlayerNumTex, NULL, &secondPlayerNumRect);
+
+			switch (secondPlayer->getWin())
+			{
+			case 0:
+				SDL_RenderCopy(renderer, zeroTex, NULL, &zeroRect);
+				break;
+			case 1:
+				SDL_RenderCopy(renderer, oneTex, NULL, &oneRect);
+				break;
+			case 2:
+				SDL_RenderCopy(renderer, twoTex, NULL, &twoRect);
+				break;
+			case 3:
+				SDL_RenderCopy(renderer, threeTex, NULL, &threeRect);
+				break;
+			case 4:
+				SDL_RenderCopy(renderer, fourTex, NULL, &fourRect);
+				break;
+			case 5:
+				SDL_RenderCopy(renderer, fiveTex, NULL, &fiveRect);
+				break;
+			default:
+				break;
+			}
 
 			secondPlayer->render();
 		}
@@ -819,9 +924,11 @@ void Game::playSound(std::string id)
 bool Game::checkForWin() const 
 {
 	if (firstPlayer->playedTiles >= playedTileToWin && playerFlag == First) {
+		firstPlayer->addWin();
 		return true;
 	}
 	else if (secondPlayer->playedTiles >= playedTileToWin && playerFlag == Second) {
+		secondPlayer->addWin();
 		return true;
 	}
 

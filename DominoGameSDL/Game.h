@@ -68,7 +68,14 @@ private:
 		* hardTex,
 		* whiteTex,
 		* blackTex,
-		* quitTex;
+		* quitTex,
+		* winTex,
+		* zeroTex,
+		* oneTex,
+		* twoTex,
+		* threeTex,
+		* fourTex,
+		* fiveTex;
 
 	SDL_Rect newRect,
 		menuRect,
@@ -89,7 +96,14 @@ private:
 		hardRect,
 		whiteRect,
 		blackRect,
-		quitRect;
+		quitRect,
+		winRect,
+		zeroRect,
+		oneRect,
+		twoRect,
+		threeRect,
+		fourRect,
+		fiveRect;
 
 	void startNewGame();
 	void nextPlayer();

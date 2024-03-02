@@ -12,6 +12,10 @@ public:
 	void render();
 	void removeTile(int idx);
 	void rotate(int idx);
+	void addWin();
+	void resetWin();
+
+	int getWin() const;
 
 	int playedTiles;
 
@@ -19,4 +23,5 @@ public:
 private:
 	int _x;
 	int _y;
+	int _win;
 };

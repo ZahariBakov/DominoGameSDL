@@ -7,6 +7,7 @@ Player::Player() {
 	_x = 150;
 	_y = 670;
 	playedTiles = 0;
+	_win = 0;
 }
 
 void Player::addTiles(Domino& domino, int difficulty) {
@@ -40,4 +41,19 @@ void Player::removeTile(int idx)
 void Player::rotate(int idx) 
 {
 	playerTiles[idx].rotate();
+}
+
+void Player::addWin()
+{
+	_win++;
+}
+
+void Player::resetWin()
+{
+	_win = 0;
+}
+
+int Player::getWin() const
+{
+	return _win;
 }

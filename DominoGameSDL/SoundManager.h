@@ -5,23 +5,19 @@
 #include <string>
 #include <map>
 
-class SoundManager {
+class SoundManager
+{
+private:
+    SoundManager();
+    ~SoundManager() {};
+
 public:
-	static SoundManager* Instance() {
-		if (s_mInstance == 0) {
-			s_mInstance = new SoundManager();
+    static auto Instance() -> SoundManager*;
 
-			return s_mInstance;
-		}
-
-		return s_mInstance;
-	}
-
-	bool load(const char* fileName, std::string id);
-	void playSound(std::string id, int loop, int ms = 0);
+    auto Load(const char* fileName, std::string id) -> bool;
+    void PlaySound(std::string id, int loop, int ms = 0);
 
 private:
-	SoundManager();
-	static SoundManager* s_mInstance;
-	std::map<std::string, Mix_Chunk*> s_mSfxs;
- };
+    static SoundManager* m_mInstance;
+    std::map<std::string, Mix_Chunk*> m_mSfxs;
+};

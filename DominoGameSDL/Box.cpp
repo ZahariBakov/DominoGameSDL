@@ -1,71 +1,77 @@
 #include "Box.h"
+#include "TextureManager.h"
 
-#include <iostream>
+Box::Box(SDL_Renderer* renderer, std::string value, ClassicTileType type, std::string domino)
+{
+    m_value = value;
+    m_renderer = renderer;
 
-int side = 32;
-
-Box::Box() {
-	this->_value = "*";
-	this->_x = 0;
-	this->_y = 0;
-	this->_renderer = nullptr;
-}
-
-Box::Box(SDL_Renderer* renderer, std::string value, int x, int y, int type, std::string domino) {
-	this->_value = value;
-	this->_x = x;
-	this->_y = y;
-	this->_renderer = renderer;
-	std::string typeStr = "white/";
-	std::string path;
-
-	if (type != 0) {
-		typeStr = "black/";
+    std::string typeStr = "white/";
+    if(type == ClassicTileType::Black)
+    {
+        typeStr = "black/";
 	}
-	
-	if (domino == "classic/") {
+
+    std::string path;
+    if(domino == "classic/")
+    {
 		path = "assets/" + domino + typeStr + value + ".png";
 	}
-	else {
+    else
+    {
 		path = "assets/" + domino + value + ".png";
 	}
-	
-	
-	TextureManager::Instance()->loadTexture(path.c_str(), value, _renderer);
-	
+    
+    TextureManager::Instance()->LoadTexture(path.c_str(), value, m_renderer);	
 }
 
-std::string Box::getValue() const {
-	return _value;
-}
-
-int Box::getY() const {
-	return _y;
-}
-
-int Box::getX() const {
-	return _x;
-}
-
-void Box::setPosition(int x, int y) {
-	_x = x;
-	_y = y;
-}
-
-void Box::setValue(std::string value) 
+std::string Box::GetValue() const
 {
-	_value = value;
+    return m_value;
 }
 
-void Box::render() const {
-	if (_value == "*") {
+int Box::GetY() const
+{
+    return m_boxPos.y;
+}
+
+int Box::GetX() const
+{
+    return m_boxPos.x;
+}
+
+Vector2D Box::GetPosition() const
+{
+    return m_boxPos;
+}
+
+void Box::SetPosition(int x, int y)
+{
+    m_boxPos.x = x;
+    m_boxPos.y = y;
+}
+
+void Box::SetValue(std::string value)
+{
+    m_value = value;
+}
+
+void Box::Render() const
+{
+    if(m_value == "*")
+    {
 		return;
 	}
-
-	TextureManager::Instance()->drawTexture(_value, _x, _y, side, side, _renderer);
+    
+    TextureManager::Instance()->DrawTexture(m_value, m_boxPos.x, m_boxPos.y, GetSize(), GetSize(), m_renderer);   
 }
 
-void Box::setRenderer(SDL_Renderer* renderer) 
+void Box::SetRenderer(SDL_Renderer* renderer)
 {
-	_renderer = renderer;
+    m_renderer = renderer;
+}
+
+auto Box::GetSize() const -> int
+{
+    return 32;
 }

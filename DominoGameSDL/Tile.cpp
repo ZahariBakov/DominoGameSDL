@@ -1,63 +1,128 @@
 #include "Tile.h"
+#include "Tools/Vector2D.h"
 
-#include <iostream>
-
-Tile::Tile() {
-	this->isSelected = false;
-	_tileX = _tileY = 0;
-}
-
-Tile::Tile(SDL_Renderer* ren, std::string first, std::string second, int tileX, int tileY, int type, std::string domino)
-	: _first(ren, first, tileX, tileY, type, domino), _second(ren, second, tileX + 32, tileY, type, domino) {
-
-	this->isSelected = false;
-	_tileX = tileX;
-	_tileY = tileY;
-}
-
-std::string Tile::getFirst() const {
-	return this->_first.getValue();
-}
-
-std::string Tile::getSecond() const {
-	return this->_second.getValue();
-}
-
-void Tile::tileRender() {
-	_first.render();
-	_second.render();
-}
-
-void Tile::rotate() {
-	if (_first.getX() == _second.getX() - 32) {
-		std::cout << "tile is horizontal" << std::endl;
-		
-		_second.Box::setPosition(_second.getX() - 32, _second.getY() + 32);
-	}
-	else if (_first.getY() == _second.getY() - 32) {
-		std::cout << "tile is upper head" << std::endl;
-		_second.Box::setPosition(_second.getX() - 64, _second.getY());
-	}
-	else if (_first.getX() == _second.getX() + 32) {
-		std::cout << "tile is flip horizontal" << std::endl;
-		_second.Box::setPosition(_second.getX() - 32, _second.getY() - 32);
-	}
-	else if (_first.getY() == _second.getY() + 32) {
-		std::cout << "tile is down head" << std::endl;
-		_second.Box::setPosition(_second.getX(), _second.getY());
-	}
-}
-
-void Tile::setPosition(int x, int y)
+Tile::Tile(SDL_Renderer* ren, std::string first, std::string second, ClassicTileType type, std::string domino)
+    : m_first(ren, first, type, domino)
+    , m_second(ren, second, type, domino)
 {
-	_tileX = x;
-	_tileY = y;
-	_first.setPosition(x, y);
-	_second.setPosition(x + 32, y);
+    m_isSelected = false;
 }
 
-void Tile::setValues()
+std::string Tile::GetFirst() const
 {
-	_first.setValue("10");
-	_second.setValue("10");
+    return m_first.GetValue();
+}
+
+std::string Tile::GetSecond() const
+{
+    return m_second.GetValue();
+}
+
+Vector2D Tile::GetPos() const
+{
+    return Vector2D(m_first.GetX(), m_first.GetY());
+}
+
+void Tile::SetPosition(Vector2D tilePos)
+{
+    m_first.SetPosition(tilePos.x, tilePos.y);
+
+    if(m_isHorizontal)
+    {
+        m_second.SetPosition(tilePos.x + m_second.GetSize(), tilePos.y);
+    }
+    else
+    {
+        m_second.SetPosition(tilePos.x, tilePos.y + m_second.GetSize());
+    }
+}
+
+void Tile::SetVertical(Vector2D tilePos)
+{
+    m_first.SetPosition(tilePos.x, tilePos.y);
+    m_second.SetPosition(tilePos.x, tilePos.y + m_second.GetSize());
+    m_isHorizontal = false;
+}
+
+void Tile::SetHorizontal(Vector2D tilePos)
+{
+    m_first.SetPosition(tilePos.x, tilePos.y);
+    m_second.SetPosition(tilePos.x + m_second.GetSize(), tilePos.y);
+    m_isHorizontal = true;
+}
+
+bool Tile::IsSelected() const
+{
+    return m_isSelected;
+}
+
+void Tile::Render()
+{
+    m_first.Render();
+    m_second.Render();
+}
+
+void Tile::Swap()
+{
+    std::string newFirst = GetSecond();
+    std::string newSecond = GetFirst();
+    SetValues(newFirst, newSecond);
+}
+
+void Tile::UpRotate()
+{
+    if(m_isHorizontal)
+    {
+        SetVertical(Vector2D{ m_first.GetX(), m_first.GetY() });
+        Swap();
+    }
+    else
+    {
+        SetHorizontal(Vector2D{ m_first.GetX(), m_first.GetY() });
+    }
+}
+
+void Tile::DownRotate()
+{
+    if(m_isHorizontal)
+    {
+        SetVertical(Vector2D{ m_first.GetX(), m_first.GetY() });
+    }
+    else
+    {
+        Swap();
+        SetHorizontal(Vector2D{ m_first.GetX(), m_first.GetY() });
+    }
+}
+
+void Tile::SetValues(std::string first, std::string second)
+{
+    m_first.SetValue(first);
+    m_second.SetValue(second);
+}
+
+void Tile::RemoveValues()
+{
+    m_first.SetValue("10");
+    m_second.SetValue("10");
+}
+
+void Tile::SetVisible(bool state)
+{
+    m_isVisible = state;
+}
+
+bool Tile::IsVisible() const
+{
+    return m_isVisible;
+}
+
+bool Tile::IsHorizontal() const
+{
+    return m_isHorizontal;
+}
+
+void Tile::SetIsSelected(bool state)
+{
+    m_isSelected = state;
 }

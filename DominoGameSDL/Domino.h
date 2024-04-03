@@ -1,19 +1,20 @@
 #pragma once
 
 #include "Tile.h"
+#include "Enums.h"
 
 #include <vector>
 
-class Domino {
+class Domino
+{
 public:
-	Domino(SDL_Renderer* renderer, int difficulty, int type, std::string domino);
+    Domino(SDL_Renderer* renderer, Difficulty difficulty, ClassicTileType type, std::string domino);
 
-	std::vector<Tile> dominoTiles;
+    void Shuffle();
 
-	void shuffle();
-
-	Tile giveTile();
+    auto GetNextTile() -> Tile;
 
 private:
-	int _tileIdx;
+    int m_tileIdx = 0;
+    std::vector<Tile> m_dominoTiles;
 };
